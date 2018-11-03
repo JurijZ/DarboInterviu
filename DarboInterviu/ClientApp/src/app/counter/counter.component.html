@@ -21,9 +21,12 @@
 </div>
 
 <div class="row text-center">
-  <button (click)="start()" class="btn btn-primary">Play</button>
-  <button (click)="toggleControls()" class="btn btn-success">Toggle Controls</button>
+  <button (click)="start()" class="btn btn-primary">Record without Sound</button>
+  <button (click)="sound()" class="btn btn-danger">Play with Sound</button>
   <button (click)="pause()" class="btn btn-warning">Pause</button>
   <button (click)="resume()" class="btn btn-info">Resume</button>
-  <button (click)="sound()" class="btn btn-danger">Play with Sound</button>
+</div>
+
+<div class="row text-center">
+  <button (click)="toggleControls()" class="btn btn-success">Toggle Controls</button>
 </div>
