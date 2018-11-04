@@ -7,29 +7,32 @@
                 <span class='icon-bar'></span>
                 <span class='icon-bar'></span>
             </button>
-            <a class='navbar-brand' [routerLink]='["/"]'>Darbo Interviu 2</a>
+            <a class='navbar-brand' [routerLink]='["/"]'>Darbo Interviu</a>
         </div>
         <div class='clearfix'></div>
         <div class='navbar-collapse collapse' [ngClass]='{ "in": isExpanded }'>
           <ul class='nav navbar-nav'>
+
             <li [routerLinkActive]='["link-active"]' [routerLinkActiveOptions]='{ exact: true }'>
               <a [routerLink]='["/"]' (click)='collapse()'>
                 <span class='glyphicon glyphicon-home'></span> Home
               </a>
             </li>
-            <li [routerLinkActive]='["link-active"]'>
+            
+            <!--<li [routerLinkActive]='["link-active"]'>
               <a [routerLink]='["/counter"]' (click)='collapse()'>
                 <span class='glyphicon glyphicon-education'></span> Counter
+              </a>
+            </li>-->
+
+            <li [routerLinkActive]='["link-active"]'>
+              <a [routerLink]='["/record-rtc"]' (click)='collapse()'>
+                <span class='glyphicon glyphicon-th-list'></span> Darbuotojas
               </a>
             </li>
             <li [routerLinkActive]='["link-active"]'>
               <a [routerLink]='["/fetch-data"]' (click)='collapse()'>
-                <span class='glyphicon glyphicon-th-list'></span> Fetch data
-              </a>
-            </li>
-            <li [routerLinkActive]='["link-active"]'>
-              <a [routerLink]='["/record-rtc"]' (click)='collapse()'>
-                <span class='glyphicon glyphicon-th-list'></span> Record RTC
+                <span class='glyphicon glyphicon-th-list'></span> Darbdavys
               </a>
             </li>
           </ul>
