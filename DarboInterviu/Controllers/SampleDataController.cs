@@ -20,6 +20,12 @@ namespace app1.Controllers
         //{
         //    _logger = logger;
         //}
+        private IHostingEnvironment _hostingEnvironment;
+
+        public SampleDataController(IHostingEnvironment hostingEnvironment)
+        {
+            _hostingEnvironment = hostingEnvironment;
+        }
 
         private static string[] Summaries = new[]
         {
@@ -29,15 +35,63 @@ namespace app1.Controllers
         [HttpGet("[action]")]
         public IEnumerable<WeatherForecast> WeatherForecasts()
         {
-            //_logger.LogInformation("Test");
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("Test3");
 
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            // Read files from the folder
+            string folderName = "Upload";
+            string webRootPath = _hostingEnvironment.WebRootPath;
+            string targetDirectory = Path.Combine(webRootPath, folderName);
+
+            string[] fileEntries;
+
+            try
             {
-                DateFormatted = DateTime.Now.AddDays(index).ToString("d"),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            });
+                if (Directory.Exists(targetDirectory))
+                {
+                    //fileEntries = Directory.GetFiles(targetDirectory);
+                    //fileEntries = new string[] { "Folder exist" };
+                    DirectoryInfo diTop = new DirectoryInfo(targetDirectory);
+
+                    return diTop.EnumerateFiles().Select(index => new WeatherForecast
+                    {
+                        DateFormatted = index.LastWriteTime.ToString(),
+                        TemperatureC = 5,
+                        Summary = index.Name
+                    });
+                }
+                else
+                {
+                    fileEntries = new string[] { "Error - Folder does not exist" };
+
+                    var rng = new Random();
+                    return fileEntries.Select(index => new WeatherForecast
+                    {
+                        DateFormatted = DateTime.Now.ToString("d"),
+                        TemperatureC = rng.Next(-20, 55),
+                        Summary = fileEntries[0]
+                    });
+                }
+            }
+            catch (Exception e)
+            {
+                
+                logger.Info(e.Message);
+
+                var rng = new Random();
+
+                var l = new List<WeatherForecast>()
+                {
+                    new WeatherForecast
+                    {
+                        DateFormatted = DateTime.Now.ToString("d"),
+                        TemperatureC = rng.Next(-20, 55),
+                        Summary = "Exception happened"
+                    }
+                };
+
+                return l;
+            }                      
         }
 
         //[HttpPost]
