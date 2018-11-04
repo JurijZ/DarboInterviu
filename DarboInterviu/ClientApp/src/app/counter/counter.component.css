@@ -3,7 +3,7 @@
 video {
   background: #222;
   margin: 0 0 20px 0;
-  --width: 100%;
+  --width: 60%;
   width: var(--width);
   height: calc(var(--width) * 0.75);
 }
