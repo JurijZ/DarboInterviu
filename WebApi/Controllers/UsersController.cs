@@ -38,6 +38,9 @@ namespace WebApi.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]UserDto userDto)
         {
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("Authentication");
+
             var user = _userService.Authenticate(userDto.Username, userDto.Password);
 
             if (user == null)

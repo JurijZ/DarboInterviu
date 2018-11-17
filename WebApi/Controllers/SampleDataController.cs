@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace WebApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class SampleDataController : ControllerBase
@@ -44,13 +44,14 @@ namespace WebApi.Controllers
         [HttpGet("[action]")]
         public IEnumerable<WeatherForecast> WeatherForecasts()
         {
-            //var logger = NLog.LogManager.GetCurrentClassLogger();
-            //logger.Info("Test3");
+            var logger = NLog.LogManager.GetCurrentClassLogger();            
 
             // Read files from the folder
             string folderName = "Upload";
-            string webRootPath = _hostingEnvironment.WebRootPath;
-            string targetDirectory = Path.Combine(webRootPath, folderName);
+            string contentRootPath = _hostingEnvironment.ContentRootPath; //_hostingEnvironment.WebRootPath;
+            string targetDirectory = Path.Combine(contentRootPath, folderName);
+
+            logger.Info("ContentRootPath is: " + targetDirectory);
 
             string[] fileEntries;
 

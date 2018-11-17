@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 let RecordRTC = require('recordrtc/RecordRTC.min');
-import { HttpClient, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http'
+import { HttpClient, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'record-rtc',
@@ -11,6 +12,7 @@ export class RecordRTCComponent implements AfterViewInit {
 
   private stream: MediaStream;
   private recordRTC: any;
+  public baseUrl: string;
 
   public progress: number;
   public message: string;
@@ -45,9 +47,16 @@ export class RecordRTCComponent implements AfterViewInit {
     for (let file of files)
       formData.append(file.name, file);
 
-    const uploadReq = new HttpRequest('POST', `api/upload`, formData, {
+    this.baseUrl = environment.apiUrl + '/api/upload'; // WebAPI project
+    console.log("BaseURL is: " + this.baseUrl);
+
+    const uploadReq = new HttpRequest('POST', this.baseUrl, formData, {
       reportProgress: true,
     });
+
+    //const uploadReq = new HttpRequest('POST', `api/upload`, formData, {
+    //  reportProgress: true,
+    //});
 
     this.http.request(uploadReq).subscribe(event => {
       if (event.type === HttpEventType.UploadProgress)
