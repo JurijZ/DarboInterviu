@@ -1,0 +1,26 @@
+<br />
+<h3>Irasyk klipuka</h3>
+<br />
+<div class="row">
+  <div class="col-xs-12">
+    <video #video class="video"></video>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <button md-raised-button color="primary" (click)="startRecording()"> Record </button>
+    <button md-raised-button color="primary" (click)="stopRecording()"> Stop</button>
+    <button md-raised-button color="primary" (click)="download()"> Download</button>
+  </div>
+</div>
+<br />
+<h3>Isaugok video failiuka i serveriuka:</h3>
+<input #file type="file" multiple (change)="upload(file.files)" />
+<br />
+<span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
+  {{progress}}%
+</span>
+
+<span style="font-weight:bold;color:green;" *ngIf="message">
+  {{message}}
+</span>
