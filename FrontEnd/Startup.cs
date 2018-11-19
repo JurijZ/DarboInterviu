@@ -21,15 +21,14 @@ namespace app1
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {            
-
+        {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // In production, the Angular files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
-            {
-                configuration.RootPath = "ClientApp/dist";
-            });
+            //services.AddSpaStaticFiles(configuration =>
+            //{
+            //    configuration.RootPath = "Candidate/dist";
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,29 +47,72 @@ namespace app1
                 app.UseExceptionHandler("/Error");
             }
 
+            //app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseSpaStaticFiles();
+            //app.UseSpaStaticFiles();
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
-            });
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });            
 
-            app.UseSpa(spa =>
-            {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
+            app.Map("/Employer", Employer =>
 
-                //spa.Options.SourcePath = "ClientApp";
-                spa.Options.SourcePath = "Angular7";
-
-                if (env.IsDevelopment())
+                Employer.UseSpa(spa =>
                 {
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
-            });
+                    // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                    // see https://go.microsoft.com/fwlink/?linkid=864501
+                    
+                    spa.Options.SourcePath = "Employer";
+
+                    //spa.UseSpaPrerendering(options =>
+                    //{
+                    //    options.BootModulePath = $"{spa.Options.SourcePath}/dist/main.js";
+                    //    options.BootModuleBuilder = env.IsDevelopment()
+                    //        ? new AngularCliBuilder(npmScript: "build:ssr:en")
+                    //        : null;
+                    //    options.ExcludeUrls = new[] { "/sockjs-node" };
+                    //});
+
+                    if (env.IsDevelopment())
+                    {
+                        spa.UseAngularCliServer(npmScript: "start");
+                    }
+                })
+            );
+
+            app.Map("/Candidate", Candidate =>
+
+                Candidate.UseSpa(spa =>
+                {
+                    // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                    // see https://go.microsoft.com/fwlink/?linkid=864501
+                    
+                    spa.Options.SourcePath = "Candidate";
+
+                    if (env.IsDevelopment())
+                    {
+                        spa.UseAngularCliServer(npmScript: "start");
+                    }
+                })
+            );
+
+
+            //app.UseSpa(spa =>
+            //{
+            //    // To learn more about options for serving an Angular SPA from ASP.NET Core,
+            //    // see https://go.microsoft.com/fwlink/?linkid=864501
+
+            //    //spa.Options.SourcePath = "ClientApp";
+            //    spa.Options.SourcePath = "Angular7";
+
+            //    if (env.IsDevelopment())
+            //    {
+            //        spa.UseAngularCliServer(npmScript: "start");
+            //    }
+            //});
         }
     }
 }
