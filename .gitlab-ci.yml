@@ -1,16 +1,24 @@
-﻿image: docker:latest
-
-variables:
-  DOCKER_DRIVER: overlay
-  CONTAINER_TEST_IMAGE: mdymel/aspdocker:$CI_BUILD_REF_NAME
-
-services:
-- docker:dind
-
-stages:
-- build
-
-build:
-  stage: build
-  script:
-  - docker build -t $CONTAINER_TEST_IMAGE .
+﻿job_build_dotnet:
+       stage: build
+       image: microsoft/dotnet:latest
+       script:
+         - dotnet restore
+         - dotnet publish src/MyProject.Web -c Release
+       artifacts:
+         expire_in: 12 hrs
+         paths:
+          - src/MyProject.Web/bin/Release/netcoreapp1.1/publish/
+        
+job_build_docker:
+       stage: deploy
+       image: docker:latest
+       services:
+        - docker:dind
+       script:
+        - export DOCKER_VERSION=$(echo "$CI_BUILD_REF" | cut -c 1-6)
+        - echo "$GOOGLE_AUTH_JSON" > google-cloud.json
+        - cd src/MyProject.Web && docker build -t gcr.io/my-kube-project/MyProject-web:$DOCKER_VERSION .
+        - cd ../../ && docker login -e 1234@5678.com -u _json_key -p "$(cat google-cloud.json)" https://gcr.io
+        - docker push gcr.io/my-kube-project/MyProject-web:$DOCKER_VERSION
+       dependencies:
+        - job_build_dotnet
