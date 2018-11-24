@@ -1,13 +1,16 @@
-﻿job_build_dotnet:
+﻿image: microsoft/dotnet:latest
+
+job_build_FrontEnd:
        stage: build
-       image: microsoft/dotnet:latest
-       script:
-         - dotnet restore
-         - dotnet publish src/MyProject.Web -c Release
+       only:
+         - master
        artifacts:
          expire_in: 12 hrs
          paths:
-          - src/MyProject.Web/bin/Release/netcoreapp1.1/publish/
+          - publish/
+       script:
+         - dotnet restore
+         - dotnet publish -c Release -o ../publish FrontEnd/FrontEnd.csproj
         
 job_build_docker:
        stage: deploy

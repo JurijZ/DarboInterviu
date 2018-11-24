@@ -30,16 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove=".gitlab-ci.yml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include=".gitlab-ci.yml">
-      <Generator>MSBuild:Compile</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
