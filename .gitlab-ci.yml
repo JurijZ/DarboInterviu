@@ -24,4 +24,4 @@ job_build_docker:
         - cd ../../ && docker login -e 1234@5678.com -u _json_key -p "$(cat google-cloud.json)" https://gcr.io
         - docker push gcr.io/my-kube-project/MyProject-web:$DOCKER_VERSION
        dependencies:
-        - job_build_dotnet
+        - job_build_FrontEnd
