@@ -12,5 +12,10 @@ namespace app1.Controllers
         {
             return View();
         }
+
+        //public ActionResult Index()
+        //{
+        //    return Redirect("~/Employer/dist/index.html");
+        //}
     }
 }

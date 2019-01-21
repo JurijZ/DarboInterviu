@@ -34,11 +34,11 @@ namespace WebApi.Services
         public FileStream GetVideoById(string id)
         {
             var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("GetVideoById");
 
-            string folderName = @"Upload\" + id;
-            string contentRootPath = _hostingEnvironment.ContentRootPath;
-            string path = Path.Combine(contentRootPath, folderName);
+            string[] parts = new string[] { _hostingEnvironment.ContentRootPath, "Upload", id };
+            string path = Path.Combine(parts);
+
+            logger.Info("Looking for a file: " + path);
 
             if (File.Exists(path))
             {
@@ -59,7 +59,7 @@ namespace WebApi.Services
             string contentRootPath = _hostingEnvironment.ContentRootPath; //_hostingEnvironment.WebRootPath;
             string targetDirectory = Path.Combine(contentRootPath, folderName);
 
-            logger.Info("ContentRootPath is: " + targetDirectory);
+            logger.Info("Video files are located in: " + targetDirectory);
 
             string[] fileEntries;
 

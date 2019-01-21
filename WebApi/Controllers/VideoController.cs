@@ -78,7 +78,7 @@ namespace WebApi.Controllers
         public IActionResult GetVideoById(string id)
         {
             var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("GetVideo2");
+            logger.Info("Video file requested: " + id);
 
             var fs = _videoService.GetVideoById(id);
             if (fs != null)

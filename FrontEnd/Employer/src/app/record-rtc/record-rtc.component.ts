@@ -79,7 +79,8 @@ export class RecordRTCComponent implements AfterViewInit {
     this.recordRTC = RecordRTC(stream, options);
     this.recordRTC.startRecording();
     let video: HTMLVideoElement = this.video.nativeElement;
-    video.src = window.URL.createObjectURL(stream);
+    //video.src = window.URL.createObjectURL(stream); //createObjectURL() function is depricated in Chrome
+    video.srcObject = stream;
     this.toggleControls();
   }
 

@@ -14,27 +14,24 @@ export class VideosComponent implements OnInit {
   public url: string;
   public baseUrl: string;
   
-  constructor(http: HttpClient) {    
-    //this.url = environment.apiUrl + "/api/Video/GetVideo"; // WebAPI project - konkretus video
-    this.baseUrl = environment.apiUrl + '/api/Video'; // WebAPI project - visi video 
+  constructor(http: HttpClient) {
+    this.baseUrl = environment.apiUrl + '/Video'; // WebAPI project - visi video 
     console.log("BaseURL is: " + this.baseUrl);
     //this.baseUrl = document.getElementsByTagName('base')[0].href; //Angular project
     
     http.get<Video[]>(this.baseUrl).subscribe(result => {
       this.videos = result;
-      this.url = environment.apiUrl + "/api/Video/GetVideo";
     }, error => console.error(error));
   }
 
   ngOnInit() {
-    console.log("BaseURL is: " + this.baseUrl);
   }
 
   playVideo(fileName: string) {
-    console.log("Play video: " + fileName);
+    console.log("Selected video: " + fileName);
 
     /* You are accessing a dom element directly here, so you need to call "nativeElement" first. */
-    this.myVideo.nativeElement.src = environment.apiUrl + "/api/Video/" + fileName;
+    this.myVideo.nativeElement.src = environment.apiUrl + "/Video/" + fileName;
     this.myVideo.nativeElement.play();
     this.videoName = fileName;
   } 
