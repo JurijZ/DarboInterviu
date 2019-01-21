@@ -2,12 +2,6 @@
     ViewData["Title"] = "Darbo Interviu";
 }
 
-<script type="text/javascript">
-    $(document).ready(function () {
-        $('.carousel').carousel({ interval: 500000, pause: "false" });
-    });
-</script>
-
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -77,17 +71,7 @@
         color: #ffffff;
     }
 
-    .howitworks {
-        padding: 10px;
-        border: 5px green;
-        margin-top: 20px;
-        background-color: #5c5cd6;
-        color: #FFFFFF;
-    }
 
-    .howitworks-background {
-        background-color: whitesmoke;
-    }
 
     #wrap {
         /*margin-top: 20vh;
@@ -96,24 +80,11 @@
         padding-bottom: 20vh;
     }
 
-    #content {
-        min-height: calc(100vh - 40px);
-    }
-
-    #footer {
-        height: 20px;
-        background: #222;
-        color: white;
-    }
 
     .fsize {
         font-size: 20px;
     }
 
-    .body-background {
-        background-image: url('../Images/Background.png');
-        height: 400px;
-    }
 
     .register {
         display: inline-block;
@@ -135,225 +106,118 @@
         margin-left: 1em;
     }
 
-    /* keeps this behind all content */
-    .carousel {
+
+
+
+
+    .frontpage {
+        background: url(Images/frontpage1.jpg);
         z-index: 0;
-    }
-
-
-    .carousel-fade .carousel-inner .item {
-        opacity: 0;
-        transition-property: opacity;
-    }
-
-    .carousel-fade .carousel-inner .active {
-        opacity: 1;
-    }
-
-        .carousel-fade .carousel-inner .active.left,
-        .carousel-fade .carousel-inner .active.right {
-            left: 0;
-            opacity: 0;
-            z-index: 2;
-        }
-
-    .carousel-fade .carousel-inner .next.left,
-    .carousel-fade .carousel-inner .prev.right {
-        opacity: 1;
-    }
-
-    .carousel-fade .carousel-control {
-        z-index: 1;
-    }
-
-    @@media all and (transform-3d), (-webkit-transform-3d) {
-        .carousel-fade .carousel-inner > .item.next,
-        .carousel-fade .carousel-inner > .item.active.right {
-            opacity: 0;
-            -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0);
-        }
-
-        .carousel-fade .carousel-inner > .item.prev,
-        .carousel-fade .carousel-inner > .item.active.left {
-            opacity: 0;
-            -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0);
-        }
-
-            .carousel-fade .carousel-inner > .item.next.left,
-            .carousel-fade .carousel-inner > .item.prev.right,
-            .carousel-fade .carousel-inner > .item.active {
-                opacity: 1;
-                -webkit-transform: translate3d(0, 0, 0);
-                transform: translate3d(0, 0, 0);
-            }
-    }
-
-    .carousel .item {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        -webkit-transition: opacity 3s;
-        -moz-transition: opacity 3s;
-        -ms-transition: opacity 3s;
-        -o-transition: opacity 3s;
-        transition: opacity 3s;
-    }
-
-    .carousel .one {
-        background: url(Images/frontpage1.jpg);
-        background-position: center center;
-        background-size: cover;
-        -moz-background-size: cover;
-    }
-
-    .carousel .two {
-        background: url(Images/frontpage2.jpg);
-        background-position: center center;
-        background-size: cover;
-        -moz-background-size: cover;
-    }
-
-    .carousel .three {
-        background: url(Images/frontpage3.jpg);
-        background-position: center center;
-        background-size: cover;
-        -moz-background-size: cover;
-    }
-
-    .carousel .four {
-        background: url(Images/frontpage4.jpg);
-        background-position: center center;
-        background-size: cover;
-        -moz-background-size: cover;
-    }
-
-    .carousel .five {
-        background: url(Images/frontpage5.jpg);
-        background-position: center center;
-        background-size: cover;
-        -moz-background-size: cover;
-    }
-
-    .carousel .active.left {
-        left: 0;
-        opacity: 0;
-        z-index: 2;
-    }
-
-    .car1 {
-        background: url(Images/frontpage1.jpg);
         background-size: cover;
         background-position: center center;
         position: relative;
     }
 </style>
 
-<div>
-    <div id="myCarousel" class="carousel slide carousel-fade">
-        <div class="carousel-inner">
-            <div class="active item one"></div>
-            <div class="item two"></div>
-            <div class="item three"></div>
-            <div class="item four"></div>
-            <div class="item five"></div>
+<body class="frontpage">
+    <div>
 
-            <div style="position:absolute;z-index:3;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);"></div>
-            <div class="row" style="position:relative;z-index:4;color:#fff">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-10 text-left logo">
-                            <h2 class="title-colour" style="margin-left:0.5em">Online Interviu platform</h2>
-                        </div>
+        <div style="position:absolute;z-index:3;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3);"></div>
+
+        <div class="row" style="position:relative;z-index:4;color:#fff">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-10 text-left logo">
+                        <h2 class="title-colour" style="margin-left:0.5em">Online Interviu platform</h2>
                     </div>
                 </div>
             </div>
-            <div class="row" style="position:relative;z-index:4;color:#fff">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-10 text-left">
-                        </div>
-                        <div class="col-md-2 text-center">
-                            <p style="color:white"></p>
-                        </div>
+        </div>
+        <div class="row" style="position:relative;z-index:4;color:#fff">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-10 text-left">
+                    </div>
+                    <div class="col-md-2 text-center">
+                        <p style="color:white"></p>
                     </div>
                 </div>
             </div>
-            <div class="row" style="position:relative;z-index:4;color:#fff">
-                <div class="col-md-12 text-center">
-                    <div class="row">
-                        <div class="col-md-2">
+        </div>
+        <div class="row" style="position:relative;z-index:4;color:#fff">
+            <div class="col-md-12 text-center">
+                <div class="row">
+                    <div class="col-md-2">
+
+                    </div>
+                    <div class="col-md-8" id="wrap">
+                        <div class="col-md-6 text-center">
+
+                            <input type="button"
+                                   class="btn btn-warning btn-xlarge"
+                                   value="Candidate"
+                                   onclick="@("window.location.href='" + @Url.Action("Index", "Candidate") + "'");">
+
+                            @*<div class="fsize" style="margin-top:1em">
+                                    Advertise a job and find the right person for you.
+                                </div>*@
 
                         </div>
-                        <div class="col-md-8" id="wrap">
-                            <div class="col-md-6 text-center">
 
-                                <input type="button"
-                                       class="btn btn-warning btn-xlarge"
-                                       value="Employer"
-                                       onclick="@("window.location.href='" + @Url.Action("Index", "Employer") + "'");">
+                        <div class="col-md-6 text-center">
 
-                                @*<div class="fsize" style="margin-top:1em">
-                                        Search for the jobs and share your skills with people.
-                                    </div>*@
-                            </div>
-                            <div class="col-md-6 text-center">
+                            <input type="button"
+                                   class="btn btn-warning btn-xlarge"
+                                   value="Employer"
+                                   onclick="@("window.location.href='" + @Url.Action("Index", "Employer") + "'");">
 
-                                <input type="button"
-                                       class="btn btn-warning btn-xlarge"
-                                       value="Candidate"
-                                       onclick="@("window.location.href='" + @Url.Action("Index", "Candidate") + "'");">
-
-                                @*<div class="fsize" style="margin-top:1em">
-                                        Advertise a job and find the right person for you.
-                                    </div>*@
-
-                            </div>
-
+                            @*<div class="fsize" style="margin-top:1em">
+                                    Search for the jobs and share your skills with people.
+                                </div>*@
                         </div>
-                        <div class="col-md-2">
 
-                        </div>
+                    </div>
+                    <div class="col-md-2">
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!--
-<div class="row">
-    <div class="col-md-10 col-md-offset-1 text-center">
-        <h4 style="margin-top:2em">How it works?</h4>
+    <!--
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 text-center">
+            <h4 style="margin-top:2em">How it works?</h4>
+        </div>
+        <div class="col-md-10 col-md-offset-1">
+            <div class="col-md-2 col-md-offset-1 text-center">
+                <h4 class="howitworks">Post a job</h4>
+                Deifine a skill you search, location and when you need it.
+            </div>
+            <div class="col-md-2 text-center">
+                <h4 class="howitworks">Apply</h4>
+                Apply for a job that matches your skills, location and availability.
+            </div>
+            <div class="col-md-2 text-center">
+                <h4 class="howitworks">Offer</h4>
+                Choose the best applicant for the job and make an offer.
+            </div>
+            <div class="col-md-2 text-center">
+                <h4 class="howitworks">Work</h4>
+                Commit to the offer and deliver great work on time.
+            </div>
+            <div class="col-md-2 text-center">
+                <h4 class="howitworks">Feedback</h4>
+                Evaluate the quality of the completed work and leave a feedback.
+            </div>
+        </div>
     </div>
-    <div class="col-md-10 col-md-offset-1">
-        <div class="col-md-2 col-md-offset-1 text-center">
-            <h4 class="howitworks">Post a job</h4>
-            Deifine a skill you search, location and when you need it.
-        </div>
-        <div class="col-md-2 text-center">
-            <h4 class="howitworks">Apply</h4>
-            Apply for a job that matches your skills, location and availability.
-        </div>
-        <div class="col-md-2 text-center">
-            <h4 class="howitworks">Offer</h4>
-            Choose the best applicant for the job and make an offer.
-        </div>
-        <div class="col-md-2 text-center">
-            <h4 class="howitworks">Work</h4>
-            Commit to the offer and deliver great work on time.
-        </div>
-        <div class="col-md-2 text-center">
-            <h4 class="howitworks">Feedback</h4>
-            Evaluate the quality of the completed work and leave a feedback.
+          -->
+    <div calss="row">
+        <div class="col-md-12">
+            <h4>Darbo Interviu</h4>
         </div>
     </div>
-</div>
+</body>
 
-<div calss="row">
-    <div class="col-md-12">
-        <h4>Darbo Interviu</h4>
-    </div>
-</div>
-    -->

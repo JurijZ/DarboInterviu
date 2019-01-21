@@ -24,10 +24,20 @@ namespace WebApi.Controllers
     public class VideoController : ControllerBase
     {
         private IHostingEnvironment _hostingEnvironment;
+        private IVideoService _videoService;
+        private IMapper _mapper;
+        private readonly AppSettings _appSettings;
 
-        public VideoController(IHostingEnvironment hostingEnvironment)
+        public VideoController(
+            IHostingEnvironment hostingEnvironment, 
+            IVideoService videoService,
+            IMapper mapper,
+            IOptions<AppSettings> appSettings)
         {
             _hostingEnvironment = hostingEnvironment;
+            _videoService = videoService;
+            _mapper = mapper;
+            _appSettings = appSettings.Value;
         }
 
         [HttpGet("[action]")]
@@ -46,6 +56,37 @@ namespace WebApi.Controllers
                 return new FileStreamResult(fs, new MediaTypeHeaderValue("video/webm").MediaType);
             }
 
+            return BadRequest();
+        }
+
+        [HttpGet()]
+        public ActionResult<IEnumerable<Video>> GetVideosMetadata()
+        {
+            NLog.LogManager.GetCurrentClassLogger().Info("GetVideosMetadata");
+
+            var listOfVideosMetadata = _videoService.GetVideosMetadata();
+            if (listOfVideosMetadata.Any())
+            {
+                return Ok(listOfVideosMetadata);
+            }
+
+            NLog.LogManager.GetCurrentClassLogger().Info("No files were found, returning HTTP 400 BadRequest");
+            return BadRequest();
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetVideoById(string id)
+        {
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("GetVideo2");
+
+            var fs = _videoService.GetVideoById(id);
+            if (fs != null)
+            {                
+                return new FileStreamResult(fs, new MediaTypeHeaderValue("video/webm").MediaType);
+            }
+
+            logger.Info("No file found, returning HTTP 400 BadRequest");
             return BadRequest();
         }
     }
