@@ -1,6 +1,5 @@
-<br />
-<h3>Irasyk klipuka</h3>
-<br />
+
+<h3>Irasyk video</h3>
 <div class="row">
   <div class="col-xs-12">
     <video #video class="video"></video>
@@ -8,15 +7,15 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <button md-raised-button color="primary" (click)="startRecording()"> Record </button>
-    <button md-raised-button color="primary" (click)="stopRecording()"> Stop</button>
-    <button md-raised-button color="primary" (click)="download()"> Download</button>
+    <button [disabled]="recordButtonDisabled" md-raised-button color="primary" (click)="startRecording()"> Record </button>
+    <!--<button md-raised-button color="primary" (click)="stopRecording()"> Stop</button>-->
+    <!--<button md-raised-button color="primary" (click)="download()"> Download</button>-->
+    <button [disabled]="sendButtonDisabled" md-raised-button color="primary" (click)="stopRecordingAndSend()">Stop and upload to Server</button>    
   </div>
 </div>
-<br />
-<h3>Isaugok video failiuka i serveriuka:</h3>
+<!--<h3>Isaugok video failiuka i serveriuka:</h3>
 <input #file type="file" multiple (change)="upload(file.files)" />
-<br />
+<br />-->
 <span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
   {{progress}}%
 </span>

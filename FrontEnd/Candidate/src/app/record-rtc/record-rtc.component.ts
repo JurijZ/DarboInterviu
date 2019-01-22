@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 let RecordRTC = require('recordrtc/RecordRTC.min');
 import { HttpClient, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
 import { environment } from '@environments/environment';
@@ -16,10 +16,13 @@ export class RecordRTCComponent implements AfterViewInit {
 
   public progress: number;
   public message: string;
+  public recordButtonDisabled: boolean = false;
+  public sendButtonDisabled: boolean = true;
+  public recordedBlob: Blob;
 
   @ViewChild('video') video;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private ref: ChangeDetectorRef) {
     // Do stuff
   }
 
@@ -47,17 +50,13 @@ export class RecordRTCComponent implements AfterViewInit {
     for (let file of files)
       formData.append(file.name, file);
 
-    this.baseUrl = environment.apiUrl + '/api/upload'; // WebAPI project
+    this.baseUrl = environment.apiUrl + '/upload'; // WebAPI project
     console.log("BaseURL is: " + this.baseUrl);
 
     const uploadReq = new HttpRequest('POST', this.baseUrl, formData, {
       reportProgress: true,
     });
-
-    //const uploadReq = new HttpRequest('POST', `api/upload`, formData, {
-    //  reportProgress: true,
-    //});
-
+    
     this.http.request(uploadReq).subscribe(event => {
       if (event.type === HttpEventType.UploadProgress)
         this.progress = Math.round(100 * event.loaded / event.total);
@@ -98,6 +97,10 @@ export class RecordRTCComponent implements AfterViewInit {
   }
 
   startRecording() {
+    this.recordButtonDisabled = true;
+    this.sendButtonDisabled = false;
+    this.message = "Recording";
+
     let mediaConstraints = {
       video: true,
       audio: true
@@ -108,11 +111,55 @@ export class RecordRTCComponent implements AfterViewInit {
   }
 
   stopRecording() {
+    this.recordButtonDisabled = false;
+    this.sendButtonDisabled = true;
     let recordRTC = this.recordRTC;
     recordRTC.stopRecording(this.processVideo.bind(this));
     let stream = this.stream;
     stream.getAudioTracks().forEach(track => track.stop());
     stream.getVideoTracks().forEach(track => track.stop());
+  }
+
+  stopRecordingAndSend() {
+    this.recordButtonDisabled = false;
+    this.sendButtonDisabled = true;
+    let recordRTC = this.recordRTC;
+    //recordRTC.stopRecording(this.processVideo.bind(this));    
+
+    var that = this;
+    recordRTC.stopRecording(function () {
+      //this.processVideo.bind(this)
+      //that.recordedBlob = recordRTC.getBlob();
+      //console.log("Blob size 1: " + that.recordedBlob.size);
+      that.sendToServer(recordRTC.getBlob());
+    });
+    let stream = this.stream;
+    stream.getAudioTracks().forEach(track => track.stop());
+    stream.getVideoTracks().forEach(track => track.stop());
+  }
+
+  sendToServer(blob: Blob) {
+    const formData = new FormData();
+    formData.append('video-blob', blob, 'test1.webm');
+    console.log("Record blob size: " + blob.size);
+
+    let baseUrl = environment.apiUrl + '/upload'; // WebAPI project
+    console.log("BaseURL is: " + baseUrl);
+
+    const uploadReq = new HttpRequest('POST', baseUrl, formData, {
+      reportProgress: true,
+    });    
+
+    //var that = this;
+    this.http.request(uploadReq).subscribe(event => {
+      if (event.type === HttpEventType.UploadProgress) {
+        this.progress = Math.round(100 * event.loaded / event.total);
+      }
+      else if (event.type === HttpEventType.Response) {
+        this.message = event.body.toString();
+        this.ref.detectChanges(); // This is needed to update the view
+      }        
+    });
   }
 
   download() {

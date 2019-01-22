@@ -33,15 +33,15 @@ namespace WebApi.Controllers
         [HttpPost, DisableRequestSizeLimit]
         public ActionResult UploadFile()
         {
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+
             try
             {
                 var file = Request.Form.Files[0];
+                logger.Info("Received file name: " + file.FileName);
+
                 string folderName = "Upload";
                 string contentRootPath = _hostingEnvironment.ContentRootPath;
-
-                var logger = NLog.LogManager.GetCurrentClassLogger();
-                logger.Info("Upload to ContentRootPath is: " + contentRootPath);
-
                 string newPath = Path.Combine(contentRootPath, folderName);
                 logger.Info("Upload to: " + newPath);
 
