@@ -164,8 +164,9 @@
                                    onclick="@("window.location.href='" + @Url.Action("Index", "Candidate") + "'");">
 
                             @*<div class="fsize" style="margin-top:1em">
-                                    Advertise a job and find the right person for you.
-                                </div>*@
+            Advertise a job and find the right person for you.
+        </div>*@
+                            <a href="@Url.Content("~/Candidate/index.html")">Candidate</a>
 
                         </div>
 
@@ -177,8 +178,9 @@
                                    onclick="@("window.location.href='" + @Url.Action("Index", "Employer") + "'");">
 
                             @*<div class="fsize" style="margin-top:1em">
-                                    Search for the jobs and share your skills with people.
-                                </div>*@
+            Search for the jobs and share your skills with people.
+        </div>*@
+                            <a href="@Url.Content("~/Employer/index.html")">Employer</a>
                         </div>
 
                     </div>
