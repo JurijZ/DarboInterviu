@@ -4,6 +4,7 @@ import { HomeComponent } from './home';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { VideosComponent } from './videos';
+import { InterviewComponent } from './interview';
 import { RecordRTCComponent } from './record-rtc';
 import { AuthGuard } from './_guards';
 
@@ -11,7 +12,8 @@ const appRoutes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
-    { path: 'videos', component: VideosComponent },
+  { path: 'videos', component: VideosComponent },
+  { path: 'interview', component: InterviewComponent },
     { path: 'record-rtc', component: RecordRTCComponent },
 
     // otherwise redirect to home

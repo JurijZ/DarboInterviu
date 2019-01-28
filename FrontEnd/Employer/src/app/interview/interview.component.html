@@ -1,0 +1,8 @@
+
+<h3>My interiews:</h3>
+<ul>
+  <li *ngFor="let interview of interviews">
+    {{interview.id}} {{interview.name}} {{interview.candidate}} {{interview.timestamp}}
+    - <a (click)="deleteInterview(interview.id)" class="text-danger">Delete</a>
+  </li>
+</ul>

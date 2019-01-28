@@ -9,8 +9,8 @@ using WebApi.Helpers;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190122101657_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20190127223730_I1")]
+    partial class I1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,9 +18,41 @@ namespace WebApi.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024");
 
-            modelBuilder.Entity("WebApi.Entities.User", b =>
+            modelBuilder.Entity("WebApi.Entities.Interview", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Candidate");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("Timestamp");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Interviews");
+                });
+
+            modelBuilder.Entity("WebApi.Entities.Question", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Interview");
+
+                    b.Property<string>("QuestionText");
+
+                    b.Property<DateTime>("Timestamp");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("WebApi.Entities.User", b =>
+                {
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("FirstName");

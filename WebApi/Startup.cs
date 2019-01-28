@@ -66,8 +66,9 @@ namespace WebApi
                     OnTokenValidated = context =>
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                        var userId = int.Parse(context.Principal.Identity.Name);
-                        var user = userService.GetById(userId);
+                        //var userId = int.Parse(context.Principal.Identity.Name);
+                        var userGuid = context.Principal.Identity.Name;
+                        var user = userService.GetById(userGuid);
                         if (user == null)
                         {
                             // return unauthorized if user no longer exists
@@ -90,6 +91,7 @@ namespace WebApi
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IVideoService, VideoService>();
+            services.AddScoped<IInterviewService, InterviewService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -100,7 +100,7 @@ namespace WebApi.Services
                     {
                         Timestamp = DateTime.Now,
                         Candidate = "Exception",
-                        Name = "Exception happened"
+                        Name = e.Message
                     }
                 };
 

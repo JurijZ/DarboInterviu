@@ -96,7 +96,7 @@ namespace WebApi.Controllers
                     {
                         DateFormatted = DateTime.Now.ToString("d"),
                         TemperatureC = rng.Next(-20, 55),
-                        Summary = "Exception happened"
+                        Summary = e.Message
                     }
                 };
 

@@ -9,5 +9,7 @@ namespace WebApi.Helpers
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Video> Videos { get; set; }
+        public virtual DbSet<Interview> Interviews { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
     }
 }
