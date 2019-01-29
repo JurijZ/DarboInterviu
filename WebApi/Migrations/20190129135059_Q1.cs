@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApi.Migrations
 {
-    public partial class I1 : Migration
+    public partial class Q1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,10 +25,11 @@ namespace WebApi.Migrations
                 name: "Questions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    Id = table.Column<string>(nullable: false),
                     Interview = table.Column<string>(nullable: true),
-                    QuestionText = table.Column<string>(nullable: true),
+                    Text = table.Column<string>(nullable: true),
+                    Duration = table.Column<int>(nullable: false),
+                    Order = table.Column<int>(nullable: false),
                     Timestamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>

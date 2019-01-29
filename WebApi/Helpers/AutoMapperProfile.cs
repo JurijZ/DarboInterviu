@@ -13,6 +13,9 @@ namespace WebApi.Helpers
 
             CreateMap<Interview, InterviewDto>();
             CreateMap<InterviewDto, Interview>();
+
+            CreateMap<Question, QuestionDto>();
+            CreateMap<QuestionDto, Question>();
         }
     }
 }

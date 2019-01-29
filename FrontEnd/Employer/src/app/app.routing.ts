@@ -5,6 +5,7 @@ import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { VideosComponent } from './videos';
 import { InterviewComponent } from './interview';
+import { QuestionComponent } from './question';
 import { RecordRTCComponent } from './record-rtc';
 import { AuthGuard } from './_guards';
 
@@ -14,6 +15,7 @@ const appRoutes: Routes = [
     { path: 'register', component: RegisterComponent },
   { path: 'videos', component: VideosComponent },
   { path: 'interview', component: InterviewComponent },
+  { path: 'question', component: QuestionComponent },
     { path: 'record-rtc', component: RecordRTCComponent },
 
     // otherwise redirect to home

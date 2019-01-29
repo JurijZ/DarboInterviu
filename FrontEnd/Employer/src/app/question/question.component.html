@@ -1,0 +1,9 @@
+
+<h3>Interiew questions:</h3>
+<ul>
+  <li *ngFor="let question of questions">
+    {{question.text}} {{question.duration}} {{question.order}} ({{question.id}})
+    - <a (click)="deleteQuestion(question.id)" class="text-danger">Delete</a>
+    
+  </li>
+</ul>

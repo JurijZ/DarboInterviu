@@ -9,8 +9,8 @@ using WebApi.Helpers;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190127223730_I1")]
-    partial class I1
+    [Migration("20190129135059_Q1")]
+    partial class Q1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -36,12 +36,16 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Entities.Question", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Duration");
 
                     b.Property<string>("Interview");
 
-                    b.Property<string>("QuestionText");
+                    b.Property<int>("Order");
+
+                    b.Property<string>("Text");
 
                     b.Property<DateTime>("Timestamp");
 

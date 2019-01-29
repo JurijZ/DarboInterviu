@@ -34,12 +34,16 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("WebApi.Entities.Question", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Duration");
 
                     b.Property<string>("Interview");
 
-                    b.Property<string>("QuestionText");
+                    b.Property<int>("Order");
+
+                    b.Property<string>("Text");
 
                     b.Property<DateTime>("Timestamp");
 
