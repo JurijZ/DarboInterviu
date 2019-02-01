@@ -3,7 +3,8 @@ import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 import { Interview, Question } from '@app/_models';
-import { InterviewService, QuestionService, AuthenticationService } from '@app/_services';
+import { InterviewService, DataService, QuestionService, AuthenticationService } from '@app/_services';
+import { loadQueryList } from '@angular/core/src/render3';
 
 @Component({
   selector: 'app-question',
@@ -13,25 +14,105 @@ import { InterviewService, QuestionService, AuthenticationService } from '@app/_
 export class QuestionComponent implements OnInit {
   questions: Question[] = [];
   interview: Interview;
+  durations: number[] = [ 5, 10, 15, 20 ];
 
-  constructor(private questionService: QuestionService) {
-
+  constructor(private questionService: QuestionService, private data: DataService) {
   }
 
   ngOnInit() {
-    this.loadAllQuestions();
+    this.data.currentInterview.subscribe(interview => {
+      this.interview = interview;
+      this.loadAllQuestions(this.interview.id);
+    })
   }
 
-  deleteInterview(id: string) {
-    this.questionService.delete(id).pipe(first()).subscribe(() => {
-      this.loadAllQuestions()
-    });
+  deleteQuestion(id: string) {
+    if(confirm("Are you sure you want to delete this question?")){
+      this.questionService.delete(id).pipe(first()).subscribe(() => {
+        this.loadAllQuestions(this.interview.id)
+      });
+    }    
   }
 
-  private loadAllQuestions() {
-    this.questionService.getAll().pipe(first()).subscribe(questions => {
+  //selectDuration(duration: number){  }
+
+  addQuestion() {
+    let newQuestion: Question = new Question();
+    //newQuestion.id = 1;
+    newQuestion.duration = 5;
+    newQuestion.order = this.questions.length;
+    newQuestion.text = "";
+    newQuestion.interview = this.interview.id;
+
+    //this.questions.push(newQuestion);
+
+    var response = this.questionService.create(newQuestion);
+
+    response.subscribe(
+      data => {
+        console.log("POST was successful ", data);
+        this.loadAllQuestions(this.interview.id);
+      },
+      error => {
+        console.log("Error: ", error);
+      }
+    );
+  }
+
+  refreshQuestions() {
+    this.loadAllQuestions(this.interview.id);
+  }
+
+  updateQuestion(question: Question) {
+    var c = this.questionService.update(question);
+  }
+
+  private loadAllQuestions(interviewId: string) {
+    this.questionService.getByInterviewId(interviewId).pipe(first()).subscribe(questions => {
       this.questions = questions;
+
+      this.orderQuestions();
     });
   }
 
+  up(index: number){
+    if(index > 0){      
+      console.log(index);
+      
+      var temp = this.questions[index];
+      
+      this.questions[index] = this.questions[index - 1];
+      this.questions[index].order = index;
+      this.updateQuestion(this.questions[index]);
+
+      this.questions[index - 1] = temp;
+      this.questions[index - 1].order = index - 1;
+      this.updateQuestion(this.questions[index - 1]);
+    }
+  }
+
+  down(index: number){
+    if(index < this.questions.length - 1){   
+      console.log(index);
+      
+      var temp = this.questions[index];
+      
+      this.questions[index] = this.questions[index + 1];
+      this.questions[index].order = index;
+      this.updateQuestion(this.questions[index]);
+
+      this.questions[index + 1] = temp;
+      this.questions[index + 1].order = index + 1;
+      this.updateQuestion(this.questions[index + 1]);
+    }
+  }
+
+  private orderQuestions(){
+    // Order rarray
+    this.questions.sort((left, right): number => {
+      if (left.order < right.order) return -1;
+      if (left.order > right.order) return 1;
+      return 0;
+    } )
+  }
 }

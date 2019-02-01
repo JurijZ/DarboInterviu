@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
-
+import { Router, ActivatedRoute } from '@angular/router';
 import { Interview } from '@app/_models';
-import { InterviewService, AuthenticationService } from '@app/_services';
+import { InterviewService, DataService, AuthenticationService } from '@app/_services';
 
 @Component({
   selector: 'app-interview',
@@ -13,24 +13,33 @@ import { InterviewService, AuthenticationService } from '@app/_services';
 export class InterviewComponent implements OnInit {
   interviews: Interview[] = [];
 
-  constructor(private interviewService: InterviewService) {
-    
+  constructor(
+    private interviewService: InterviewService,
+    private router: Router,
+    private data: DataService) {
+
   }
 
-ngOnInit() {
-  this.loadAllInterviews();
-}
+  ngOnInit() {
+    this.loadAllInterviews();
+  }
 
   deleteInterview(id: string) {
-    this.interviewService.delete(id).pipe(first()).subscribe(() => {
-      this.loadAllInterviews()
+    if (confirm("Are you sure you want to delete this Interview?")) {
+      this.interviewService.delete(id).pipe(first()).subscribe(() => {
+        this.loadAllInterviews()
+      });
+    }
+  }
+
+  private loadAllInterviews() {
+    this.interviewService.getAll().pipe(first()).subscribe(interviews => {
+      this.interviews = interviews;
     });
   }
 
-private loadAllInterviews() {
-  this.interviewService.getAll().pipe(first()).subscribe(interviews => {
-    this.interviews = interviews;
-  });
-}
-
+  selectedInterview(interview: Interview) {
+    this.data.setInterview(interview);
+    this.router.navigate(['/question']);
+  }
 }

@@ -1,9 +1,32 @@
+<br>
+<h3>My Interiews:</h3>
+<br>
+<div class="container">
 
-<h3>My interiews:</h3>
-<ul>
-  <li *ngFor="let interview of interviews">
-    {{interview.name}} {{interview.candidate}} {{interview.timestamp}} ({{interview.id}})
-    - <a (click)="deleteInterview(interview.id)" class="text-danger">Delete</a>
-    <a routerLink="/question" class="btn btn-link">Edit</a>
-  </li>
-</ul>
+  <div class="row">
+    <table class="table table-striped ">
+      <thead>
+        <tr>
+          <th> Interview Title </th>
+          <th> Creation Date </th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let interview of interviews">
+          <td> {{interview.name}}</td>
+          <td> {{interview.timestamp}}</td>
+          <td>
+            <button class="btn btn-warning btn-sm" (click)="selectedInterview(interview)" style="margin-right:5px">Edit</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteInterview(interview.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <button (click)="addFieldValue()" class="btn btn-success btn-lg1" type="button" style="margin-right:10px">Add</button>
+    <button (click)="onEditCloseItems()" class="btn btn-primary btn-lg1" type="button">Refresh</button>
+  </div>
+</div>

@@ -1,9 +1,38 @@
+<br>
+<h3>"{{interview.name}}" interview questions:</h3>
+<br>
+<ul class="list-unstyled">
+  <li *ngFor="let question of questions; let i = index">
+    <div>
+      <textarea [(ngModel)]="question.text" [disabled]="!question.isEditable" rows="2" style="min-width: 100%"
+        placeholder="Enter your question here...">
+    </textarea>
+    </div>
+    <div class="horizontal">
+      <div class="left">
+        <span>Duration (min.): </span>
+        <select [(ngModel)]="question.duration" [disabled]="!question.isEditable">
+          <option *ngFor="let duration of durations" [ngValue]="duration">{{duration}}</option>
+        </select>
+      </div>
 
-<h3>Interiew questions:</h3>
-<ul>
-  <li *ngFor="let question of questions">
-    {{question.text}} {{question.duration}} {{question.order}} ({{question.id}})
-    - <a (click)="deleteQuestion(question.id)" class="text-danger">Delete</a>
-    
+      <div class="right">
+        <button *ngIf="!question.isEditable" class="btn btn-warning btn-sm" (click)="question.isEditable=!question.isEditable"
+          style="margin-right:5px">Edit</button>
+        <button *ngIf="question.isEditable" class="btn btn-warning btn-sm" (click)="question.isEditable=!question.isEditable; updateQuestion(question)"
+          style="margin-right:5px">Save</button>
+        <button class="btn btn-danger btn-sm" (click)="deleteQuestion(question.id)">Delete</button>
+      </div>
+
+      <div class="center">
+        <button *ngIf="i > 0" class="btn btn-outline-primary btn-sm" (click)="up(i)">&#9650;</button>
+        <button *ngIf="i < questions.length - 1" class="btn btn-outline-primary btn-sm" (click)="down(i)">&#9660;</button>
+      </div>
+    </div>
+
   </li>
 </ul>
+<div>
+  <button (click)="addQuestion()" class="btn btn-success btn-lg1" type="button" style="margin-right:10px">Add</button>
+  <button (click)="refreshQuestions()" class="btn btn-primary btn-lg1" type="button">Refresh</button>
+</div>

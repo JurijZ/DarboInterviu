@@ -12,16 +12,27 @@ export class QuestionService {
     return this.http.get<Question[]>(`${environment.apiUrl}/question`);
   }
 
+  getByInterviewId(interviewId: string) {
+    return this.http.get<Question[]>(`${environment.apiUrl}/question/interview/${interviewId}`);
+  }
+
   getById(id: string) {
     return this.http.get(`${environment.apiUrl}/question/${id}`);
   }
 
-  creaete(question: Question) {
+  create(question: Question) {
     return this.http.post(`${environment.apiUrl}/question/create`, question);
   }
 
   update(question: Question) {
-    return this.http.put(`${environment.apiUrl}/question/${question.id}`, question);
+    return this.http.put(`${environment.apiUrl}/question/${question.id}`, question).subscribe(
+      data => {
+        console.log("PUT was successful ", data);
+      },
+      error => {
+        console.log("Error: ", error);
+      }
+    );
   }
 
   delete(id: string) {

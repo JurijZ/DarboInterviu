@@ -9,6 +9,7 @@ namespace WebApi.Services
 {
     public interface IQuestionService
     {
+        IEnumerable<Question> GetAllByInterviewId(string interviewId);
         IEnumerable<Question> GetAll();
         Question GetById(string id);
         Question Create(Question interview);
@@ -23,6 +24,11 @@ namespace WebApi.Services
         public QuestionService(DataContext context)
         {
             _context = context;
+        }
+        
+        public IEnumerable<Question> GetAllByInterviewId(string interviewId)
+        {
+            return _context.Questions.Where(q => q.Interview == interviewId);
         }
 
         public IEnumerable<Question> GetAll()

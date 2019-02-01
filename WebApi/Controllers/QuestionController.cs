@@ -36,9 +36,10 @@ namespace WebApi.Controllers
         
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult GetAll()
+        [Route("interview/{id}")]
+        public IActionResult GetAllByInterviewId(string id)
         {
-            var questions =  _questionService.GetAll();
+            var questions =  _questionService.GetAllByInterviewId(id);
             var questionDtos = _mapper.Map<IList<QuestionDto>>(questions);
 
             var logger = NLog.LogManager.GetCurrentClassLogger();
@@ -101,11 +102,14 @@ namespace WebApi.Controllers
             {
                 // save 
                 _questionService.Update(question);
-                return Ok();
+                logger.Info("Question update was successful");
+                //return Ok(question.Id);  //200
+                return NoContent(); //204
             }
             catch (AppException ex)
             {
                 // return error message if there was an exception
+                logger.Info("Error while updating the question");
                 return BadRequest(new { message = ex.Message });
             }
         }
