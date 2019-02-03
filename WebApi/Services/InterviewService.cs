@@ -12,6 +12,7 @@ namespace WebApi.Services
         IEnumerable<Interview> GetAll();
         Interview GetById(string id);
         Interview Create(Interview interview);
+        void Update(Interview interview);
         void Delete(string id);
     }
 
@@ -26,7 +27,7 @@ namespace WebApi.Services
 
         public IEnumerable<Interview> GetAll()
         {
-            return _context.Interviews;
+            return _context.Interviews.OrderByDescending(i => i.Timestamp);
         }
 
         public Interview GetById(string id)
@@ -40,6 +41,21 @@ namespace WebApi.Services
             _context.SaveChanges();
 
             return interview;
+        }
+
+        public void Update(Interview interviewParam)
+        {
+            var interview = _context.Interviews.Find(interviewParam.Id);
+
+            if (interview == null)
+                throw new AppException("Interview not found");
+
+            // update question properties
+            interview.Name = interviewParam.Name;
+            interview.Timestamp = DateTime.Now;
+
+            _context.Interviews.Update(interview);
+            _context.SaveChanges();
         }
 
         public void Delete(string id)

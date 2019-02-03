@@ -1,5 +1,9 @@
 <br>
-<h3>"{{interview.name}}" interview questions:</h3>
+<div>
+  <input [(ngModel)]="interview.name" (focusout)="updateInterview()" 
+  class="form-control form-control-lg"
+  placeholder="Enter interview title here...">  
+</div>
 <br>
 <ul class="list-unstyled">
   <li *ngFor="let question of questions; let i = index">
@@ -33,6 +37,6 @@
   </li>
 </ul>
 <div>
-  <button (click)="addQuestion()" class="btn btn-success btn-lg1" type="button" style="margin-right:10px">Add</button>
+  <button (click)="addQuestion()" class="btn btn-success btn-lg1" type="button" style="margin-right:10px">Add New Question</button>
   <button (click)="refreshQuestions()" class="btn btn-primary btn-lg1" type="button">Refresh</button>
 </div>

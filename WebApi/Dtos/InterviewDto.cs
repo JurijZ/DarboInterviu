@@ -6,7 +6,6 @@ namespace WebApi.Dtos
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Candidate { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTime? Timestamp { get; set; }
     }
 }

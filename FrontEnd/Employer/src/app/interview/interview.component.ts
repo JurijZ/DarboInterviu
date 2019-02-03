@@ -12,6 +12,7 @@ import { InterviewService, DataService, AuthenticationService } from '@app/_serv
 })
 export class InterviewComponent implements OnInit {
   interviews: Interview[] = [];
+  newInterview: Interview;
 
   constructor(
     private interviewService: InterviewService,
@@ -32,13 +33,39 @@ export class InterviewComponent implements OnInit {
     }
   }
 
+  addInterview() {
+    let newInterview: Interview = new Interview();
+    newInterview.name = "";
+    newInterview.timestamp = "";
+
+    //this.questions.push(newQuestion);
+
+    var response = this.interviewService.create(newInterview);
+
+    response.subscribe(
+      interview => {
+        console.log("POST was successful ", interview.id);
+        this.data.setInterview(interview);
+        this.router.navigate(['/question']);
+        //this.loadAllInterviews();
+      },
+      error => {
+        console.log("Error: ", error);
+      }
+    );
+  }
+
+  refreshInterviews() {
+    this.loadAllInterviews();
+  }
+
   private loadAllInterviews() {
     this.interviewService.getAll().pipe(first()).subscribe(interviews => {
       this.interviews = interviews;
     });
   }
 
-  selectedInterview(interview: Interview) {
+  editInterview(interview: Interview) {
     this.data.setInterview(interview);
     this.router.navigate(['/question']);
   }

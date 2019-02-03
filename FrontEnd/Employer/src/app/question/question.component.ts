@@ -14,7 +14,7 @@ import { loadQueryList } from '@angular/core/src/render3';
 export class QuestionComponent implements OnInit {
   questions: Question[] = [];
   interview: Interview;
-  durations: number[] = [ 5, 10, 15, 20 ];
+  durations: number[] = [5, 10, 15, 20];
 
   constructor(private questionService: QuestionService, private data: DataService) {
   }
@@ -27,11 +27,11 @@ export class QuestionComponent implements OnInit {
   }
 
   deleteQuestion(id: string) {
-    if(confirm("Are you sure you want to delete this question?")){
+    if (confirm("Are you sure you want to delete this question?")) {
       this.questionService.delete(id).pipe(first()).subscribe(() => {
         this.loadAllQuestions(this.interview.id)
       });
-    }    
+    }
   }
 
   //selectDuration(duration: number){  }
@@ -67,6 +67,16 @@ export class QuestionComponent implements OnInit {
     var c = this.questionService.update(question);
   }
 
+  updateInterview(){
+    this.questionService.updateInterview(this.interview).subscribe(
+      data => {
+        console.log("Interview update was successful ", data);
+      },
+      error => {
+        console.log("Error in Interview update: ", error);
+      });
+  }
+
   private loadAllQuestions(interviewId: string) {
     this.questionService.getByInterviewId(interviewId).pipe(first()).subscribe(questions => {
       this.questions = questions;
@@ -75,12 +85,12 @@ export class QuestionComponent implements OnInit {
     });
   }
 
-  up(index: number){
-    if(index > 0){      
+  up(index: number) {
+    if (index > 0) {
       console.log(index);
-      
+
       var temp = this.questions[index];
-      
+
       this.questions[index] = this.questions[index - 1];
       this.questions[index].order = index;
       this.updateQuestion(this.questions[index]);
@@ -91,12 +101,12 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  down(index: number){
-    if(index < this.questions.length - 1){   
+  down(index: number) {
+    if (index < this.questions.length - 1) {
       console.log(index);
-      
+
       var temp = this.questions[index];
-      
+
       this.questions[index] = this.questions[index + 1];
       this.questions[index].order = index;
       this.updateQuestion(this.questions[index]);
@@ -107,12 +117,12 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  private orderQuestions(){
+  private orderQuestions() {
     // Order rarray
     this.questions.sort((left, right): number => {
       if (left.order < right.order) return -1;
       if (left.order > right.order) return 1;
       return 0;
-    } )
+    })
   }
 }

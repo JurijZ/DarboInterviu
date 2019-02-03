@@ -65,20 +65,50 @@ namespace WebApi.Controllers
         [HttpPost("Create")]
         public IActionResult Create([FromBody]InterviewDto interviewDto)
         {
-            // map dto to entity
-            var interview = _mapper.Map<Interview>(interviewDto);
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("New interview id: " + interviewDto.Id);
 
             try
             {
+                // map dto to entity
+                var interview = _mapper.Map<Interview>(interviewDto);
+
                 // save 
                 interview.Id = Guid.NewGuid().ToString();
-
+                interview.Timestamp = DateTime.Now;
+                
                 _interviewService.Create(interview);
-                return Ok();
+                return Ok(interview);
             }
             catch (AppException ex)
             {
                 // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPut("{id}")]
+        public IActionResult Update(string id, [FromBody]InterviewDto interviewDto)
+        {
+            // map dto to entity and set id
+            var interview = _mapper.Map<Interview>(interviewDto);
+
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("Updating interview: " + interview.Id);
+
+            try
+            {
+                // save 
+                _interviewService.Update(interview);
+                logger.Info("Interview update was successful");
+                //return Ok(question.Id);  //200
+                return NoContent(); //204
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                logger.Info("Error while updating the interview");
                 return BadRequest(new { message = ex.Message });
             }
         }

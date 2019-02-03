@@ -6,25 +6,25 @@ import { Interview } from '@app/_models';
 
 @Injectable({ providedIn: 'root' })
 export class InterviewService {
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-    getAll() {
-      return this.http.get<Interview[]>(`${environment.apiUrl}/interview`);
-    }
+  getAll() {
+    return this.http.get<Interview[]>(`${environment.apiUrl}/interview`);
+  }
 
-    getById(id: string) {
-        return this.http.get(`${environment.apiUrl}/interview/${id}`);
-    }
+  getById(id: string) {
+    return this.http.get(`${environment.apiUrl}/interview/${id}`);
+  }
 
-  creaete(interview: Interview) {
-    return this.http.post(`${environment.apiUrl}/interview/create`, interview);
-    }
+  create(interview: Interview) {
+    return this.http.post<Interview>(`${environment.apiUrl}/interview/create`, interview);
+  }
 
   update(interview: Interview) {
     return this.http.put(`${environment.apiUrl}/interview/${interview.id}`, interview);
-    }
+  }
 
-    delete(id: string) {
-        return this.http.delete(`${environment.apiUrl}/interview/${id}`);
-    }
+  delete(id: string) {
+    return this.http.delete(`${environment.apiUrl}/interview/${id}`);
+  }
 }

@@ -27,12 +27,16 @@ export class QuestionService {
   update(question: Question) {
     return this.http.put(`${environment.apiUrl}/question/${question.id}`, question).subscribe(
       data => {
-        console.log("PUT was successful ", data);
+        console.log("Question update was successful ", data);
       },
       error => {
-        console.log("Error: ", error);
+        console.log("Error in Question update: ", error);
       }
     );
+  }
+
+  updateInterview(interview: Interview) {
+    return this.http.put(`${environment.apiUrl}/interview/${interview.id}`, interview);
   }
 
   delete(id: string) {
