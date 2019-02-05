@@ -11,5 +11,6 @@ namespace WebApi.Helpers
         public virtual DbSet<Video> Videos { get; set; }
         public virtual DbSet<Interview> Interviews { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<Application> Applications { get; set; }
     }
 }

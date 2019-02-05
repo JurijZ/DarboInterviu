@@ -60,6 +60,7 @@ namespace WebApi.Services
             question.Text = questionParam.Text;
             question.Duration = questionParam.Duration;
             question.Order = questionParam.Order;
+            question.Timestamp = questionParam.Timestamp;
             
             _context.Questions.Update(question);
             _context.SaveChanges();

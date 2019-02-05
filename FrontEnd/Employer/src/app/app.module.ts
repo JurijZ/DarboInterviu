@@ -2,6 +2,7 @@ import { NgModule }      from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule  }    from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // used to create fake backend
 //import { fakeBackendProvider } from './_helpers';
@@ -17,6 +18,7 @@ import { RegisterComponent } from './register';
 import { VideosComponent } from './videos';
 import { RecordRTCComponent } from './record-rtc';
 import { InterviewComponent } from './interview';
+import { InterviewModalComponent } from './interviewmodal';
 import { QuestionComponent } from './question';
 
 @NgModule({
@@ -25,7 +27,8 @@ import { QuestionComponent } from './question';
         ReactiveFormsModule,
         FormsModule,
         HttpClientModule,
-        routing
+        routing,
+        NgbModule
     ],
     declarations: [
         AppComponent,
@@ -36,6 +39,7 @@ import { QuestionComponent } from './question';
         VideosComponent,
         RecordRTCComponent,
         InterviewComponent,
+        InterviewModalComponent,
         QuestionComponent
     ],
     providers: [

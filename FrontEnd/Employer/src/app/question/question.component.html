@@ -4,6 +4,11 @@
   class="form-control form-control-lg"
   placeholder="Enter interview title here...">  
 </div>
+<div>
+    <ngb-alert type="success" [dismissible]="false">
+        Bootstrap is working!
+      </ngb-alert>
+</div>
 <br>
 <ul class="list-unstyled">
   <li *ngFor="let question of questions; let i = index">

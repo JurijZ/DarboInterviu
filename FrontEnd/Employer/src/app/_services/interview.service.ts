@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '@environments/environment';
-import { Interview } from '@app/_models';
+import { Interview, Application } from '@app/_models';
 
 @Injectable({ providedIn: 'root' })
 export class InterviewService {
@@ -18,6 +18,10 @@ export class InterviewService {
 
   create(interview: Interview) {
     return this.http.post<Interview>(`${environment.apiUrl}/interview/create`, interview);
+  }
+
+  createApplication(application: Application) {
+    return this.http.post(`${environment.apiUrl}/application/create`, application);
   }
 
   update(interview: Interview) {

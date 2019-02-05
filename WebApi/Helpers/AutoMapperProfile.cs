@@ -16,6 +16,9 @@ namespace WebApi.Helpers
 
             CreateMap<Question, QuestionDto>();
             CreateMap<QuestionDto, Question>();
+
+            CreateMap<Application, ApplicationDto>();
+            CreateMap<ApplicationDto, Application>();
         }
     }
 }

@@ -40,7 +40,7 @@ export class QuestionComponent implements OnInit {
     let newQuestion: Question = new Question();
     //newQuestion.id = 1;
     newQuestion.duration = 5;
-    newQuestion.order = this.questions.length;
+    newQuestion.order = (this.questions.length == 0) ? 0 : this.questions[this.questions.length - 1].order + 1;
     newQuestion.text = "";
     newQuestion.interview = this.interview.id;
 
@@ -118,7 +118,7 @@ export class QuestionComponent implements OnInit {
   }
 
   private orderQuestions() {
-    // Order rarray
+    // Order array
     this.questions.sort((left, right): number => {
       if (left.order < right.order) return -1;
       if (left.order > right.order) return 1;

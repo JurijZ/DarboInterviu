@@ -3,7 +3,7 @@
 <br>
 <div class="container">
 
-  <div class="row">
+  <div class="row" *ngIf="interviews.length">
     <table class="table table-striped ">
       <thead>
         <tr>
@@ -19,7 +19,8 @@
           <td> {{interview.timestamp | date:'yyyy-MM-dd HH:mm'}}</td>
           <td>
             <button class="btn btn-warning btn-sm" (click)="editInterview(interview)" style="margin-right:5px">Edit</button>
-            <button class="btn btn-danger btn-sm" (click)="deleteInterview(interview.id)">Delete</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteInterview(interview.id)" style="margin-right:5px">Delete</button>
+            <interviewmodal [interview]="interview"></interviewmodal>
           </td>
         </tr>
       </tbody>
@@ -27,6 +28,6 @@
   </div>
   <div>
     <button (click)="addInterview()" class="btn btn-success btn-lg1" type="button" style="margin-right:10px">Add New Interview</button>
-    <button (click)="refreshInterviews()" class="btn btn-primary btn-lg1" type="button">Refresh</button>
+    <button (click)="refreshInterviews()" *ngIf="interviews.length" class="btn btn-primary btn-lg1" type="button">Refresh</button>
   </div>
 </div>

@@ -76,6 +76,7 @@ namespace WebApi.Controllers
             {
                 // save 
                 question.Id = Guid.NewGuid().ToString();
+                question.Timestamp = DateTime.Now;
 
                 _questionService.Create(question);
                 return Ok();
@@ -94,6 +95,7 @@ namespace WebApi.Controllers
             // map dto to entity and set id
             var question = _mapper.Map<Question>(questionDto);
             question.Id = id;
+            question.Timestamp = DateTime.Now;
 
             var logger = NLog.LogManager.GetCurrentClassLogger();
             logger.Info("Updating question: " + question.Id);
