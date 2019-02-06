@@ -94,6 +94,7 @@ namespace WebApi
             services.AddScoped<IInterviewService, InterviewService>();
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IApplicationService, ApplicationService>();
+            services.AddScoped<ICandidateService, CandidateService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -120,7 +121,7 @@ namespace WebApi
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Darbo Interviu API V1");
             });
 
             app.UseMvc();

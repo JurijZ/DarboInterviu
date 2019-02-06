@@ -13,11 +13,13 @@ namespace WebApi.Services
         Application GetByApplicationId(string id);
         Application Create(Application application);
         void Delete(string id);
+        int GetRandomNumber(int min, int max);
     }
 
     public class ApplicationService : IApplicationService
     {
         private DataContext _context;
+        private static readonly Random getrandom = new Random();
 
         public ApplicationService(DataContext context)
         {
@@ -52,5 +54,12 @@ namespace WebApi.Services
             }
         }
 
+        public int GetRandomNumber(int min, int max)
+        {
+            lock (getrandom) // synchronize
+            {
+                return getrandom.Next(min, max);
+            }
+        }
     }
 }

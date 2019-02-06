@@ -76,6 +76,7 @@ namespace WebApi.Controllers
             {
                 // save 
                 application.Id = Guid.NewGuid().ToString();
+                application.UserId = _applicationService.GetRandomNumber(0, 1000).ToString();
                 application.Timestamp = DateTime.Now;
 
                 _applicationService.Create(application);
