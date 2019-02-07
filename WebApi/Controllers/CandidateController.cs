@@ -11,6 +11,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using WebApi.Services;
 using WebApi.Dtos;
+using System.Linq;
 using WebApi.Entities;
 
 namespace WebApi.Controllers
@@ -35,6 +36,24 @@ namespace WebApi.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet("questions/{id}")]
+        public IActionResult GetInterviewQuestionsByApplicationId(string id)
+        {
+            var questions = _candidateService.GetInterviewQuestionsByApplicationId(id);
+
+            if (questions != null && questions.Any()) {
+                var questionDtos = _mapper.Map<IList<QuestionDto>>(questions);
+
+                return Ok(questionDtos);
+            }
+            else
+            {
+                return BadRequest("Unknown Application Id");
+            }
+            
+        }
+
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetApplicationById(string id)
         {
@@ -42,9 +61,25 @@ namespace WebApi.Controllers
             logger.Info("Requested application id: " + id);
 
             var application = _candidateService.GetApplicationById(id);
-            var applicationDto = _mapper.Map<ApplicationDto>(application);            
+            var applicationDto = _mapper.Map<ApplicationDto>(application);
 
-            return Ok(applicationDto);
+            // Prepare ApplicationId and Interview overview information
+            
+            var interview = _candidateService.GetInterviewOverview(application.InterviewId);
+            
+            //return Ok(applicationDto);
+
+            return Ok(new
+            {
+                InterviewId = application.InterviewId,
+                Email = application.Email,
+                ApplicationId = application.Id,
+                Expiration = application.Expiration,
+                Name = application.Name,
+                Title = application.Title,
+                NumberOfQuestions = interview.Item1,
+                InterviewDuration = interview.Item2
+            });
         }
 
         [AllowAnonymous]
@@ -78,16 +113,14 @@ namespace WebApi.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            // Prepare Application Id
+            // Retriev application
             var application = _candidateService.GetApplicationId(candidateDto.Email, candidateDto.Password);
 
-            // return basic user info (without password) and token to store client side
+            // Return
             return Ok(new {
                 Username = application.Name,
-                Email = candidateDto.Email,
-                ApplicationId = application.Id,
-                Title = application.Title,
-                Expiry = application.Expiration,
+                Email = application.Email,
+                ApplicationId = application.Id,                
                 Token = tokenString
             });
         }

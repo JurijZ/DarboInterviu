@@ -1,14 +1,19 @@
 import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 let RecordRTC = require('recordrtc/RecordRTC.min');
 import { HttpClient, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 import { environment } from '@environments/environment';
+import { Router, ActivatedRoute } from '@angular/router';
+
+import { RecordService, AuthenticationService } from '@app/_services';
+import { User, Application, Question } from '@app/_models';
 
 @Component({
   selector: 'record-rtc',
   templateUrl: './record-rtc.component.html',
   styleUrls: ['./record-rtc.component.css']
 })
-export class RecordRTCComponent implements AfterViewInit {
+export class RecordRTCComponent implements AfterViewInit, OnInit {
 
   private stream: MediaStream;
   private recordRTC: any;
@@ -20,10 +25,36 @@ export class RecordRTCComponent implements AfterViewInit {
   public sendButtonDisabled: boolean = true;
   public recordedBlob: Blob;
 
+  activeQuestion: Question = new Question();
+  questions: Question[];
+  currentUser: User;
+  currentUserSubscription: Subscription;
+
   @ViewChild('video') video;
 
-  constructor(private http: HttpClient, private ref: ChangeDetectorRef) {
+  constructor(
+    private authenticationService: AuthenticationService,
+    private http: HttpClient,
+    private ref: ChangeDetectorRef,
+    private recordService: RecordService,
+    private router: Router) {
     // Do stuff
+  }
+
+  ngOnInit() {
+    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+      this.currentUser = user;
+      console.log(this.currentUser);
+
+      this.recordService.getQuestionsByApplicationId(this.currentUser.applicationId).subscribe(questions => {
+        this.questions = questions;
+        this.orderQuestions();
+
+        this.activeQuestion = this.questions[0];
+
+        console.log("Current question:" + this.activeQuestion.text + ", order Id: " + this.activeQuestion.order);
+      });
+    });
   }
 
   ngAfterViewInit() {
@@ -41,6 +72,15 @@ export class RecordRTCComponent implements AfterViewInit {
     video.autoplay = !video.autoplay;
   }
 
+  private orderQuestions() {
+    // Order array
+    this.questions.sort((left, right): number => {
+      if (left.order < right.order) return -1;
+      if (left.order > right.order) return 1;
+      return 0;
+    })
+  }
+
   upload(files) {
     if (files.length === 0)
       return;
@@ -56,7 +96,7 @@ export class RecordRTCComponent implements AfterViewInit {
     const uploadReq = new HttpRequest('POST', this.baseUrl, formData, {
       reportProgress: true,
     });
-    
+
     this.http.request(uploadReq).subscribe(event => {
       if (event.type === HttpEventType.UploadProgress)
         this.progress = Math.round(100 * event.loaded / event.total);
@@ -127,20 +167,40 @@ export class RecordRTCComponent implements AfterViewInit {
     //recordRTC.stopRecording(this.processVideo.bind(this));    
 
     var that = this;
-    recordRTC.stopRecording(function () {
+    this.recordRTC.stopRecording(function () {
       //this.processVideo.bind(this)
       //that.recordedBlob = recordRTC.getBlob();
       //console.log("Blob size 1: " + that.recordedBlob.size);
       that.sendToServer(recordRTC.getBlob());
     });
     let stream = this.stream;
-    stream.getAudioTracks().forEach(track => track.stop());
-    stream.getVideoTracks().forEach(track => track.stop());
+    this.stream.getAudioTracks().forEach(track => track.stop());
+    this.stream.getVideoTracks().forEach(track => track.stop());
+
+    // reset the initial state of the video
+    let video: HTMLVideoElement = this.video.nativeElement;
+    video.muted = false;
+    video.controls = true;
+    video.autoplay = false;
+
+    // Show next question
+    var i = this.questions.findIndex(q => q.id === this.activeQuestion.id);
+    if (i == this.questions.length - 1) {
+      this.router.navigate(["/home"]);
+    }
+    else {
+      this.activeQuestion = this.questions[i + 1];
+    }
+
   }
 
   sendToServer(blob: Blob) {
     const formData = new FormData();
-    formData.append('video-blob', blob, 'test1.webm');
+
+    var filename = this.currentTimeStamp() + ".webm";
+    console.log(filename);
+
+    formData.append('video-blob', blob, filename);
     console.log("Record blob size: " + blob.size);
 
     let baseUrl = environment.apiUrl + '/upload'; // WebAPI project
@@ -148,7 +208,7 @@ export class RecordRTCComponent implements AfterViewInit {
 
     const uploadReq = new HttpRequest('POST', baseUrl, formData, {
       reportProgress: true,
-    });    
+    });
 
     //var that = this;
     this.http.request(uploadReq).subscribe(event => {
@@ -158,11 +218,15 @@ export class RecordRTCComponent implements AfterViewInit {
       else if (event.type === HttpEventType.Response) {
         this.message = event.body.toString();
         this.ref.detectChanges(); // This is needed to update the view
-      }        
+      }
     });
   }
 
   download() {
     this.recordRTC.save('video.webm');
+  }
+
+  private currentTimeStamp(){
+    return new Date().toISOString().replace(/:\s*/g, "");    
   }
 }

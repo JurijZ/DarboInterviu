@@ -1,28 +1,29 @@
 ﻿import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 
-import { User } from '@app/_models';
-import { UserService, AuthenticationService } from '@app/_services';
+import { User, Application } from '@app/_models';
+import { HomeService, AuthenticationService } from '@app/_services';
 
 @Component({ templateUrl: 'home.component.html' })
 export class HomeComponent implements OnInit, OnDestroy {
     currentUser: User;
     currentUserSubscription: Subscription;
     users: User[] = [];
+    application: Application = new Application();
 
-    constructor(
-        private authenticationService: AuthenticationService,
-        private userService: UserService
-    ) {
-        this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
-            this.currentUser = user;
-        });
+    constructor(private authenticationService: AuthenticationService, 
+        private homeService: HomeService,
+        private router: Router) {
     }
 
     ngOnInit() {
-        this.loadAllUsers();
-        console.log(this.currentUser);
+        this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+            this.currentUser = user;
+            //console.log(this.currentUser);
+            this.loadApplication(this.currentUser.applicationId);
+        });
     }
 
     ngOnDestroy() {
@@ -30,15 +31,15 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.currentUserSubscription.unsubscribe();
     }
 
-    deleteUser(id: number) {
-        this.userService.delete(id).pipe(first()).subscribe(() => {
-            this.loadAllUsers()
+    private loadApplication(applicationid: string) {
+        this.homeService.getApplicationById(applicationid).pipe(first()).subscribe(application => {
+            this.application = application;
+            //console.log(this.application);
         });
     }
 
-    private loadAllUsers() {
-        this.userService.getAll().pipe(first()).subscribe(users => {
-            this.users = users;
-        });
+    private startInterview() {
+        //console.log(this.application);
+        this.router.navigate(['/record-rtc']);        
     }
 }

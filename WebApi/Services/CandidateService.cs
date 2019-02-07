@@ -11,6 +11,8 @@ namespace WebApi.Services
         int Authenticate(string username, string password);
         Application GetApplicationById(string applicationId);
         Application GetApplicationId(string email, string password);
+        (int, int) GetInterviewOverview(string interviewId);
+        IEnumerable<Question> GetInterviewQuestionsByApplicationId(string id);
     }
 
     public class CandidateService : ICandidateService
@@ -55,7 +57,6 @@ namespace WebApi.Services
             var logger = NLog.LogManager.GetCurrentClassLogger();
             logger.Info("Extracted application interview: " + application.Title);
 
-            // authentication successful
             return application;
         }
 
@@ -66,8 +67,38 @@ namespace WebApi.Services
             var logger = NLog.LogManager.GetCurrentClassLogger();
             logger.Info("Extracted application interview: " + application.Title);
 
-            // authentication successful
             return application;
+        }
+
+        public (int, int) GetInterviewOverview(string interviewId)
+        {
+            var questions = _context.Questions.Where(x => x.Interview == interviewId);
+
+            var numberOfQuestions = questions.Count();
+            var totalInterviewDuration = questions.Sum(q => q.Duration);
+
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("Number of questions in the interview: " + numberOfQuestions);
+            logger.Info("Interview total duration: " + totalInterviewDuration);
+
+            return (numberOfQuestions, totalInterviewDuration);
+        }
+
+        public IEnumerable<Question> GetInterviewQuestionsByApplicationId(string id)
+        {
+            var application = _context.Applications.FirstOrDefault(a => a.Id == id);
+
+            if (application != null)
+            {
+                var questions = _context.Questions.Where(x => x.Interview == application.InterviewId);
+
+                return questions;
+            }
+            else
+            {
+                return null;
+            }
+            
         }
     }
 }
