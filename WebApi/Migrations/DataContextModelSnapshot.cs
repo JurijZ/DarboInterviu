@@ -21,13 +21,17 @@ namespace WebApi.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email");
+                    b.Property<string>("CandidateEmail");
+
+                    b.Property<string>("CandidateName");
+
+                    b.Property<string>("CandidateSecret");
 
                     b.Property<DateTime>("Expiration");
 
                     b.Property<string>("InterviewId");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Status");
 
                     b.Property<DateTime>("Timestamp");
 
@@ -45,11 +49,11 @@ namespace WebApi.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Candidate");
-
                     b.Property<string>("Name");
 
                     b.Property<DateTime>("Timestamp");
+
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 

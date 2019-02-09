@@ -2,8 +2,8 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Interview, Application } from '@app/_models';
-import { InterviewService, DataService, AuthenticationService } from '@app/_services';
+import { InterviewTemplate, Application, User } from '@app/_models';
+import { InterviewTemplateService, DataService, AuthenticationService } from '@app/_services';
 import { NgbModal, NgbDateStruct, NgbTimeStruct, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -12,21 +12,28 @@ import { NgbModal, NgbDateStruct, NgbTimeStruct, ModalDismissReasons } from '@ng
   styleUrls: ['./interviewmodal.component.css']
 })
 export class InterviewModalComponent {
-  interviews: Interview[] = [];
-  currentInterview: Interview;
+  interviews: InterviewTemplate[] = [];
+  currentInterview: InterviewTemplate;
   closeResult: string;
   newApplication: Application = new Application;
   date: NgbDateStruct;
   minDate: NgbDateStruct;
   time: NgbTimeStruct;
+  issent: boolean = false;
+  currentUser: User;
+  currentUserSubscription: Subscription;
 
-  @Input() interview: Interview;
+  @Input() interview: InterviewTemplate;
 
   constructor(
-    private interviewService: InterviewService,
+    private authenticationService: AuthenticationService,
+    private interviewTemplateService: InterviewTemplateService,
     private router: Router,
     private data: DataService,
     private modalService: NgbModal) {
+      this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+        this.currentUser = user;
+    });
   }
 
   ngOnInit() {
@@ -63,11 +70,13 @@ export class InterviewModalComponent {
 
     //
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      // this result comes from the modal.close() in the html. Can be useful :)
       this.closeResult = `Closed with: ${result}`;
-      console.log(this.newApplication.title);
-      console.log(this.date);
-      console.log(this.time);
-      // Call Web API POST
+
+      // Cleanup variables of the modal window for the next application
+      this.issent = false;
+      this.newApplication.candidateEmail = "";
+      this.newApplication.candidateName = "";
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
@@ -85,13 +94,17 @@ export class InterviewModalComponent {
 
   createApplicant() {
     this.newApplication.expiration = this.formatDateTime(this.date, this.time);
+    this.newApplication.userId = this.currentUser.id;
     console.log(this.newApplication);
 
-    var response = this.interviewService.createApplication(this.newApplication);
+    var response = this.interviewTemplateService.createApplication(this.newApplication);
 
     response.subscribe(
       application => {
         console.log("POST was successful ", application);
+
+        // If successfully submitted hide the Send button 
+        this.issent = true;
         //this.data.setInterview(interview);
         //this.router.navigate(['/question']);
         //this.loadAllInterviews();

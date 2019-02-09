@@ -72,10 +72,10 @@ namespace WebApi.Controllers
             return Ok(new
             {
                 InterviewId = application.InterviewId,
-                Email = application.Email,
+                Email = application.CandidateEmail,
                 ApplicationId = application.Id,
                 Expiration = application.Expiration,
-                Name = application.Name,
+                Name = application.CandidateName,
                 Title = application.Title,
                 NumberOfQuestions = interview.Item1,
                 InterviewDuration = interview.Item2
@@ -118,8 +118,8 @@ namespace WebApi.Controllers
 
             // Return
             return Ok(new {
-                Username = application.Name,
-                Email = application.Email,
+                Username = application.CandidateName,
+                Email = application.CandidateEmail,
                 ApplicationId = application.Id,                
                 Token = tokenString
             });

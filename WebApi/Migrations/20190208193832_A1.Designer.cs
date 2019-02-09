@@ -9,8 +9,8 @@ using WebApi.Helpers;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190206141911_Application2")]
-    partial class Application2
+    [Migration("20190208193832_A1")]
+    partial class A1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,13 +23,17 @@ namespace WebApi.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Email");
+                    b.Property<string>("CandidateEmail");
+
+                    b.Property<string>("CandidateName");
+
+                    b.Property<string>("CandidateSecret");
 
                     b.Property<DateTime>("Expiration");
 
                     b.Property<string>("InterviewId");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Status");
 
                     b.Property<DateTime>("Timestamp");
 
@@ -47,11 +51,11 @@ namespace WebApi.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Candidate");
-
                     b.Property<string>("Name");
 
                     b.Property<DateTime>("Timestamp");
+
+                    b.Property<string>("UserId");
 
                     b.HasKey("Id");
 

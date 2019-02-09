@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '@environments/environment';
-import { Interview, Question } from '@app/_models';
+import { InterviewTemplate, Question } from '@app/_models';
 
 @Injectable({ providedIn: 'root' })
 export class QuestionService {
@@ -35,7 +35,7 @@ export class QuestionService {
     );
   }
 
-  updateInterview(interview: Interview) {
+  updateInterview(interview: InterviewTemplate) {
     return this.http.put(`${environment.apiUrl}/interview/${interview.id}`, interview);
   }
 

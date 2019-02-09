@@ -19,6 +19,9 @@ namespace WebApi.Helpers
 
             CreateMap<Application, ApplicationDto>();
             CreateMap<ApplicationDto, Application>();
+
+            CreateMap<Application, ActiveInteriewDto>();
+            CreateMap<ActiveInteriewDto, Application>();
         }
     }
 }

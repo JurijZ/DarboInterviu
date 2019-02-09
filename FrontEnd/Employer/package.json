@@ -24,6 +24,7 @@
     "core-js": "^2.5.4",
     "recordrtc": "^5.4.8",
     "rxjs": "~6.3.3",
+    "terser": "^3.14.1",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {

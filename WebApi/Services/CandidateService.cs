@@ -32,7 +32,7 @@ namespace WebApi.Services
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 return 1;
 
-            var application = _context.Applications.SingleOrDefault(x => x.Email == email && x.UserId == password);
+            var application = _context.Applications.SingleOrDefault(x => x.CandidateEmail == email && x.CandidateSecret == password);
 
             // check if application exists 
             if (application == null)
@@ -62,7 +62,7 @@ namespace WebApi.Services
 
         public Application GetApplicationId(string email, string password)
         {
-            var application = _context.Applications.SingleOrDefault(x => x.Email == email && x.UserId == password);
+            var application = _context.Applications.SingleOrDefault(x => x.CandidateEmail == email && x.CandidateSecret == password);
 
             var logger = NLog.LogManager.GetCurrentClassLogger();
             logger.Info("Extracted application interview: " + application.Title);

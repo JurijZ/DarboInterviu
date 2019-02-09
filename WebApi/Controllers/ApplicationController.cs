@@ -34,16 +34,17 @@ namespace WebApi.Controllers
             _appSettings = appSettings.Value;
         }
         
+        // Retrieve all the applications related to a particular Employer
         [AllowAnonymous]
         [HttpGet]
         [Route("{id}")]
         public IActionResult GetAllByUserId(string id)
         {
             var applications = _applicationService.GetAllByUserId(id);
-            var applicationDtos = _mapper.Map<IList<ApplicationDto>>(applications);
+            var applicationDtos = _mapper.Map<IList<ActiveInteriewDto>>(applications);
 
             var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Number of questions: " + applicationDtos.Count);
+            logger.Info("Number of active interviews: " + applicationDtos.Count);
 
             return Ok(applicationDtos);
         }
@@ -70,14 +71,15 @@ namespace WebApi.Controllers
             var application = _mapper.Map<Application>(applicationDto);
 
             var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Creating application: " + application.Title + " for the " + application.Email);
+            logger.Info("Creating application: " + application.Title + " for the " + application.CandidateEmail);
 
             try
             {
                 // save 
                 application.Id = Guid.NewGuid().ToString();
-                application.UserId = _applicationService.GetRandomNumber(0, 1000).ToString();
+                application.CandidateSecret = _applicationService.GetRandomNumber(1000, 9999).ToString();
                 application.Timestamp = DateTime.Now;
+                application.Status = "Not Started";
 
                 _applicationService.Create(application);
                 return Ok(application);

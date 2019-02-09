@@ -1,5 +1,8 @@
 export class Interview {
     id: string;
-    name: string;
-    timestamp: string;
+    title: string;
+    candidateName: string;
+    candidateEmail: string;
+    status: string;
+    expiration: string;
 }

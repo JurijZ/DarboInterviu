@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         });
     }
 
-    private startInterview() {
+    startInterview() {
         //console.log(this.application);
         this.router.navigate(['/record-rtc']);        
     }

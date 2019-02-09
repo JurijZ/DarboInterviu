@@ -1,33 +1,36 @@
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">"{{currentInterview.name}}"</h4>
+    <h4 class="modal-title text-center col-12" id="modal-basic-title">"{{currentInterview.name}}"</h4>
   </div>
 
   <div class="modal-body">
     <form novalidate>
       <div class="form-group">
-        <label for="title">Title:</label>
+        <label for="title">Job Title:</label>
         <div class="input-group">
-          <input id="title" [(ngModel)]="newApplication.title" class="form-control" placeholder="Enter interview title" name="title" required>
+          <input id="title" [(ngModel)]="newApplication.title" class="form-control" placeholder="Enter interview title"
+            name="title" required>
         </div>
       </div>
       <div class="form-group">
-          <label for="name">Candidates Name:</label>
-          <div class="input-group">
-            <input id="name" [(ngModel)]="newApplication.name" email class="form-control" placeholder="Enter name" name="name" required>
-          </div>
-        </div>
-      <div class="form-group">
-        <label for="email">Candidates email:</label>
+        <label for="name">Candidates Name:</label>
         <div class="input-group">
-          <input id="email" [(ngModel)]="newApplication.email" email class="form-control" placeholder="Enter email address" name="email" required>
+          <input id="name" [(ngModel)]="newApplication.candidateName" email class="form-control" placeholder="Enter name" name="name"
+            required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Candidates Email:</label>
+        <div class="input-group">
+          <input id="email" [(ngModel)]="newApplication.candidateEmail" email class="form-control" placeholder="Enter email address"
+            name="email" required>
         </div>
       </div>
       <div class="form-group">
         <label for="expiry">Candidate must complete the interview before:</label>
         <div class="input-group">
-          <input id="expiry" [(ngModel)]="date" class="form-control" placeholder="yyyy-mm-dd" name="dp" 
-          ngbDatepicker #dp="ngbDatepicker" [minDate]="minDate">
+          <input id="expiry" [(ngModel)]="date" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker
+            #dp="ngbDatepicker" [minDate]="minDate">
           <div class="input-group-append">
             <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
           </div>
@@ -35,21 +38,28 @@
       </div>
     </form>
     <div>
-        <ngb-timepicker [(ngModel)]="time" [spinners]="false"></ngb-timepicker>
+      <ngb-timepicker [(ngModel)]="time" [spinners]="false"></ngb-timepicker>
     </div>
   </div>
+  <div *ngIf="issent">
+      <div class="alert alert-success text-center" role="alert">
+        Email was successfully sent to the candidate.
+      </div>
+    </div>
+  <div class="modal-footer ">
 
-  <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="createApplicant()">Send</button>
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
+
+
+        <button *ngIf="!issent" type="button" class="btn btn-outline-primary" (click)="createApplicant()" placement="bottom"
+          ngbTooltip="An email will be sent to the candidate" style="margin-right:5px">Send</button>
+        <button *ngIf="!issent" type="button" class="btn btn-outline-primary" (click)="modal.dismiss('Cancel click')"
+          style="margin-right:5px">Cancel</button>
+        <button *ngIf="issent" type="button" class="btn btn-outline-primary" (click)="modal.close('Close click')" style="float:center;">Close</button>
+
   </div>
 
 </ng-template>
 
-
-<button class="btn btn-sm btn-outline-primary" (click)="open(content)">Send</button>
-
-<pre>{{closeResult}}</pre>
+<!--This is shown in the interview.component.html-->
+<button class="btn btn-sm btn-outline-primary" (click)="open(content)">Send to a Candidate</button>
+<!-- <pre>{{closeResult}}</pre> -->

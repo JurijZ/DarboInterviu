@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Interview } from '@app/_models';
+import { Interview, User } from '@app/_models';
 import { InterviewService, DataService, AuthenticationService } from '@app/_services';
 
 @Component({
@@ -12,61 +12,33 @@ import { InterviewService, DataService, AuthenticationService } from '@app/_serv
 })
 export class InterviewComponent implements OnInit {
   interviews: Interview[] = [];
-  newInterview: Interview;
+  currentUser: User;
+  currentUserSubscription: Subscription;
 
   constructor(
+    private authenticationService: AuthenticationService,
     private interviewService: InterviewService,
     private router: Router,
     private data: DataService) {
-
+      
   }
 
   ngOnInit() {
-    this.loadAllInterviews();
+    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+      this.currentUser = user; 
+      this.loadAllInterviews(this.currentUser.id);
+    });
+    
   }
 
-  deleteInterview(id: string) {
-    if (confirm("Are you sure you want to delete this Interview?")) {
-      this.interviewService.delete(id).pipe(first()).subscribe(() => {
-        this.loadAllInterviews()
-      });
-    }
+  refreshInterviews(userId: string) {
+    this.loadAllInterviews(userId);
   }
 
-  addInterview() {
-    let newInterview: Interview = new Interview();
-    newInterview.name = "";
-    newInterview.timestamp = "";
-
-    //this.questions.push(newQuestion);
-
-    var response = this.interviewService.create(newInterview);
-
-    response.subscribe(
-      interview => {
-        console.log("POST was successful ", interview.id);
-        this.data.setInterview(interview);
-        this.router.navigate(['/question']);
-        //this.loadAllInterviews();
-      },
-      error => {
-        console.log("Error: ", error);
-      }
-    );
-  }
-
-  refreshInterviews() {
-    this.loadAllInterviews();
-  }
-
-  private loadAllInterviews() {
-    this.interviewService.getAll().pipe(first()).subscribe(interviews => {
+  private loadAllInterviews(userId: string) {
+    this.interviewService.getAll(userId).pipe(first()).subscribe(interviews => {
       this.interviews = interviews;
     });
   }
 
-  editInterview(interview: Interview) {
-    this.data.setInterview(interview);
-    this.router.navigate(['/question']);
-  }
 }

@@ -17,8 +17,9 @@ import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { VideosComponent } from './videos';
 import { RecordRTCComponent } from './record-rtc';
-import { InterviewComponent } from './interview';
+import { InterviewTemplateComponent } from './interviewtemplate';
 import { InterviewModalComponent } from './interviewmodal';
+import { InterviewComponent } from './interview';
 import { QuestionComponent } from './question';
 
 @NgModule({
@@ -38,8 +39,9 @@ import { QuestionComponent } from './question';
         RegisterComponent,
         VideosComponent,
         RecordRTCComponent,
-        InterviewComponent,
+        InterviewTemplateComponent,
         InterviewModalComponent,
+        InterviewComponent,
         QuestionComponent
     ],
     providers: [

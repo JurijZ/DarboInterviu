@@ -1,8 +1,9 @@
 export class Application {
     id: string;
+    userId: string;
     interviewId: string;
     title: string;
-    email: string;
-    name: string;
+    candidateEmail: string;
+    candidateName: string;
     expiration: string;
 }

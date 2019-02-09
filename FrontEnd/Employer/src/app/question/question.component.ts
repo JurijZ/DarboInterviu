@@ -2,8 +2,8 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 
-import { Interview, Question } from '@app/_models';
-import { InterviewService, DataService, QuestionService, AuthenticationService } from '@app/_services';
+import { InterviewTemplate, Question, User } from '@app/_models';
+import { DataService, QuestionService, AuthenticationService } from '@app/_services';
 import { loadQueryList } from '@angular/core/src/render3';
 
 @Component({
@@ -13,10 +13,19 @@ import { loadQueryList } from '@angular/core/src/render3';
 })
 export class QuestionComponent implements OnInit {
   questions: Question[] = [];
-  interview: Interview;
+  interview: InterviewTemplate;
   durations: number[] = [5, 10, 15, 20];
+  currentUser: User;
+  currentUserSubscription: Subscription;
 
-  constructor(private questionService: QuestionService, private data: DataService) {
+  constructor(
+    private authenticationService: AuthenticationService,
+    private questionService: QuestionService, 
+    private data: DataService
+    ) {
+      this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+        this.currentUser = user;
+      });
   }
 
   ngOnInit() {
@@ -68,6 +77,7 @@ export class QuestionComponent implements OnInit {
   }
 
   updateInterview(){
+    this.interview.userid = this.currentUser.id;
     this.questionService.updateInterview(this.interview).subscribe(
       data => {
         console.log("Interview update was successful ", data);

@@ -1,21 +1,21 @@
 ﻿import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Interview } from '@app/_models';
+import { InterviewTemplate } from '@app/_models';
 
 @Injectable({ providedIn: 'root' })
 export class DataService {
     
-    private currentInterviewSubject: BehaviorSubject<Interview> = new BehaviorSubject(new Interview());
-    public currentInterview: Observable<Interview> = this.currentInterviewSubject.asObservable();
+    private currentInterviewSubject: BehaviorSubject<InterviewTemplate> = new BehaviorSubject(new InterviewTemplate());
+    public currentInterview: Observable<InterviewTemplate> = this.currentInterviewSubject.asObservable();
 
     constructor() {
     }
 
-    public get currentInterviewValue(): Interview {
+    public get currentInterviewValue(): InterviewTemplate {
         return this.currentInterviewSubject.value;
     }
 
-    setInterview(interview: Interview) {
+    setInterview(interview: InterviewTemplate) {
         this.currentInterviewSubject.next(interview);
     }
 

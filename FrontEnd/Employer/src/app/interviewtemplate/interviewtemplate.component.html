@@ -1,5 +1,5 @@
 <br>
-<h3>Active Interviews:</h3>
+<h3>Interiew Templates:</h3>
 <br>
 <div class="container">
 
@@ -8,30 +8,26 @@
       <thead>
         <tr>
           <th> Interview Title </th>
-          <th> Candidate Name </th>
-          <th> Candidate Email </th>
-          <th> Expires on </th>
-          <th> Status </th>
+          <th> Updated on </th>
           <th></th>
         </tr>
       </thead>
 
       <tbody>
         <tr *ngFor="let interview of interviews">
-          <td> {{interview.title}}</td>
-          <td> {{interview.candidateName}}</td>
-          <td> {{interview.candidateEmail}}</td>
-          <td> {{interview.expiration | date:'yyyy-MM-dd HH:mm'}}</td>
-          <td> {{interview.status}}</td>
+          <td> {{interview.name}}</td>
+          <td> {{interview.timestamp | date:'yyyy-MM-dd HH:mm'}}</td>
           <td>
             <button class="btn btn-warning btn-sm" (click)="editInterview(interview)" style="margin-right:5px">Edit</button>
             <button class="btn btn-danger btn-sm" (click)="deleteInterview(interview.id)" style="margin-right:5px">Delete</button>
+            <interviewmodal [interview]="interview"></interviewmodal>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
   <div>
+    <button (click)="addInterview()" class="btn btn-success btn-lg1" type="button" style="margin-right:10px">Add New Interview Template</button>
     <button (click)="refreshInterviews()" *ngIf="interviews.length" class="btn btn-primary btn-lg1" type="button">Refresh</button>
   </div>
 </div>
