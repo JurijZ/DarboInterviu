@@ -39,6 +39,14 @@ namespace WebApi.Controllers
         [HttpGet("questions/{id}")]
         public IActionResult GetInterviewQuestionsByApplicationId(string id)
         {
+            // If this method has been called then it means the interview has started, we change the status:
+            var status = _candidateService.SetInterviewStatus(id, "Started");
+            if (status == null)
+            {
+                return BadRequest("Unknown Application Id");
+            }
+
+            // Retrieve all the questions:
             var questions = _candidateService.GetInterviewQuestionsByApplicationId(id);
 
             if (questions != null && questions.Any()) {
@@ -80,6 +88,19 @@ namespace WebApi.Controllers
                 NumberOfQuestions = interview.Item1,
                 InterviewDuration = interview.Item2
             });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("status")]
+        public IActionResult UpdateInterviewStatus([FromBody] InterviewStatusDto interviewStatusDto)
+        {
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("Interview " + interviewStatusDto.ApplicationId + " status is set to - " + interviewStatusDto.Status);
+
+            var authentication = _candidateService.SetInterviewStatus(interviewStatusDto.ApplicationId, interviewStatusDto.Status);
+
+            // Return
+            return Ok();
         }
 
         [AllowAnonymous]

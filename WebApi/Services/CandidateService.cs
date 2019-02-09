@@ -13,6 +13,7 @@ namespace WebApi.Services
         Application GetApplicationId(string email, string password);
         (int, int) GetInterviewOverview(string interviewId);
         IEnumerable<Question> GetInterviewQuestionsByApplicationId(string id);
+        string SetInterviewStatus(string id, string status);
     }
 
     public class CandidateService : ICandidateService
@@ -82,6 +83,22 @@ namespace WebApi.Services
             logger.Info("Interview total duration: " + totalInterviewDuration);
 
             return (numberOfQuestions, totalInterviewDuration);
+        }
+
+        public string SetInterviewStatus(string id, string status)
+        {
+            var application = _context.Applications.FirstOrDefault(a => a.Id == id);
+            if (application == null)
+            {
+                return null;
+            }
+
+            application.Status = status ?? application.Status;
+
+            _context.Applications.Update(application);
+            _context.SaveChanges();
+
+            return application.Status;
         }
 
         public IEnumerable<Question> GetInterviewQuestionsByApplicationId(string id)

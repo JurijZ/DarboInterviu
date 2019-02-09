@@ -8,6 +8,7 @@ namespace WebApi.Dtos
         public string Title { get; set; }
         public string CandidateName { get; set; }
         public string CandidateEmail { get; set; }
+        public string CandidateSecret { get; set; }
         public string Status { get; set; }
         public DateTime Expiration { get; set; }
     }

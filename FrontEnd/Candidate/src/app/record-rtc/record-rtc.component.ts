@@ -183,15 +183,26 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
     video.controls = true;
     video.autoplay = false;
 
-    // Show next question
+    // Show next question or complete
     var i = this.questions.findIndex(q => q.id === this.activeQuestion.id);
     if (i == this.questions.length - 1) {
+      // Interview is completed
+      console.log("Interview is completed");
+      this.updateInterviewStatus(this.currentUser.applicationId, "Completed");
       this.router.navigate(["/home"]);
     }
     else {
+      // Retrieve next question
       this.activeQuestion = this.questions[i + 1];
     }
 
+  }
+
+  updateInterviewStatus(applicationId: string, status: string){
+    this.recordService.updateInterviewStatus(applicationId, status).subscribe(status => {
+
+      console.log("Interview status was sucessfully updated");
+    });
   }
 
   sendToServer(blob: Blob) {
