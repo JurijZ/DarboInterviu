@@ -41,4 +41,9 @@ export class InterviewComponent implements OnInit {
     });
   }
 
+  reviewInterview(interview: Interview){
+    this.data.setInterview(interview);
+    this.router.navigate(['/review']);
+  }
+
 }

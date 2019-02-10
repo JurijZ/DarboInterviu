@@ -11,8 +11,7 @@ import { InterviewTemplateService, DataService, AuthenticationService } from '@a
   styleUrls: ['./interviewtemplate.component.css']
 })
 export class InterviewTemplateComponent implements OnInit {
-  interviews: InterviewTemplate[] = [];
-  newInterview: InterviewTemplate;
+  interviewTemplates: InterviewTemplate[] = [];
 
   constructor(
     private interviewtemplateService: InterviewTemplateService,
@@ -25,6 +24,12 @@ export class InterviewTemplateComponent implements OnInit {
     this.loadAllInterviews();
   }
 
+  private loadAllInterviews() {
+    this.interviewtemplateService.getAll().pipe(first()).subscribe(interviewTemplates => {
+      this.interviewTemplates = interviewTemplates;
+    });
+  }
+
   deleteInterview(id: string) {
     if (confirm("Are you sure you want to delete this Interview?")) {
       this.interviewtemplateService.delete(id).pipe(first()).subscribe(() => {
@@ -34,18 +39,18 @@ export class InterviewTemplateComponent implements OnInit {
   }
 
   addInterview() {
-    let newInterview: InterviewTemplate = new InterviewTemplate();
-    newInterview.name = "";
-    newInterview.timestamp = "";
+    let newInterviewTemplate: InterviewTemplate = new InterviewTemplate();
+    newInterviewTemplate.name = "";
+    newInterviewTemplate.timestamp = "";
 
     //this.questions.push(newQuestion);
 
-    var response = this.interviewtemplateService.create(newInterview);
+    var response = this.interviewtemplateService.create(newInterviewTemplate);
 
     response.subscribe(
-      interview => {
-        console.log("POST was successful ", interview.id);
-        this.data.setInterview(interview);
+      interviewTemplate => {
+        console.log("POST was successful ", interviewTemplate.id);
+        this.data.setInterviewTemplate(interviewTemplate);
         this.router.navigate(['/question']);
         //this.loadAllInterviews();
       },
@@ -59,14 +64,10 @@ export class InterviewTemplateComponent implements OnInit {
     this.loadAllInterviews();
   }
 
-  private loadAllInterviews() {
-    this.interviewtemplateService.getAll().pipe(first()).subscribe(interviews => {
-      this.interviews = interviews;
-    });
-  }
 
-  editInterview(interview: InterviewTemplate) {
-    this.data.setInterview(interview);
+
+  editInterview(interviewTemplate: InterviewTemplate) {
+    this.data.setInterviewTemplate(interviewTemplate);
     this.router.navigate(['/question']);
   }
 }

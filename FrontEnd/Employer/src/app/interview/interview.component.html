@@ -26,8 +26,7 @@
           <td> {{interview.expiration | date:'yyyy-MM-dd HH:mm'}}</td>
           <td> {{interview.status}}</td>
           <td>
-            <button class="btn btn-warning btn-sm" (click)="editInterview(interview)" style="margin-right:5px">Edit</button>
-            <button class="btn btn-danger btn-sm" (click)="deleteInterview(interview.id)" style="margin-right:5px">Delete</button>
+            <button class="btn btn-warning btn-sm" (click)="reviewInterview(interview)" style="margin-right:5px">Review</button>
           </td>
         </tr>
       </tbody>

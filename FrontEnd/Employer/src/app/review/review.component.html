@@ -1,0 +1,38 @@
+
+<p *ngIf="!videos"><em>Loading...</em></p>
+
+<div class="row">
+  <div class="col-sm-4 col-md-4 col-lg-4 bg-silver">
+
+    <div>
+      <table *ngIf="videos">
+        <thead>
+          <tr>
+            <th>Irasai</th>
+            <th>Iraso Data</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let video of videos">
+            <td><a class="text-primary" (click)="playVideo(video.name)">{{ video.name }}</a></td>
+            <td>{{ video.timestamp | date:'MM/dd/yyyy h:mm:ss a'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <div class="col-sm-1 col-md-1 col-lg-1">
+  </div>
+  <div class="col-sm-7 col-md-7 col-lg-7 bg-silver">
+
+    <div class="centerBlock">
+      <video #myVideo controls autoplay>
+        <source src="{{url}}" type="video/webm" />
+        Browser not supported
+      </video>
+
+      <p *ngIf="videoName != null"><em>Playing: {{ videoName }}</em></p>
+    </div>
+  </div>
+</div>

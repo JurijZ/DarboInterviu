@@ -20,6 +20,7 @@ import { RecordRTCComponent } from './record-rtc';
 import { InterviewTemplateComponent } from './interviewtemplate';
 import { InterviewModalComponent } from './interviewmodal';
 import { InterviewComponent } from './interview';
+import { ReviewComponent } from './review';
 import { QuestionComponent } from './question';
 
 @NgModule({
@@ -42,6 +43,7 @@ import { QuestionComponent } from './question';
         InterviewTemplateComponent,
         InterviewModalComponent,
         InterviewComponent,
+        ReviewComponent,
         QuestionComponent
     ],
     providers: [
