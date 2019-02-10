@@ -13,7 +13,7 @@ import { loadQueryList } from '@angular/core/src/render3';
 })
 export class QuestionComponent implements OnInit {
   questions: Question[] = [];
-  interview: InterviewTemplate;
+  interviewTemplate: InterviewTemplate;
   durations: number[] = [5, 10, 15, 20];
   currentUser: User;
   currentUserSubscription: Subscription;
@@ -29,16 +29,16 @@ export class QuestionComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.data.currentInterview.subscribe(interview => {
-      this.interview = interview;
-      this.loadAllQuestions(this.interview.id);
+    this.data.currentInterviewTemplate.subscribe(interviewTemplate => {
+      this.interviewTemplate = interviewTemplate;
+      this.loadAllQuestions(this.interviewTemplate.id);
     })
   }
 
   deleteQuestion(id: string) {
     if (confirm("Are you sure you want to delete this question?")) {
       this.questionService.delete(id).pipe(first()).subscribe(() => {
-        this.loadAllQuestions(this.interview.id)
+        this.loadAllQuestions(this.interviewTemplate.id)
       });
     }
   }
@@ -51,7 +51,7 @@ export class QuestionComponent implements OnInit {
     newQuestion.duration = 5;
     newQuestion.order = (this.questions.length == 0) ? 0 : this.questions[this.questions.length - 1].order + 1;
     newQuestion.text = "";
-    newQuestion.interview = this.interview.id;
+    newQuestion.interview = this.interviewTemplate.id;
 
     //this.questions.push(newQuestion);
 
@@ -60,7 +60,7 @@ export class QuestionComponent implements OnInit {
     response.subscribe(
       data => {
         console.log("POST was successful ", data);
-        this.loadAllQuestions(this.interview.id);
+        this.loadAllQuestions(this.interviewTemplate.id);
       },
       error => {
         console.log("Error: ", error);
@@ -69,7 +69,7 @@ export class QuestionComponent implements OnInit {
   }
 
   refreshQuestions() {
-    this.loadAllQuestions(this.interview.id);
+    this.loadAllQuestions(this.interviewTemplate.id);
   }
 
   updateQuestion(question: Question) {
@@ -77,8 +77,8 @@ export class QuestionComponent implements OnInit {
   }
 
   updateInterview(){
-    this.interview.userid = this.currentUser.id;
-    this.questionService.updateInterview(this.interview).subscribe(
+    this.interviewTemplate.userid = this.currentUser.id;
+    this.questionService.updateInterview(this.interviewTemplate).subscribe(
       data => {
         console.log("Interview update was successful ", data);
       },
