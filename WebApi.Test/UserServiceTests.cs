@@ -36,8 +36,8 @@ namespace WebApi.Test
                 // Insert seed data into the database using one instance of the context
                 using (var context = new DataContext(options))
                 {
-                    context.Users.Add(new User { FirstName = "A", LastName = "B", Username = "ab@gmail.com" });
-                    context.Users.Add(new User { FirstName = "C", LastName = "D", Username = "cd@gmail.com" });
+                    context.Users.Add(new User { Id = "1", FirstName = "A", LastName = "B", Username = "ab@gmail.com" });
+                    context.Users.Add(new User { Id = "2", FirstName = "C", LastName = "D", Username = "cd@gmail.com" });
                     context.SaveChanges();
                 }
 
@@ -45,7 +45,7 @@ namespace WebApi.Test
                 using (var context = new DataContext(options))
                 {
                     var service = new UserService(context);
-                    var result = service.GetById(2);
+                    var result = service.GetById("2");
                     Assert.Equal("C", result.FirstName);
                 }
             }
