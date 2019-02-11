@@ -21,8 +21,8 @@ jobs:
             name: Restore dependencies
             command: dotnet restore
       - run: 
-            name: Build the WebAPI.Test project
-            command: cd WebApi.Test && dotnet --info && dotnet build  && tree /root/project/WebApi.Test && dotnet test
+            name: Run WebAPI.Test tests
+            command: cd WebApi.Test && dotnet --info && tree /root/project/WebApi.Test && dotnet test
       - run: 
             name: Build the WebAPI project
             command: cd WebApi && dotnet build --configuration Release
