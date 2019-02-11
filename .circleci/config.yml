@@ -1,9 +1,14 @@
 version: 2
 jobs:
-  build:
+  webapi:
+    working_directory: ~/WebApi
     docker:
       - image: microsoft/dotnet:latest
     steps:
       - checkout
-      - run: dotnet restore
-      - run: dotnet build
+      - run: 
+            name: Restore dependencies
+            command: dotnet restore
+      - run: 
+            name: Build the projectdotnet
+            command: dotnet build
