@@ -15,7 +15,7 @@ jobs:
       - run:
             name: Install softwar to the container
             command: |
-                sudo apt-get install tree
+                apt-get install tree
       - run: 
             name: Restore dependencies
             command: dotnet restore
