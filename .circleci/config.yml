@@ -20,4 +20,4 @@ jobs:
             command: cd WebApi && dotnet build --configuration Release --runtime linux-x64
       - run: 
             name: Build the WebAPI.Test project
-            command: cd WebApi.Test && dotnet build
+            command: cd WebApi.Test && dotnet test
