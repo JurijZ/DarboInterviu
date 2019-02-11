@@ -7,6 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="TestFiles\Test.webm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="TestFiles\Test.webm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="Moq" Version="4.10.1" />
@@ -16,10 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WebApi\WebApi.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="TestFiles\" />
   </ItemGroup>
 
   <ItemGroup>

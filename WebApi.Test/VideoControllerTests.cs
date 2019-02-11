@@ -41,7 +41,7 @@ namespace WebApi.Test
             // Assert
             Assert.NotNull(response);
             Assert.IsType<FileStreamResult>(response);
-            Assert.Equal(21, ((FileStreamResult)response).FileStream.Length);
+            Assert.Equal(31327, ((FileStreamResult)response).FileStream.Length);
             
         }
 
@@ -49,7 +49,7 @@ namespace WebApi.Test
         {
             string dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-            string file = dir + @"\TestFiles\Test.txt";
+            string file = dir + @"\TestFiles\Test.webm";
             return new FileStream(file, FileMode.Open);
         }
     }
