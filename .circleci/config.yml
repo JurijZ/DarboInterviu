@@ -9,7 +9,7 @@ workflows:
 jobs:
   webapi:
     docker:
-      - image: microsoft/dotnet:2.1-runtime 
+      - image: microsoft/dotnet:2.1-sdk 
     steps:
       - checkout
       - run:
