@@ -49,7 +49,7 @@ namespace WebApi.Test
         {
             string dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 
-            string file = dir + @"\TestFiles\Test.webm";
+            string file = dir + Path.DirectorySeparatorChar + "TestFiles" + Path.DirectorySeparatorChar + "Test.webm";
             return new FileStream(file, FileMode.Open);
         }
     }
