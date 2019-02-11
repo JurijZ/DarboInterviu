@@ -22,7 +22,7 @@ jobs:
             command: dotnet restore
       - run: 
             name: Build the WebAPI.Test project
-            command: cd WebApi.Test && ls && dotnet test
+            command: cd WebApi.Test && tree /root/project/WebApi.Test && dotnet test
       - run: 
             name: Build the WebAPI project
             command: cd WebApi && dotnet build --configuration Release --runtime linux-x64
