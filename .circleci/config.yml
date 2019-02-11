@@ -17,5 +17,5 @@ jobs:
             name: Restore dependencies
             command: dotnet restore
       - run: 
-            name: Build the projectdotnet
-            command: dotnet build
+            name: Build the WebAPI project
+            command: cd WebApi && dotnet build
