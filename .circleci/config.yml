@@ -1,4 +1,11 @@
 version: 2
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - webapi
+      
 jobs:
   webapi:
     working_directory: ~/WebApi
