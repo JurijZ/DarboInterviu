@@ -8,7 +8,6 @@ workflows:
       
 jobs:
   webapi:
-    working_directory: ~/WebApi
     docker:
       - image: microsoft/dotnet:latest
     steps:
