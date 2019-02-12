@@ -2,27 +2,18 @@
 <p *ngIf="!videos"><em>Loading...</em></p>
 
 <div class="row">
-  <strong> "{{interview.title}}" </strong> completed by <strong> {{interview.candidateName}} ({{interview.candidateEmail}})</strong>
+  <strong> "{{interview.title}}" </strong> interview completed by <strong> {{interview.candidateName}} ({{interview.candidateEmail}})</strong>
 </div>
+
+<div class="row"> 
+    <button *ngFor="let video of videos" type="button" class="btn btn-info btn-circle" (click)="showQuestion(video.videoId)"> {{video.videoId}} </button>
+</div> 
 
 <div class="row">
   <div class="col-sm-4 col-md-4 col-lg-4 bg-silver">
 
     <div>
-      <table *ngIf="videos">
-        <thead>
-          <tr>
-            <th>Irasai</th>
-            <th>Iraso Data</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let video of videos">
-            <td><a class="text-primary" (click)="playVideo(video.videoFileName)">{{ video.question }}</a></td>
-            <td>{{ video.timestamp | date:'MM/dd/yyyy h:mm:ss a'}}</td>
-          </tr>
-        </tbody>
-      </table>
+      {{activeQuestion}}
     </div>
 
   </div>

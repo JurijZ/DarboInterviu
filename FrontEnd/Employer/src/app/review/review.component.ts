@@ -15,6 +15,7 @@ import { Interview , Video } from '@app/_models';
 export class ReviewComponent implements OnInit {
   public videos: Video[];
   public videoName: string; 
+  public activeQuestion: string = "";
   public url: string;
   public baseUrl: string;
   public interview: Interview;
@@ -46,6 +47,15 @@ export class ReviewComponent implements OnInit {
     this.myVideo.nativeElement.play();
     this.videoName = fileName;
   } 
+
+  showQuestion(videoId: number){
+    var video = this.videos.find(v => v.videoId === videoId);
+    console.log(video.question);
+
+    this.activeQuestion = video.question;
+
+    this.playVideo(video.videoFileName)
+  }
 }
 
 export interface IMedia {
