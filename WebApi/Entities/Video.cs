@@ -9,8 +9,10 @@ namespace WebApi.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Candidate { get; set; }
+        public string ApplicationId { get; set; }
+        public string QuestionId { get; set; }
+        public string FileName { get; set; }
+        public string FilePath { get; set; }
         public DateTime Timestamp { get; set; }
     }
 }

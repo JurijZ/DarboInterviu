@@ -8,7 +8,7 @@ import { Interview, Application } from '@app/_models';
 export class InterviewService {
   constructor(private http: HttpClient) { }
 
-  getAll(id: string) {
+  getAllByUserId(id: string) {
     return this.http.get<Interview[]>(`${environment.apiUrl}/application/${id}`);
   }
 }

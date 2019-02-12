@@ -2,6 +2,10 @@
 <p *ngIf="!videos"><em>Loading...</em></p>
 
 <div class="row">
+  <strong> "{{interview.title}}" </strong> completed by <strong> {{interview.candidateName}} ({{interview.candidateEmail}})</strong>
+</div>
+
+<div class="row">
   <div class="col-sm-4 col-md-4 col-lg-4 bg-silver">
 
     <div>
@@ -14,7 +18,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let video of videos">
-            <td><a class="text-primary" (click)="playVideo(video.name)">{{ video.name }}</a></td>
+            <td><a class="text-primary" (click)="playVideo(video.videoFileName)">{{ video.question }}</a></td>
             <td>{{ video.timestamp | date:'MM/dd/yyyy h:mm:ss a'}}</td>
           </tr>
         </tbody>

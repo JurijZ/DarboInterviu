@@ -1,5 +1,5 @@
 export class Question {
-    id: number;
+    id: string;
     interview: string;
     text: string;    
     duration: number;

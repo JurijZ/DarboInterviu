@@ -59,12 +59,12 @@ namespace WebApi.Controllers
             return BadRequest();
         }
 
-        [HttpGet()]
-        public ActionResult<IEnumerable<Video>> GetVideosMetadata()
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<VideoDto>> GetVideosMetadataByInterviewId(string id)
         {
-            NLog.LogManager.GetCurrentClassLogger().Info("GetVideosMetadata");
+            NLog.LogManager.GetCurrentClassLogger().Info("GetVideosMetadataByInterviewId");
 
-            var listOfVideosMetadata = _videoService.GetVideosMetadata();
+            var listOfVideosMetadata = _videoService.GetVideosMetadataByInterviewId(id);
             if (listOfVideosMetadata.Any())
             {
                 return Ok(listOfVideosMetadata);
@@ -74,7 +74,7 @@ namespace WebApi.Controllers
             return BadRequest();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("record/{id}")]
         public IActionResult GetVideoById(string id)
         {
             var logger = NLog.LogManager.GetCurrentClassLogger();

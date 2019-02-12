@@ -36,7 +36,7 @@ export class InterviewComponent implements OnInit {
   }
 
   private loadAllInterviews(userId: string) {
-    this.interviewService.getAll(userId).pipe(first()).subscribe(interviews => {
+    this.interviewService.getAllByUserId(userId).pipe(first()).subscribe(interviews => {
       this.interviews = interviews;
     });
   }

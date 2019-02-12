@@ -24,10 +24,12 @@ namespace WebApi.Controllers
     public class UploadController : Controller
     {
         private IHostingEnvironment _hostingEnvironment;
+        private IVideoService _videoService;
 
-        public UploadController(IHostingEnvironment hostingEnvironment)
+        public UploadController(IHostingEnvironment hostingEnvironment, IVideoService videoService)
         {
-            _hostingEnvironment = hostingEnvironment;
+            _hostingEnvironment = hostingEnvironment;            
+            _videoService = videoService;
         }
 
         [HttpPost, DisableRequestSizeLimit]
@@ -37,6 +39,10 @@ namespace WebApi.Controllers
 
             try
             {
+                // Extract keys from the submitted form
+                var formKeys = Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString());
+                               
+
                 var file = Request.Form.Files[0];
                 logger.Info("Received file name: " + file.FileName);
 
@@ -44,6 +50,14 @@ namespace WebApi.Controllers
                 string contentRootPath = _hostingEnvironment.ContentRootPath;
                 string newPath = Path.Combine(contentRootPath, folderName);
                 logger.Info("Upload to: " + newPath);
+
+                var videoMetadata = new Video();
+                videoMetadata.ApplicationId = formKeys["applicationId"];
+                videoMetadata.QuestionId = formKeys["questionId"];
+                videoMetadata.FileName = file.FileName;
+                videoMetadata.FilePath = newPath;
+                videoMetadata.Timestamp = DateTime.Now;
+                _videoService.SaveVideoMetaData(videoMetadata);
 
                 if (!Directory.Exists(newPath))
                 {

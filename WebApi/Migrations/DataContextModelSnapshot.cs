@@ -105,9 +105,13 @@ namespace WebApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Candidate");
+                    b.Property<string>("ApplicationId");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("FileName");
+
+                    b.Property<string>("FilePath");
+
+                    b.Property<string>("QuestionId");
 
                     b.Property<DateTime>("Timestamp");
 

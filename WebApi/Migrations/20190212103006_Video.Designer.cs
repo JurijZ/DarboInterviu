@@ -9,8 +9,8 @@ using WebApi.Helpers;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190208193832_A1")]
-    partial class A1
+    [Migration("20190212103006_Video")]
+    partial class Video
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -107,9 +107,13 @@ namespace WebApi.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Candidate");
+                    b.Property<string>("ApplicationId");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("FileName");
+
+                    b.Property<string>("FilePath");
+
+                    b.Property<string>("QuestionId");
 
                     b.Property<DateTime>("Timestamp");
 
