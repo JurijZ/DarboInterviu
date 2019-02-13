@@ -17,8 +17,10 @@ export class ReviewComponent implements OnInit {
   public videoName: string; 
   public activeQuestion: string = "";
   public url: string;
+  public urlBackgroundImage: string = environment.apiUrl + "/Upload/Poster.png";
   public baseUrl: string;
   public interview: Interview;
+  public selectedButton: number = -1;
   @ViewChild('myVideo') myVideo: any;
   
   constructor(
@@ -35,6 +37,9 @@ export class ReviewComponent implements OnInit {
 
       this.reviewService.getByInterviewId(this.interview.id).pipe(first()).subscribe(videos => {
         this.videos = videos;
+
+        this.selectedButton = this.videos[0].videoId;
+        this.showQuestion(this.videos[0].videoId);
       });
     })
   }
