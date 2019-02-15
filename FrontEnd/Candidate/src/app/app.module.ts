@@ -16,6 +16,7 @@ import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { VideosComponent } from './videos';
 import { RecordRTCComponent } from './record-rtc';
+import { TestComponent } from './test';
 
 @NgModule({
     imports: [
@@ -31,7 +32,8 @@ import { RecordRTCComponent } from './record-rtc';
         LoginComponent,
         RegisterComponent,
         VideosComponent,
-        RecordRTCComponent
+        RecordRTCComponent,
+        TestComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

@@ -6,9 +6,9 @@
 </div>
 
 <div class="row centerBlock"> 
-    <button *ngFor="let video of videos" type="button" class="btn btn-info btn-circle" 
+    <button *ngFor="let video of videos; index as i" type="button" class="btn btn-info btn-circle" 
     (click)="selectedButton = video.videoId; showQuestion(video.videoId);"
-    [ngClass]="{'btn-circle2': selectedButton === video.videoId}"> {{video.videoId}} </button>
+    [ngClass]="{'btn-circle2': selectedButton === video.videoId}"> {{i + 1}} </button>
 </div> 
 
 <div class="row">

@@ -1,0 +1,30 @@
+<h3>Test your camera and microphone</h3>
+<div class="row" *ngIf="recordingState == true">
+  <div class="col-xs-12">
+    <video #video class="video"></video>
+  </div>
+</div>
+<div class="row" *ngIf="recordingState == true">
+  <div class="col-xs-12">
+    <button [disabled]="recordButtonDisabled" md-raised-button color="primary" (click)="startRecording()"> Record
+    </button>
+    <button [disabled]="sendButtonDisabled" md-raised-button color="primary" (click)="stopRecordingAndSend()">Stop and
+      Playback</button>
+  </div>
+</div>
+
+<div class="row" *ngIf="!recordingState">
+  <div class="col-xs-12">
+    <video #myVideo controls autoplay class="video" source src="{{url}}" type="video/webm" poster={{urlBackgroundImage}}
+      width="100%">
+      Browser not supported
+    </video>
+
+  </div>
+</div>
+<div class="row" *ngIf="!recordingState">
+  <div class="col-xs-12">
+    <button md-raised-button color="primary" (click)="enableRecordingState()"> Retry Test </button>
+    <p *ngIf="videoName != null"><em>Playing: {{ videoName }}</em></p>
+  </div>
+</div>

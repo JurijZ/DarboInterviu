@@ -1,19 +1,20 @@
 let RecordRTC = require('recordrtc/RecordRTC.min');
 
-import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { HttpClient, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { environment } from '@environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
-import { RecordService, AuthenticationService } from '@app/_services';
+import { TestService, AuthenticationService } from '@app/_services';
 import { User, Application, Question } from '@app/_models';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
-  selector: 'record-rtc',
-  templateUrl: './record-rtc.component.html',
-  styleUrls: ['./record-rtc.component.css']
+  selector: 'test',
+  templateUrl: './test.component.html',
+  styleUrls: ['./test.component.css']
 })
-export class RecordRTCComponent implements AfterViewInit, OnInit {
+export class TestComponent implements AfterViewInit, OnInit {
 
   private stream: MediaStream;
   private recordRTC: any;
@@ -23,6 +24,9 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
   public recordButtonDisabled: boolean = false;
   public sendButtonDisabled: boolean = true;
   public recordedBlob: Blob;
+  public recordingState: boolean = true;
+  public videoName: string;
+  imageData: any;
 
   activeQuestion: Question = new Question();
   questions: Question[];
@@ -30,13 +34,16 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
   currentUserSubscription: Subscription;
 
   @ViewChild('video') video;
+  @ViewChild('myVideo') myVideo: any;
 
   constructor(
     private authenticationService: AuthenticationService,
     private http: HttpClient,
     private ref: ChangeDetectorRef,
-    private recordService: RecordService,
-    private router: Router) {
+    private testService: TestService,
+    private router: Router,
+    private elRef: ElementRef,
+    private sanitizer: DomSanitizer) {
     // Do stuff
   }
 
@@ -44,15 +51,6 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
     this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
       this.currentUser = user;
       console.log(this.currentUser);
-
-      this.recordService.getQuestionsByApplicationId(this.currentUser.applicationId).subscribe(questions => {
-        this.questions = questions;
-        this.orderQuestions();
-
-        this.activeQuestion = this.questions[0];
-
-        console.log("Current question:" + this.activeQuestion.text + ", order Id: " + this.activeQuestion.order);
-      });
     });
   }
 
@@ -62,8 +60,9 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
     video.muted = false;
     video.controls = true;
     video.autoplay = false;
-  }
+  }  
 
+  
   toggleControls() {
     let video: HTMLVideoElement = this.video.nativeElement;
     video.muted = !video.muted;
@@ -71,17 +70,45 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
     video.autoplay = !video.autoplay;
   }
 
+  playVideo() {
+    //console.log("Selected video: " + fileName);
+    let fileName = "test.webm";
+
+    /* You are accessing a dom element directly here, so you need to call "nativeElement" first. */
+    this.myVideo.nativeElement.src = environment.apiUrl + "/Test/" + fileName;
+    this.myVideo.nativeElement.play();
+    this.videoName = fileName;
+  } 
+
+  enableRecordingState(){
+    this.recordingState = true;    
+
+    this.ref.detectChanges(); // This is needed to update the view otherwise the element does not yet exist   
+    
+    // set the initial state of the video
+    let video: HTMLVideoElement = this.video.nativeElement;
+    video.muted = false;
+    video.controls = true;
+    video.autoplay = false;
+
+    this.recordButtonDisabled = false;
+    this.sendButtonDisabled = true;
+  }
   
-  
-  sendToServer(applicationId: string, questionId: string, blob: Blob) {
-    this.recordService.sendToServer(applicationId, questionId, blob).subscribe(event => {
+  sendToServer(testId: string, blob: Blob) {
+    this.testService.sendToServer(testId, blob).subscribe(event => {
       if (event.type === HttpEventType.UploadProgress) {
         this.progress = Math.round(100 * event.loaded / event.total);
       }
       else if (event.type === HttpEventType.Response) {
         this.message = event.body.toString();
-        this.ref.detectChanges(); // This is needed to update the view
-      }
+
+        console.log("Playing back the video");
+        this.recordingState = false;
+        
+        this.ref.detectChanges(); // This is needed to update the view otherwise the element does not yet exist   
+        this.playVideo();   
+      }      
     });
   }  
 
@@ -98,6 +125,9 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
     navigator.mediaDevices
       .getUserMedia(mediaConstraints)
       .then(this.successCallback.bind(this), this.errorCallback.bind(this));
+
+      this.ref.detectChanges(); // This is needed to update the view otherwise the element does not yet exist   
+        
   }
 
   successCallback(stream: MediaStream) {
@@ -135,7 +165,9 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
       //this.processVideo.bind(this)
       //that.recordedBlob = recordRTC.getBlob();
       //console.log("Id to be sent: " + that.activeQuestion.id);
-      that.sendToServer(that.currentUser.applicationId, currentActiveQuestion.id, recordRTC.getBlob());
+      that.sendToServer("test", recordRTC.getBlob());
+
+      
     });
     let stream = this.stream;
     this.stream.getAudioTracks().forEach(track => track.stop());
@@ -147,67 +179,7 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
     video.controls = true;
     video.autoplay = false;
 
-    // Show next question or complete
-    var i = this.questions.findIndex(q => q.id === this.activeQuestion.id);
-    if (i == this.questions.length - 1) {
-      // Interview is completed
-      console.log("Interview is Completed");
-      this.updateInterviewStatus(this.currentUser.applicationId, "Completed");      
-    }
-    else {
-      // Retrieve next question
-      this.activeQuestion = this.questions[i + 1];
-      console.log("Next question Id: " + this.activeQuestion.id)
-    }
   }
 
-  updateInterviewStatus(applicationId: string, statusCode: string){
-    this.recordService.updateInterviewStatus(applicationId, statusCode).subscribe(status => {
-      console.log("Interview status was sucessfully updated");
-      if (statusCode == "Completed"){
-        //console.log("Redirecting");
-        this.router.navigate(["/home"]);
-      }
-    });
-  }
-
-  private orderQuestions() {
-    // Order array
-    this.questions.sort((left, right): number => {
-      if (left.order < right.order) return -1;
-      if (left.order > right.order) return 1;
-      return 0;
-    })
-  }
-
-  // NOT IN USE!!!
-  processVideo(audioVideoWebMURL) {
-    let video: HTMLVideoElement = this.video.nativeElement;
-    let recordRTC = this.recordRTC;
-    video.src = audioVideoWebMURL;
-    this.toggleControls();
-    var recordedBlob = recordRTC.getBlob();
-    recordRTC.getDataURL(function (dataURL) { });
-  }
-
-  stopRecording() {
-    this.recordButtonDisabled = false;
-    this.sendButtonDisabled = true;
-    let recordRTC = this.recordRTC;
-    recordRTC.stopRecording(this.processVideo.bind(this));
-    let stream = this.stream;
-    stream.getAudioTracks().forEach(track => track.stop());
-    stream.getVideoTracks().forEach(track => track.stop());
-  }
-
-  
-  upload(files) {
-    this.recordService.upload(files).subscribe(event => {
-      if (event.type === HttpEventType.UploadProgress)
-        this.progress = Math.round(100 * event.loaded / event.total);
-      else if (event.type === HttpEventType.Response)
-        this.message = event.body.toString();
-    });
-  }
   
 }

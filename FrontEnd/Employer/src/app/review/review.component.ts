@@ -17,7 +17,7 @@ export class ReviewComponent implements OnInit {
   public videoName: string; 
   public activeQuestion: string = "";
   public url: string;
-  public urlBackgroundImage: string = environment.apiUrl + "/Upload/Poster.png";
+  public urlBackgroundImage: string = environment.apiUrl + "/Images/Poster.png";
   public baseUrl: string;
   public interview: Interview;
   public selectedButton: number = -1;
