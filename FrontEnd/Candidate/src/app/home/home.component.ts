@@ -42,4 +42,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         //console.log(this.application);
         this.router.navigate(['/record-rtc']);        
     }
+
+    testRecording(){
+        this.router.navigate(['/test']);
+    }
 }

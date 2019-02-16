@@ -1,6 +1,6 @@
 let RecordRTC = require('recordrtc/RecordRTC.min');
 
-import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, ElementRef, NgZone } from '@angular/core';
 import { HttpClient, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { environment } from '@environments/environment';
@@ -43,7 +43,8 @@ export class TestComponent implements AfterViewInit, OnInit {
     private testService: TestService,
     private router: Router,
     private elRef: ElementRef,
-    private sanitizer: DomSanitizer) {
+    private sanitizer: DomSanitizer,
+    private ngZone: NgZone) {
     // Do stuff
   }
 
@@ -178,7 +179,12 @@ export class TestComponent implements AfterViewInit, OnInit {
     video.muted = false;
     video.controls = true;
     video.autoplay = false;
-
+  }
+  completeTest(){
+    //- normal navigation does not work. Probably beacause of the this.ref.detectChanges(); usage
+    //this.router.navigate(['/']); 
+    
+    this.ngZone.run(() => this.router.navigate(['/'])).then();
   }
 
   

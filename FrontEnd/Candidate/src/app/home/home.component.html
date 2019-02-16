@@ -1,18 +1,23 @@
-<h3>Hi {{currentUser.username}} ({{currentUser.email}}),</h3>
-<p>Your interviewer prepared an online interview for you: <strong>{{application.title}}</strong></p>
-<p>It consists of {{application.numberOfQuestions}} questions and you will have {{application.interviewDuration}} minutes to complete.</p>
-<p>Before you start, make sure you can finish the interview in one go. When started the interview cannot be paused or canceled</p>
+<h3 style="margin-top: 20px;">Hi {{currentUser.username}} ({{currentUser.email}}),</h3>
+<hr class="hr-primary" />
+<div class="container">
+    <p>Your interviewer prepared an online interview for you: <strong>{{application.title}}</strong></p>
+    <p>It consists of <strong>{{application.numberOfQuestions}}</strong> questions and you will have
+        <strong>{{application.interviewDuration}}</strong> minutes to complete.</p>
 
-<p>Also be aware that this interview expires on <strong>{{application.expiration | date }}, {{ application.expiration | date:'shortTime' }}</strong> and won't be available afer</p>
+    <p>Also be aware that this interview expires on <strong>{{application.expiration | date }},
+            {{ application.expiration | date:'shortTime' }}</strong> and won't be available after.</p>
 
-<button  md-raised-button color="primary" (click)="startInterview()">Start the interview</button>  
+</div>
+<hr class="hr-primary" />
+<div class="container">
+    <p>Before you start we recommend you to test your computer's recording quality.</p>
+    <button type="button" class="btn btn-primary" (click)="testRecording()">Test recording</button>
+</div>
 
-<!-- <h3>All registered users:</h3>
-<ul>
-    <li *ngFor="let user of users">
-        {{user.username}} ({{user.firstName}} {{user.lastName}})
-        - <a (click)="deleteUser(user.id)" class="text-danger">Delete</a>
-    </li>
-</ul> -->
-
-
+<hr class="hr-primary" />
+<div class="container">
+    <p>If you are ready click on the bellow button to start the interview.</p>
+    <p>When started the interview cannot be paused or canceled, therefore make sure you can finish it in one go.</p>
+    <button type="button" class="btn btn-success" (click)="startInterview()">Start the interview</button>
+</div>

@@ -6,9 +6,9 @@
 </div>
 <div class="row" *ngIf="recordingState == true">
   <div class="col-xs-12">
-    <button [disabled]="recordButtonDisabled" md-raised-button color="primary" (click)="startRecording()"> Record
+    <button [disabled]="recordButtonDisabled" type="button" class="btn btn-primary" (click)="startRecording()"> Record
     </button>
-    <button [disabled]="sendButtonDisabled" md-raised-button color="primary" (click)="stopRecordingAndSend()">Stop and
+    <button [disabled]="sendButtonDisabled" type="button" class="btn btn-primary" (click)="stopRecordingAndSend()">Stop and
       Playback</button>
   </div>
 </div>
@@ -24,7 +24,8 @@
 </div>
 <div class="row" *ngIf="!recordingState">
   <div class="col-xs-12">
-    <button md-raised-button color="primary" (click)="enableRecordingState()"> Retry Test </button>
+    <button type="button" class="btn btn-warning" (click)="enableRecordingState()"> Retry Test </button>
+    <button type="button" class="btn btn-success" (click)="completeTest()"> Complete Test </button>
     <p *ngIf="videoName != null"><em>Playing: {{ videoName }}</em></p>
   </div>
 </div>

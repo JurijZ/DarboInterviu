@@ -13,10 +13,10 @@ import { AlertComponent } from './_components';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 import { HomeComponent } from './home';
 import { LoginComponent } from './login';
-import { RegisterComponent } from './register';
 import { VideosComponent } from './videos';
 import { RecordRTCComponent } from './record-rtc';
 import { TestComponent } from './test';
+import { FinalComponent } from './final';
 
 @NgModule({
     imports: [
@@ -30,10 +30,10 @@ import { TestComponent } from './test';
         AlertComponent,
         HomeComponent,
         LoginComponent,
-        RegisterComponent,
         VideosComponent,
         RecordRTCComponent,
-        TestComponent
+        TestComponent,
+        FinalComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
