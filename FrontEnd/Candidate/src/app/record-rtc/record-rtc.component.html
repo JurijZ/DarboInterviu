@@ -1,21 +1,37 @@
+<div class="row centerBlock">
+  <button *ngFor="let question of questions; index as i" type="button" class="btn btn-info btn-circle"
+    [ngClass]="{'btn-circle2': activeQuestion.id === question.id}"> {{i + 1}} </button>
+</div>
 
-<h3>{{activeQuestion.text}}</h3>
 <div class="row">
-  <div class="col-xs-12">
+  <div class="col text-center">
+    <h3>{{activeQuestion.text}}</h3>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col text-center">
     <video #video class="video"></video>
   </div>
 </div>
+
 <div class="row">
-  <div class="col-xs-12">
-    <button [disabled]="recordButtonDisabled" md-raised-button color="primary" (click)="startRecording()"> Record </button>
+  <div class="col text-center">
+    <!--<button [disabled]="recordButtonDisabled" md-raised-button color="primary" (click)="startRecording()"> Record </button>-->
     <!--<button md-raised-button color="primary" (click)="stopRecording()"> Stop</button>-->
     <!--<button md-raised-button color="primary" (click)="download()"> Download</button>-->
-    <button [disabled]="sendButtonDisabled" md-raised-button color="primary" (click)="stopRecordingAndSend()">Stop and upload to Server</button>    
+    <button [disabled]="sendButtonDisabled" type="button" class="btn btn-info" (click)="stopRecordingAndSend()">Next
+      Question</button>
   </div>
 </div>
-<!--<h3>Isaugok video failiuka i serveriuka:</h3>
-<input #file type="file" multiple (change)="upload(file.files)" />
-<br />-->
+
+<div *ngIf="showTimer">
+  <ngb-progressbar type="info" [value]="timeLeft * 4">{{timeLeft}} s</ngb-progressbar>
+</div>
+<div *ngIf="!showTimer">
+  <ngb-progressbar type="info" [value]="timeLeftMinutesInPercents">{{timeLeftMinutes}}</ngb-progressbar>
+</div>
+
 <span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">
   {{progress}}%
 </span>

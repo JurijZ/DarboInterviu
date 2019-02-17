@@ -7,6 +7,7 @@ import { environment } from '@environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RecordService, AuthenticationService } from '@app/_services';
 import { User, Application, Question } from '@app/_models';
+import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'record-rtc',
@@ -24,6 +25,12 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
   public sendButtonDisabled: boolean = true;
   public recordedBlob: Blob;
 
+  interval;
+  timeLeft: number = 60;
+  timeLeftMinutes: string;
+  timeLeftMinutesInPercents: number;
+
+  showTimer: boolean = false;
   activeQuestion: Question = new Question();
   questions: Question[];
   currentUser: User;
@@ -52,6 +59,9 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
         this.activeQuestion = this.questions[0];
 
         console.log("Current question:" + this.activeQuestion.text + ", order Id: " + this.activeQuestion.order);
+      
+        console.log("Start Recording")
+        this.startRecording();
       });
     });
   }
@@ -70,8 +80,6 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
     video.controls = !video.controls;
     video.autoplay = !video.autoplay;
   }
-
-  
   
   sendToServer(applicationId: string, questionId: string, blob: Blob) {
     this.recordService.sendToServer(applicationId, questionId, blob).subscribe(event => {
@@ -90,6 +98,10 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
     this.recordButtonDisabled = true;
     this.sendButtonDisabled = false;
     this.message = "Recording";
+
+    // Timer
+    this.timeLeft = this.activeQuestion.duration * 60;
+    this.startTimer()
 
     let mediaConstraints = {
       video: true,
@@ -130,6 +142,9 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
     let currentActiveQuestion = this.activeQuestion;
     //recordRTC.stopRecording(this.processVideo.bind(this));    
 
+    // Stop timer
+    this.pauseTimer();
+
     var that = this;
     this.recordRTC.stopRecording(function () {
       //this.processVideo.bind(this)
@@ -157,7 +172,10 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
     else {
       // Retrieve next question
       this.activeQuestion = this.questions[i + 1];
-      console.log("Next question Id: " + this.activeQuestion.id)
+      console.log("Next question Id: " + this.activeQuestion.id);
+
+      console.log("Continue Recording.");
+      this.startRecording();
     }
   }
 
@@ -166,7 +184,7 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
       console.log("Interview status was sucessfully updated");
       if (statusCode == "Completed"){
         //console.log("Redirecting");
-        this.router.navigate(["/home"]);
+        this.router.navigate(["/final"]);
       }
     });
   }
@@ -178,6 +196,42 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
       if (left.order > right.order) return 1;
       return 0;
     })
+  }
+
+  startTimer() {
+    this.interval = setInterval(() => {
+      // If you decide to change value 20 then do not forget to update html multiplication as well
+      if(this.timeLeft > 0 && this.timeLeft <= 25) {
+        this.showTimer = true;
+        this.timeLeft--;        
+      } else if (this.timeLeft > 25) {
+        this.showTimer = false;
+        this.timeLeftMinutes = this.calculateMinutes(this.timeLeft - 1);
+        this.timeLeftMinutesInPercents = this.calculateDurationPercentage(this.timeLeft - 1);
+        this.timeLeft--;             
+      } else {
+        // When time is up then stop recording and load next question
+        this.showTimer = false;
+        this.stopRecordingAndSend();
+      }
+    },1000)
+  }
+
+  calculateMinutes(seconds: number){
+    var m = Math.floor(seconds % 3600 / 60) + 1;
+    var mDisplay = m > 0 ? m + (m == 1 ? " minute remain" : " minutes remain") : "";
+    return mDisplay
+  }
+
+  calculateDurationPercentage(seconds: number){    
+    var c = Math.floor(100 / (this.activeQuestion.duration));
+    var m = Math.floor(seconds % 3600 / 60) + 1;
+    var p = Math.floor(m * c);
+    return p;
+  }
+
+  pauseTimer() {
+    clearInterval(this.interval);
   }
 
   // NOT IN USE!!!
