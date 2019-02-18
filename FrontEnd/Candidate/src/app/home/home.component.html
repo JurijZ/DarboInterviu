@@ -1,4 +1,4 @@
-<h3 style="margin-top: 20px;">Hi {{currentUser.username}} ({{currentUser.email}}),</h3>
+<h3 style="margin-top: 20px;">Hi {{currentUser.username}} ({{currentUser.email}})</h3>
 <hr class="hr-primary" />
 <div class="container">
     <p>Your interviewer prepared an online interview for you: <strong>{{application.title}}</strong></p>
@@ -16,8 +16,8 @@
 </div>
 
 <hr class="hr-primary" />
-<div class="container">
-    <p>If you are ready click on the bellow button to start the interview.</p>
-    <p>When started the interview cannot be paused or canceled, therefore make sure you can finish it in one go.</p>
+<div class="container">    
+    <p>Note that the interview cannot be paused or canceled, therefore make sure you can finish it in one go.</p>
+    <p>To start the interview click on the bellow button.</p>
     <button type="button" class="btn btn-success" (click)="startInterview()">Start the interview</button>
 </div>

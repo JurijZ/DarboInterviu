@@ -1,6 +1,6 @@
 let RecordRTC = require('recordrtc/RecordRTC.min');
 
-import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpEvent } from '@angular/common/http';
 import { Subscription, Observable, Subject } from 'rxjs';
 import { environment } from '@environments/environment';
@@ -15,7 +15,7 @@ import { ConditionalExpr } from '@angular/compiler';
   templateUrl: './record-rtc.component.html',
   styleUrls: ['./record-rtc.component.css']
 })
-export class RecordRTCComponent implements AfterViewInit, OnInit {
+export class RecordRTCComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private stream: MediaStream;
   private recordRTC: any;
@@ -47,7 +47,8 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
     private http: HttpClient,
     private ref: ChangeDetectorRef,
     private recordService: RecordService,
-    private router: Router) {
+    private router: Router,
+    private zone: NgZone) {
     // Do stuff
   }
 
@@ -76,6 +77,11 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
         this.startRecording();
       });
     });
+  }
+
+  ngOnDestroy() {
+    // unsubscribe to ensure no memory leaks
+    this.currentUserSubscription.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -206,7 +212,7 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
       subject.subscribe(value => {
         console.log("Interview is Completed");
         this.updateInterviewStatus(this.currentUser.applicationId, "Completed");
-      })      
+      })
     }
     else {
       // Retrieve next question
@@ -240,7 +246,8 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
       console.log("Interview status was sucessfully updated");
       if (statusCode == "Completed") {
         //console.log("Redirecting");
-        this.router.navigate(["/final"]);
+        //this.router.navigate(["/final"]);
+        this.zone.run(() => this.router.navigate(['/final']));
       }
     });
   }

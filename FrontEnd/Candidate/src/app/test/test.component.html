@@ -1,20 +1,27 @@
-<h3>Test your camera and microphone</h3>
+
+<div class="row">
+  <div class="col text-center">
+    <h3 style="margin-bottom:5px; margin-top:10px">Test your Web Camera and Microphone</h3>
+  </div>
+</div>
+
 <div class="row" *ngIf="recordingState == true">
-  <div class="col-xs-12">
+  <div class="col text-center">
     <video #video class="video"></video>
   </div>
 </div>
+
 <div class="row" *ngIf="recordingState == true">
-  <div class="col-xs-12">
-    <button [disabled]="recordButtonDisabled" type="button" class="btn btn-primary" (click)="startRecording()"> Record
+  <div class="col text-center">
+    <button *ngIf="!recordButtonDisabled" [disabled]="recordButtonDisabled" type="button" class="btn btn-primary" (click)="startRecording()"> Test Recording
     </button>
-    <button [disabled]="sendButtonDisabled" type="button" class="btn btn-primary" (click)="stopRecordingAndSend()">Stop and
+    <button *ngIf="!sendButtonDisabled" [disabled]="sendButtonDisabled" type="button" class="btn btn-primary" (click)="stopRecordingAndSend()">Stop and
       Playback</button>
   </div>
 </div>
 
 <div class="row" *ngIf="!recordingState">
-  <div class="col-xs-12">
+  <div class="col text-center">
     <video #myVideo controls autoplay class="video" source src="{{url}}" type="video/webm" poster={{urlBackgroundImage}}
       width="100%">
       Browser not supported
@@ -23,9 +30,9 @@
   </div>
 </div>
 <div class="row" *ngIf="!recordingState">
-  <div class="col-xs-12">
-    <button type="button" class="btn btn-warning" (click)="enableRecordingState()"> Retry Test </button>
+  <div class="col text-center">
+    <button type="button" class="btn btn-warning" (click)="enableRecordingState()" style="margin-right:10px"> Retry Test </button>
     <button type="button" class="btn btn-success" (click)="completeTest()"> Complete Test </button>
-    <p *ngIf="videoName != null"><em>Playing: {{ videoName }}</em></p>
+    <!-- <p *ngIf="videoName != null"><em>Playing: {{ videoName }}</em></p> -->
   </div>
 </div>
