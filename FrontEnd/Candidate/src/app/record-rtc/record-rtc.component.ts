@@ -1,13 +1,14 @@
 let RecordRTC = require('recordrtc/RecordRTC.min');
 
 import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { HttpClient, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
-import { Subscription } from 'rxjs';
+import { HttpClient, HttpRequest, HttpEventType, HttpResponse, HttpEvent } from '@angular/common/http';
+import { Subscription, Observable, Subject } from 'rxjs';
 import { environment } from '@environments/environment';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RecordService, AuthenticationService } from '@app/_services';
 import { User, Application, Question } from '@app/_models';
 import { NgbProgressbar } from '@ng-bootstrap/ng-bootstrap';
+import { ConditionalExpr } from '@angular/compiler';
 
 @Component({
   selector: 'record-rtc',
@@ -24,9 +25,12 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
   public recordButtonDisabled: boolean = false;
   public sendButtonDisabled: boolean = true;
   public recordedBlob: Blob;
+  uploadingState: boolean = false; //false means upload completed
+  buttonText: string = "Next Question";
+  subscribtion: Observable<HttpEvent<{}>>;
 
   interval;
-  timeLeft: number = 60;
+  timeLeft: number = 0;
   timeLeftMinutes: string;
   timeLeftMinutesInPercents: number;
 
@@ -59,8 +63,16 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
         this.activeQuestion = this.questions[0];
 
         console.log("Current question:" + this.activeQuestion.text + ", order Id: " + this.activeQuestion.order);
-      
+
         console.log("Start Recording")
+
+        // Button
+        this.setButtonText();
+
+        // Timer
+        this.timeLeft = this.activeQuestion.duration * 60;
+        this.startTimer();
+
         this.startRecording();
       });
     });
@@ -80,28 +92,25 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
     video.controls = !video.controls;
     video.autoplay = !video.autoplay;
   }
-  
+
   sendToServer(applicationId: string, questionId: string, blob: Blob) {
+
     this.recordService.sendToServer(applicationId, questionId, blob).subscribe(event => {
       if (event.type === HttpEventType.UploadProgress) {
         this.progress = Math.round(100 * event.loaded / event.total);
       }
       else if (event.type === HttpEventType.Response) {
         this.message = event.body.toString();
-        this.ref.detectChanges(); // This is needed to update the view
+        //this.ref.detectChanges(); // This is needed to update the view
       }
     });
-  }  
+  }
 
   // Linked to a button
   startRecording() {
     this.recordButtonDisabled = true;
     this.sendButtonDisabled = false;
     this.message = "Recording";
-
-    // Timer
-    this.timeLeft = this.activeQuestion.duration * 60;
-    this.startTimer()
 
     let mediaConstraints = {
       video: true,
@@ -133,25 +142,51 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
   errorCallback() {
     //handle error here
   }
-  
+
+  setButtonText() {
+    // Show next question or finish
+    var i = this.questions.findIndex(q => q.id === this.activeQuestion.id);
+    if (i == this.questions.length - 1) {
+      this.buttonText = "Finish";
+    }
+  }
+
   // Linked to a Button
   stopRecordingAndSend() {
     this.recordButtonDisabled = false;
     this.sendButtonDisabled = true;
     let recordRTC = this.recordRTC;
     let currentActiveQuestion = this.activeQuestion;
-    //recordRTC.stopRecording(this.processVideo.bind(this));    
+    let fileUploaded = false;
 
     // Stop timer
     this.pauseTimer();
+
+    let subject = new Subject();
 
     var that = this;
     this.recordRTC.stopRecording(function () {
       //this.processVideo.bind(this)
       //that.recordedBlob = recordRTC.getBlob();
       //console.log("Id to be sent: " + that.activeQuestion.id);
-      that.sendToServer(that.currentUser.applicationId, currentActiveQuestion.id, recordRTC.getBlob());
+
+      //that.sendToServer(that.currentUser.applicationId, currentActiveQuestion.id, recordRTC.getBlob());
+
+      that.recordService.sendToServer(that.currentUser.applicationId, currentActiveQuestion.id, recordRTC.getBlob()).subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+          that.progress = Math.round(100 * event.loaded / event.total);
+        }
+        else if (event.type === HttpEventType.Response) {
+          that.message = event.body.toString();
+          console.log("File is loaded");
+
+          // Trigger observable event to load next question
+          subject.next("Loaded");
+          //this.ref.detectChanges(); // This is needed to update the view
+        }
+      });
     });
+
     let stream = this.stream;
     this.stream.getAudioTracks().forEach(track => track.stop());
     this.stream.getVideoTracks().forEach(track => track.stop());
@@ -162,12 +197,16 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
     video.controls = true;
     video.autoplay = false;
 
+
+
     // Show next question or complete
     var i = this.questions.findIndex(q => q.id === this.activeQuestion.id);
     if (i == this.questions.length - 1) {
       // Interview is completed
-      console.log("Interview is Completed");
-      this.updateInterviewStatus(this.currentUser.applicationId, "Completed");      
+      subject.subscribe(value => {
+        console.log("Interview is Completed");
+        this.updateInterviewStatus(this.currentUser.applicationId, "Completed");
+      })      
     }
     else {
       // Retrieve next question
@@ -175,14 +214,31 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
       console.log("Next question Id: " + this.activeQuestion.id);
 
       console.log("Continue Recording.");
-      this.startRecording();
+
+      // Button
+      this.setButtonText();
+
+      // Timer
+      this.timeLeft = this.activeQuestion.duration * 60;
+      this.startTimer();
+
+      // Load next question only after the video file is loaded to the server
+      subject.subscribe(value => {
+        console.log(value);
+        this.startRecording();
+        //this.ref.detectChanges();
+      })
     }
   }
 
-  updateInterviewStatus(applicationId: string, statusCode: string){
+  async delay(ms: number) {
+    await new Promise(resolve => setTimeout(() => resolve(), ms)).then(() => console.log("fired"));
+  }
+
+  updateInterviewStatus(applicationId: string, statusCode: string) {
     this.recordService.updateInterviewStatus(applicationId, statusCode).subscribe(status => {
       console.log("Interview status was sucessfully updated");
-      if (statusCode == "Completed"){
+      if (statusCode == "Completed") {
         //console.log("Redirecting");
         this.router.navigate(["/final"]);
       }
@@ -201,29 +257,29 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
   startTimer() {
     this.interval = setInterval(() => {
       // If you decide to change value 20 then do not forget to update html multiplication as well
-      if(this.timeLeft > 0 && this.timeLeft <= 25) {
+      if (this.timeLeft > 0 && this.timeLeft <= 25) {
         this.showTimer = true;
-        this.timeLeft--;        
+        this.timeLeft--;
       } else if (this.timeLeft > 25) {
         this.showTimer = false;
         this.timeLeftMinutes = this.calculateMinutes(this.timeLeft - 1);
         this.timeLeftMinutesInPercents = this.calculateDurationPercentage(this.timeLeft - 1);
-        this.timeLeft--;             
+        this.timeLeft--;
       } else {
         // When time is up then stop recording and load next question
         this.showTimer = false;
         this.stopRecordingAndSend();
       }
-    },1000)
+    }, 1000)
   }
 
-  calculateMinutes(seconds: number){
+  calculateMinutes(seconds: number) {
     var m = Math.floor(seconds % 3600 / 60) + 1;
     var mDisplay = m > 0 ? m + (m == 1 ? " minute remain" : " minutes remain") : "";
     return mDisplay
   }
 
-  calculateDurationPercentage(seconds: number){    
+  calculateDurationPercentage(seconds: number) {
     var c = Math.floor(100 / (this.activeQuestion.duration));
     var m = Math.floor(seconds % 3600 / 60) + 1;
     var p = Math.floor(m * c);
@@ -254,7 +310,7 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
     stream.getVideoTracks().forEach(track => track.stop());
   }
 
-  
+
   upload(files) {
     this.recordService.upload(files).subscribe(event => {
       if (event.type === HttpEventType.UploadProgress)
@@ -263,5 +319,5 @@ export class RecordRTCComponent implements AfterViewInit, OnInit {
         this.message = event.body.toString();
     });
   }
-  
+
 }

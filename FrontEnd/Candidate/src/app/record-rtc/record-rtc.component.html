@@ -20,8 +20,7 @@
     <!--<button [disabled]="recordButtonDisabled" md-raised-button color="primary" (click)="startRecording()"> Record </button>-->
     <!--<button md-raised-button color="primary" (click)="stopRecording()"> Stop</button>-->
     <!--<button md-raised-button color="primary" (click)="download()"> Download</button>-->
-    <button [disabled]="sendButtonDisabled" type="button" class="btn btn-info" (click)="stopRecordingAndSend()">Next
-      Question</button>
+    <button [disabled]="sendButtonDisabled" type="button" class="btn btn-info" (click)="stopRecordingAndSend()">{{buttonText}}</button>
   </div>
 </div>
 
