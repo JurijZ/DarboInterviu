@@ -14,6 +14,7 @@ import { AlertComponent } from './_components';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 import { HomeComponent } from './home';
 import { LoginComponent } from './login';
+import { LogoutComponent } from './logout';
 import { RegisterComponent } from './register';
 import { VideosComponent } from './videos';
 import { RecordRTCComponent } from './record-rtc';
@@ -37,6 +38,7 @@ import { QuestionComponent } from './question';
         AlertComponent,
         HomeComponent,
         LoginComponent,
+        LogoutComponent,
         RegisterComponent,
         VideosComponent,
         RecordRTCComponent,

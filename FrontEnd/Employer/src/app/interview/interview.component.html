@@ -2,6 +2,13 @@
 <h3>Active Interviews:</h3>
 <br>
 <div class="container">
+  <div class="row" *ngIf="interviews.length == 0">
+    <p>You did not assign any interviews to the candidates yet.</p>
+    <div>
+      <button (click)="refreshInterviews(currentUser.id)" *ngIf="interviews.length == 0" class="btn btn-primary btn-lg1"
+        type="button">Assign an interview</button>
+    </div>
+  </div>
 
   <div class="row" *ngIf="interviews.length">
     <table class="table table-striped ">
@@ -26,13 +33,15 @@
           <td> {{interview.expiration | date:'yyyy-MM-dd HH:mm'}}</td>
           <td> {{interview.status}}</td>
           <td>
-            <button class="btn btn-warning btn-sm" (click)="reviewInterview(interview)" style="margin-right:5px">Review</button>
+            <button class="btn btn-warning btn-sm" (click)="reviewInterview(interview)"
+              style="margin-right:5px">Review</button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
   <div>
-    <button (click)="refreshInterviews(currentUser.id)" *ngIf="interviews.length" class="btn btn-primary btn-lg1" type="button">Refresh</button>
+    <button (click)="refreshInterviews(currentUser.id)" *ngIf="interviews.length" class="btn btn-primary btn-lg1"
+      type="button">Refresh</button>
   </div>
 </div>

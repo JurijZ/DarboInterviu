@@ -2,6 +2,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { HomeComponent } from './home';
 import { LoginComponent } from './login';
+import { LogoutComponent } from './logout';
 import { RegisterComponent } from './register';
 import { VideosComponent } from './videos';
 import { InterviewTemplateComponent } from './interviewtemplate';
@@ -14,6 +15,7 @@ import { AuthGuard } from './_guards';
 const appRoutes: Routes = [
     { path: '', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
+    { path: 'logout', component: LogoutComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'videos', component: VideosComponent },
     { path: 'interviewtemplate', component: InterviewTemplateComponent },

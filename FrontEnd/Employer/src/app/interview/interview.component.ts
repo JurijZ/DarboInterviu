@@ -10,7 +10,7 @@ import { InterviewService, DataService, AuthenticationService } from '@app/_serv
   templateUrl: './interview.component.html',
   styleUrls: ['./interview.component.css']
 })
-export class InterviewComponent implements OnInit {
+export class InterviewComponent implements OnInit, OnDestroy {
   interviews: Interview[] = [];
   currentUser: User;
   currentUserSubscription: Subscription;
@@ -20,15 +20,17 @@ export class InterviewComponent implements OnInit {
     private interviewService: InterviewService,
     private router: Router,
     private data: DataService) {
-      
+      this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+        this.currentUser = user;
+        this.loadAllInterviews(this.currentUser.id);
+      });
   }
 
-  ngOnInit() {
-    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
-      this.currentUser = user; 
-      this.loadAllInterviews(this.currentUser.id);
-    });
-    
+  ngOnInit() {    
+  }
+
+  ngOnDestroy() {
+    this.currentUserSubscription.unsubscribe();
   }
 
   refreshInterviews(userId: string) {
@@ -41,7 +43,7 @@ export class InterviewComponent implements OnInit {
     });
   }
 
-  reviewInterview(interview: Interview){
+  reviewInterview(interview: Interview) {
     this.data.setInterview(interview);
     this.router.navigate(['/review']);
   }
