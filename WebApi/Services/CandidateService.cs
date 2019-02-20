@@ -11,9 +11,9 @@ namespace WebApi.Services
         int Authenticate(string username, string password);
         Application GetApplicationById(string applicationId);
         Application GetApplicationId(string email, string password);
-        (int, int) GetInterviewOverview(string interviewId);
-        IEnumerable<Question> GetInterviewQuestionsByApplicationId(string id);
-        string SetInterviewStatus(string id, string status);
+        (int, int) GetInterviewOverview(string templateId);
+        IEnumerable<Question> GetTemplateQuestionsByApplicationId(string id);
+        string SetApplicationStatus(string id, string status);
     }
 
     public class CandidateService : ICandidateService
@@ -56,7 +56,7 @@ namespace WebApi.Services
             var application = _context.Applications.SingleOrDefault(x => x.Id == applicationId);
 
             var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Extracted application interview: " + application.Title);
+            logger.Info("Extracted application template: " + application.Title);
 
             return application;
         }
@@ -66,26 +66,26 @@ namespace WebApi.Services
             var application = _context.Applications.SingleOrDefault(x => x.CandidateEmail == email && x.CandidateSecret == password);
 
             var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Extracted application interview: " + application.Title);
+            logger.Info("Extracted application template: " + application.Title);
 
             return application;
         }
 
-        public (int, int) GetInterviewOverview(string interviewId)
+        public (int, int) GetInterviewOverview(string templateId)
         {
-            var questions = _context.Questions.Where(x => x.Interview == interviewId);
+            var questions = _context.Questions.Where(x => x.TemplateId == templateId);
 
             var numberOfQuestions = questions.Count();
             var totalInterviewDuration = questions.Sum(q => q.Duration);
 
             var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Number of questions in the interview: " + numberOfQuestions);
+            logger.Info("Number of questions in the template: " + numberOfQuestions);
             logger.Info("Interview total duration: " + totalInterviewDuration);
 
             return (numberOfQuestions, totalInterviewDuration);
         }
 
-        public string SetInterviewStatus(string id, string status)
+        public string SetApplicationStatus(string id, string status)
         {
             var application = _context.Applications.FirstOrDefault(a => a.Id == id);
             if (application == null)
@@ -101,13 +101,13 @@ namespace WebApi.Services
             return application.Status;
         }
 
-        public IEnumerable<Question> GetInterviewQuestionsByApplicationId(string id)
+        public IEnumerable<Question> GetTemplateQuestionsByApplicationId(string id)
         {
             var application = _context.Applications.FirstOrDefault(a => a.Id == id);
 
             if (application != null)
             {
-                var questions = _context.Questions.Where(x => x.Interview == application.InterviewId);
+                var questions = _context.Questions.Where(x => x.TemplateId == application.TemplateId);
 
                 return questions;
             }

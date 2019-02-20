@@ -1,0 +1,39 @@
+
+<p *ngIf="!videos"><em>Loading...</em></p>
+
+<div class="row centerBlock">
+  <h4> "{{interview.title}}" interview completed by {{interview.candidateName}} ({{interview.candidateEmail}})</h4>
+</div>
+
+<div class="row centerBlock"> 
+    <button *ngFor="let video of videos; index as i" type="button" class="btn btn-info btn-circle" 
+    (click)="selectedButton = video.videoId; showQuestion(video.videoId);"
+    [ngClass]="{'btn-circle2': selectedButton === video.videoId}"> {{i + 1}} </button>
+</div> 
+
+<div class="row">
+  <div class="col-sm-4 col-md-4 col-lg-4">
+
+    <div class="centerText">
+      <h3>{{activeQuestion}}</h3>
+    </div>
+
+  </div>
+  <div class="col-sm-1 col-md-1 col-lg-1">
+  </div>
+  <div class="col-sm-7 col-md-7 col-lg-7">
+
+    <div>
+      <video #myVideo controls autoplay
+        class="video"
+        source src="{{url}}" 
+        type="video/webm"
+        poster={{urlBackgroundImage}}
+        width="100%">
+        Browser not supported
+      </video>
+
+      <p *ngIf="videoName != null"><em>Playing: {{ videoName }}</em></p>
+    </div>
+  </div>
+</div>

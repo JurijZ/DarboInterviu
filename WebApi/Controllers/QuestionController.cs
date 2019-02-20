@@ -36,10 +36,10 @@ namespace WebApi.Controllers
         
         [AllowAnonymous]
         [HttpGet]
-        [Route("interview/{id}")]
-        public IActionResult GetAllByInterviewId(string id)
+        [Route("template/{id}")]
+        public IActionResult GetAllByTemplateId(string id)
         {
-            var questions =  _questionService.GetAllByInterviewId(id);
+            var questions =  _questionService.GetAllByTemplateId(id);
             var questionDtos = _mapper.Map<IList<QuestionDto>>(questions);
 
             var logger = NLog.LogManager.GetCurrentClassLogger();

@@ -9,7 +9,7 @@ namespace WebApi.Services
 {
     public interface IQuestionService
     {
-        IEnumerable<Question> GetAllByInterviewId(string interviewId);
+        IEnumerable<Question> GetAllByTemplateId(string templateId);
         IEnumerable<Question> GetAll();
         Question GetById(string id);
         Question Create(Question interview);
@@ -26,9 +26,9 @@ namespace WebApi.Services
             _context = context;
         }
         
-        public IEnumerable<Question> GetAllByInterviewId(string interviewId)
+        public IEnumerable<Question> GetAllByTemplateId(string templateId)
         {
-            return _context.Questions.Where(q => q.Interview == interviewId);
+            return _context.Questions.Where(q => q.TemplateId == templateId);
         }
 
         public IEnumerable<Question> GetAll()

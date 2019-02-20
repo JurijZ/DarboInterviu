@@ -44,7 +44,7 @@ namespace WebApi.Controllers
             var applicationDtos = _mapper.Map<IList<ActiveInteriewDto>>(applications);
 
             var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Number of active interviews: " + applicationDtos.Count);
+            logger.Info("Number of active templates: " + applicationDtos.Count);
 
             return Ok(applicationDtos);
         }

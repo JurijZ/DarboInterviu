@@ -54,6 +54,14 @@ namespace WebApi
             // configure jwt authentication
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Employer", policy => policy.RequireClaim("Role", "Employer"));
+                options.AddPolicy("Support", policy => policy.RequireClaim("Role", "Support"));                
+                options.AddPolicy("Candidate", policy => policy.RequireClaim("Role", "Candidate"));                
+            });            
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -66,15 +74,52 @@ namespace WebApi
                     OnTokenValidated = context =>
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                        //var userId = int.Parse(context.Principal.Identity.Name);
-                        var userGuid = context.Principal.Identity.Name;
-                        var user = userService.GetById(userGuid);
-                        if (user == null)
+                        var adminService = context.HttpContext.RequestServices.GetRequiredService<IAdminService>();
+                        var applicationService = context.HttpContext.RequestServices.GetRequiredService<IApplicationService>();
+                        //var userId = int.Parse(context.Principal.Identity.Name); 
+
+                        var logger = NLog.LogManager.GetCurrentClassLogger();
+                        var t = context.Principal.Claims.ToArray();
+                        logger.Info("Role claim - " + t[1].Type + " " + t[1].Value);
+
+
+                        if (context.Principal.Claims.First(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value == "Support") //Support Authentication
                         {
-                            // return unauthorized if user no longer exists
-                            context.Fail("Unauthorized");
+                            var accountGuid = context.Principal.Identity.Name;
+
+                            var admin = adminService.GetById(accountGuid);
+
+                            if (admin == null)
+                            {
+                                // return unauthorized admin
+                                context.Fail("Unauthorized");
+                            }
+
+                            return Task.CompletedTask;
                         }
-                        return Task.CompletedTask;
+                        else if (context.Principal.Claims.First(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value == "Employer") //Employer Authentication
+                        {
+                            var accountGuid = context.Principal.Identity.Name;
+
+                            var user = userService.GetById(accountGuid);
+
+                            if (user == null)
+                            {
+                                // return unauthorized if user no longer exists
+                                context.Fail("Unauthorized");
+                            }
+                            return Task.CompletedTask;
+                        }
+                        else if (context.Principal.Claims.First(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value == "Candidate") //Candidate Authentication
+                        {
+                            // Add a check her for the Candidate token extra verification
+                            return Task.CompletedTask;
+                        }
+                        else
+                        {
+                            context.Fail("Unauthorized");
+                            return Task.CompletedTask;
+                        }                        
                     }
                 };
                 x.RequireHttpsMetadata = false;
@@ -90,12 +135,14 @@ namespace WebApi
 
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IVideoService, VideoService>();
-            services.AddScoped<IInterviewService, InterviewService>();
+            services.AddScoped<ITemplateService, TemplateService>();
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IApplicationService, ApplicationService>();
             services.AddScoped<ICandidateService, CandidateService>();
             services.AddScoped<ITestService, TestService>();
+            services.AddScoped<ISupportService, SupportService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

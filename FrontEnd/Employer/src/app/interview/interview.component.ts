@@ -48,4 +48,10 @@ export class InterviewComponent implements OnInit, OnDestroy {
     this.router.navigate(['/review']);
   }
 
+  isButtonDisabled(status: string){
+    if (status == 'Not Started'){
+      return true;
+    }
+    return false;
+  }
 }

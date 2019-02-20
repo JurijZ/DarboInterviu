@@ -40,14 +40,14 @@ namespace WebApi.Controllers
         public IActionResult GetInterviewQuestionsByApplicationId(string id)
         {
             // If this method has been called then it means the interview has started, we change the status:
-            var status = _candidateService.SetInterviewStatus(id, "Started");
+            var status = _candidateService.SetApplicationStatus(id, "Started");
             if (status == null)
             {
                 return BadRequest("Unknown Application Id");
             }
 
             // Retrieve all the questions:
-            var questions = _candidateService.GetInterviewQuestionsByApplicationId(id);
+            var questions = _candidateService.GetTemplateQuestionsByApplicationId(id);
 
             if (questions != null && questions.Any()) {
                 var questionDtos = _mapper.Map<IList<QuestionDto>>(questions);
@@ -73,31 +73,31 @@ namespace WebApi.Controllers
 
             // Prepare ApplicationId and Interview overview information
             
-            var interview = _candidateService.GetInterviewOverview(application.InterviewId);
+            var template = _candidateService.GetInterviewOverview(application.TemplateId);
             
             //return Ok(applicationDto);
 
             return Ok(new
             {
-                InterviewId = application.InterviewId,
+                TemplateId = application.TemplateId,
                 Email = application.CandidateEmail,
                 ApplicationId = application.Id,
                 Expiration = application.Expiration,
                 Name = application.CandidateName,
                 Title = application.Title,
-                NumberOfQuestions = interview.Item1,
-                InterviewDuration = interview.Item2
+                NumberOfQuestions = template.Item1,
+                InterviewDuration = template.Item2
             });
         }
 
         [AllowAnonymous]
         [HttpPost("status")]
-        public IActionResult UpdateInterviewStatus([FromBody] InterviewStatusDto interviewStatusDto)
+        public IActionResult UpdateInterviewStatus([FromBody] ApplicationStatusDto applicationStatusDto)
         {
             var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Interview " + interviewStatusDto.ApplicationId + " status is set to - " + interviewStatusDto.Status);
+            logger.Info("Interview " + applicationStatusDto.ApplicationId + " status is set to - " + applicationStatusDto.Status);
 
-            var authentication = _candidateService.SetInterviewStatus(interviewStatusDto.ApplicationId, interviewStatusDto.Status);
+            var authentication = _candidateService.SetApplicationStatus(applicationStatusDto.ApplicationId, applicationStatusDto.Status);
 
             // Return
             return Ok();
@@ -126,9 +126,10 @@ namespace WebApi.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[] 
                 {
-                    new Claim(ClaimTypes.Name, candidateDto.Email)
+                    new Claim(ClaimTypes.Name, candidateDto.Email),
+                    new Claim(ClaimTypes.Role, "Candidate")
                 }),
-                Expires = DateTime.UtcNow.AddDays(7),
+                Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

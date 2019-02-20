@@ -1,0 +1,9 @@
+
+
+.horizontal {right: 0; text-align: center; margin-bottom: 20px}
+
+.horizontal .left, .horizontal .center, .horizontal .right { display: inline-block; }
+
+.horizontal .left { float: left; }
+.horizontal .center { margin: 0 auto; }
+.horizontal .right { float: right; }

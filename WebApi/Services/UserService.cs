@@ -51,6 +51,10 @@ namespace WebApi.Services
 
         public User GetById(string id)
         {
+
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("User Authentiction");
+
             return _context.Users.Find(id);
         }
 

@@ -11,8 +11,11 @@ namespace WebApi.Helpers
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
 
-            CreateMap<Interview, InterviewDto>();
-            CreateMap<InterviewDto, Interview>();
+            CreateMap<Admin, AdminDto>();
+            CreateMap<AdminDto, Admin>();
+
+            CreateMap<Template, TemplateDto>();
+            CreateMap<TemplateDto, Template>();
 
             CreateMap<Question, QuestionDto>();
             CreateMap<QuestionDto, Question>();

@@ -16,6 +16,28 @@ namespace WebApi.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024");
 
+            modelBuilder.Entity("WebApi.Entities.Admin", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
+                    b.Property<byte[]>("PasswordHash");
+
+                    b.Property<byte[]>("PasswordSalt");
+
+                    b.Property<string>("Role");
+
+                    b.Property<string>("UserName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Admins");
+                });
+
             modelBuilder.Entity("WebApi.Entities.Application", b =>
                 {
                     b.Property<string>("Id")
@@ -29,9 +51,9 @@ namespace WebApi.Migrations
 
                     b.Property<DateTime>("Expiration");
 
-                    b.Property<string>("InterviewId");
-
                     b.Property<string>("Status");
+
+                    b.Property<string>("TemplateId");
 
                     b.Property<DateTime>("Timestamp");
 
@@ -44,7 +66,27 @@ namespace WebApi.Migrations
                     b.ToTable("Applications");
                 });
 
-            modelBuilder.Entity("WebApi.Entities.Interview", b =>
+            modelBuilder.Entity("WebApi.Entities.Question", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Duration");
+
+                    b.Property<int>("Order");
+
+                    b.Property<string>("TemplateId");
+
+                    b.Property<string>("Text");
+
+                    b.Property<DateTime>("Timestamp");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Questions");
+                });
+
+            modelBuilder.Entity("WebApi.Entities.Template", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -57,27 +99,7 @@ namespace WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Interviews");
-                });
-
-            modelBuilder.Entity("WebApi.Entities.Question", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("Duration");
-
-                    b.Property<string>("Interview");
-
-                    b.Property<int>("Order");
-
-                    b.Property<string>("Text");
-
-                    b.Property<DateTime>("Timestamp");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Questions");
+                    b.ToTable("Templates");
                 });
 
             modelBuilder.Entity("WebApi.Entities.User", b =>

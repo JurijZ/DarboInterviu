@@ -8,16 +8,18 @@ import { InterviewTemplate, Application } from '@app/_models';
 export class InterviewTemplateService {
   constructor(private http: HttpClient) { }
 
+  /*
   getAll() {
-    return this.http.get<InterviewTemplate[]>(`${environment.apiUrl}/interview`);
+    return this.http.get<InterviewTemplate[]>(`${environment.apiUrl}/template`);
   }
+  */
 
-  getById(id: string) {
-    return this.http.get(`${environment.apiUrl}/interview/${id}`);
+  getAllByUserId(userId: string) {
+    return this.http.get<InterviewTemplate[]>(`${environment.apiUrl}/template/${userId}`);
   }
 
   create(interview: InterviewTemplate) {
-    return this.http.post<InterviewTemplate>(`${environment.apiUrl}/interview/create`, interview);
+    return this.http.post<InterviewTemplate>(`${environment.apiUrl}/template/create`, interview);
   }
 
   createApplication(application: Application) {
@@ -25,10 +27,10 @@ export class InterviewTemplateService {
   }
 
   update(interview: InterviewTemplate) {
-    return this.http.put(`${environment.apiUrl}/interview/${interview.id}`, interview);
+    return this.http.put(`${environment.apiUrl}/template/${interview.id}`, interview);
   }
 
   delete(id: string) {
-    return this.http.delete(`${environment.apiUrl}/interview/${id}`);
+    return this.http.delete(`${environment.apiUrl}/template/${id}`);
   }
 }

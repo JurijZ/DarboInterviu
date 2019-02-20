@@ -1,13 +1,11 @@
 <!-- nav -->
 <nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="currentUser">
   <div class="navbar-nav">
-    <a class="nav-item nav-link" routerLink="/">Home</a>
     <a class="nav-item nav-link" routerLink="/interviewtemplate">Templates</a>
     <a class="nav-item nav-link" routerLink="/interview">Interviews</a>    
-    <a class="nav-item nav-link" routerLink="/videos"> All videos</a>
-    <a class="nav-item nav-link" routerLink="/record-rtc">Record</a>    
   </div>
   <div class="navbar-nav ml-auto">
+    <a class="nav-item nav-link" routerLink="/">My Profile</a>
     <a class="nav-item nav-link" routerLink="/logout">Logout</a>
   </div>
 </nav>

@@ -1,0 +1,33 @@
+<br>
+<h3>Interiew Templates:</h3>
+<br>
+<div class="container">
+
+  <div class="row" *ngIf="interviewTemplates">
+    <table class="table table-striped ">
+      <thead>
+        <tr>
+          <th> Interview Title </th>
+          <th> Updated on </th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let interviewTemplate of interviewTemplates">
+          <td> {{interviewTemplate.name}}</td>
+          <td> {{interviewTemplate.timestamp | date:'yyyy-MM-dd HH:mm'}}</td>
+          <td>
+            <button class="btn btn-warning btn-sm" (click)="editInterview(interviewTemplate)" style="margin-right:5px">Edit</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteInterview(interviewTemplate.id)" style="margin-right:5px">Delete</button>
+            <interviewmodal [interview]="interviewTemplate"></interviewmodal>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <button (click)="addInterview()" class="btn btn-success btn-lg1" type="button" style="margin-right:10px">Add New Interview Template</button>
+    <button (click)="refreshInterviews()" *ngIf="interviewTemplates" class="btn btn-primary btn-lg1" type="button">Refresh</button>
+  </div>
+</div>

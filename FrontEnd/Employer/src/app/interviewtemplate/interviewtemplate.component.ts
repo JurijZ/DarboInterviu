@@ -4,6 +4,7 @@ import { first } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { InterviewTemplate } from '@app/_models';
 import { InterviewTemplateService, DataService, AuthenticationService } from '@app/_services';
+import { User } from '@app/_models';
 
 @Component({
   selector: 'app-interviewtemplate',
@@ -12,20 +13,29 @@ import { InterviewTemplateService, DataService, AuthenticationService } from '@a
 })
 export class InterviewTemplateComponent implements OnInit {
   interviewTemplates: InterviewTemplate[] = [];
+  currentUser: User;
+  currentUserSubscription: Subscription;
 
   constructor(
     private interviewtemplateService: InterviewTemplateService,
     private router: Router,
-    private data: DataService) {
-
+    private data: DataService,
+    private authenticationService: AuthenticationService) {
+      this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+        this.currentUser = user;
+        this.loadAllTemplates(this.currentUser.id);
+      });
   }
 
-  ngOnInit() {
-    this.loadAllInterviews();
+  ngOnInit() {    
   }
 
-  private loadAllInterviews() {
-    this.interviewtemplateService.getAll().pipe(first()).subscribe(interviewTemplates => {
+  ngOnDestroy() {
+    this.currentUserSubscription.unsubscribe();
+  }
+
+  private loadAllTemplates(userId: string) {
+    this.interviewtemplateService.getAllByUserId(userId).pipe(first()).subscribe(interviewTemplates => {
       this.interviewTemplates = interviewTemplates;
     });
   }
@@ -33,7 +43,7 @@ export class InterviewTemplateComponent implements OnInit {
   deleteInterview(id: string) {
     if (confirm("Are you sure you want to delete this Interview?")) {
       this.interviewtemplateService.delete(id).pipe(first()).subscribe(() => {
-        this.loadAllInterviews()
+        this.loadAllTemplates(this.currentUser.id)
       });
     }
   }
@@ -42,6 +52,7 @@ export class InterviewTemplateComponent implements OnInit {
     let newInterviewTemplate: InterviewTemplate = new InterviewTemplate();
     newInterviewTemplate.name = "";
     newInterviewTemplate.timestamp = "";
+    newInterviewTemplate.userid = this.currentUser.id;
 
     //this.questions.push(newQuestion);
 
@@ -61,7 +72,7 @@ export class InterviewTemplateComponent implements OnInit {
   }
 
   refreshInterviews() {
-    this.loadAllInterviews();
+    this.loadAllTemplates(this.currentUser.id);
   }
 
 

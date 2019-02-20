@@ -12,12 +12,10 @@ import { routing }        from './app.routing';
 
 import { AlertComponent } from './_components';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
-import { HomeComponent } from './home';
+import { ProfileComponent } from './profile';
 import { LoginComponent } from './login';
 import { LogoutComponent } from './logout';
 import { RegisterComponent } from './register';
-import { VideosComponent } from './videos';
-import { RecordRTCComponent } from './record-rtc';
 import { InterviewTemplateComponent } from './interviewtemplate';
 import { InterviewModalComponent } from './interviewmodal';
 import { InterviewComponent } from './interview';
@@ -36,12 +34,10 @@ import { QuestionComponent } from './question';
     declarations: [
         AppComponent,
         AlertComponent,
-        HomeComponent,
+        ProfileComponent,
         LoginComponent,
         LogoutComponent,
         RegisterComponent,
-        VideosComponent,
-        RecordRTCComponent,
         InterviewTemplateComponent,
         InterviewModalComponent,
         InterviewComponent,

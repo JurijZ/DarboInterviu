@@ -10,7 +10,7 @@ namespace WebApi.Entities
         //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
         public string UserId { get; set; }
-        public string InterviewId { get; set; }
+        public string TemplateId { get; set; }
         public string Title { get; set; }
         public string CandidateName { get; set; }
         public string CandidateEmail { get; set; }   
