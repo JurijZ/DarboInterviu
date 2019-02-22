@@ -9,7 +9,7 @@ namespace WebApi.Services
 {
     public interface ISupportService
     {
-        IEnumerable<Template> GetAllTemplates();
+        IEnumerable<Entities.Template> GetAllTemplates();
         IEnumerable<Application> GetAllApplications();
         IEnumerable<VideoDto> GetVideosMetadata();
     }
@@ -23,7 +23,7 @@ namespace WebApi.Services
             _context = context;
         }
 
-        public IEnumerable<Template> GetAllTemplates()
+        public IEnumerable<Entities.Template> GetAllTemplates()
         {
             return _context.Templates.OrderByDescending(t => t.Timestamp);
         }
@@ -53,5 +53,6 @@ namespace WebApi.Services
             return videoDtos;
         }
 
+        
     }
 }

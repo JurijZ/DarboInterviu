@@ -12,7 +12,7 @@ import { QuestionComponent } from './question';
 import { AuthGuard } from './_guards';
 
 const appRoutes: Routes = [
-    { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+    { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'logout', component: LogoutComponent },
     { path: 'register', component: RegisterComponent },
@@ -23,7 +23,7 @@ const appRoutes: Routes = [
     { path: 'question', component: QuestionComponent },
 
     // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: 'home' }
 ];
 
 export const routing = RouterModule.forRoot(appRoutes);

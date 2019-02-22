@@ -1,14 +1,14 @@
 <!-- nav -->
 <nav class="navbar navbar-expand navbar-dark bg-dark" *ngIf="currentUser">
   <div class="navbar-nav">
-    <a class="nav-item nav-link" routerLink="/">Home</a>
+    <a class="nav-item nav-link" routerLink="/home" routerLinkActive="active">Home</a>
     <!--<a class="nav-item nav-link" routerLink="/videos">Videos</a>-->
-    <a class="nav-item nav-link" routerLink="/record-rtc">Record</a>
-    <a class="nav-item nav-link" routerLink="/test">Test</a>
+    <a class="nav-item nav-link" routerLink="/record-rtc" routerLinkActive="active">Record</a>
+    <a class="nav-item nav-link" routerLink="/test" routerLinkActive="active">Test</a>
   </div>
   <div class="navbar-nav ml-auto">
-      <a class="nav-item nav-link" routerLink="/final">Final</a>
-    <a class="nav-item nav-link" (click)="logout()">Logout</a>
+      <a class="nav-item nav-link" routerLink="/final" routerLinkActive="active">Final</a>
+    <a class="nav-item nav-link" (click)="logout()" routerLinkActive="active">Logout</a>
   </div>
 </nav>
 

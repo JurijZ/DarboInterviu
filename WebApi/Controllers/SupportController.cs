@@ -82,5 +82,24 @@ namespace WebApi.Controllers
             return BadRequest();
         }
 
+        [AllowAnonymous]
+        [HttpPost("Email")]
+        public IActionResult Create(string emailText)
+        {
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("Sending email with text: " + emailText);
+
+            try
+            {
+                var status = AmazonAPI.SendEmailMessage(emailText);
+                return Ok(status);
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
     }
 }

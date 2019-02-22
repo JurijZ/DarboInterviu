@@ -41,6 +41,9 @@ namespace WebApi.Services
             _context.Applications.Add(application);
             _context.SaveChanges();
 
+            // Send an email to the Candidate
+            var x = AmazonAPI.SendApplicationEmailMessage(application);
+
             return application;
         }
         

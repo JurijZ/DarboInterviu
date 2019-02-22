@@ -9,7 +9,7 @@ import { FinalComponent } from './final';
 import { AuthGuard } from './_guards';
 
 const appRoutes: Routes = [
-    { path: '', component: HomeComponent, canActivate: [AuthGuard] },
+    { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'videos', component: VideosComponent },
     { path: 'record-rtc', component: RecordRTCComponent },
@@ -17,7 +17,7 @@ const appRoutes: Routes = [
     { path: 'final', component: FinalComponent },
 
     // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: 'home' }
 ];
 
 export const routing = RouterModule.forRoot(appRoutes);

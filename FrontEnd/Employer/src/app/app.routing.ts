@@ -11,17 +11,17 @@ import { QuestionComponent } from './question';
 import { AuthGuard } from './_guards';
 
 const appRoutes: Routes = [
-    { path: '', component: ProfileComponent, canActivate: [AuthGuard] },
+    { path: 'profile', component: ProfileComponent },
     { path: 'login', component: LoginComponent },
     { path: 'logout', component: LogoutComponent },
     { path: 'register', component: RegisterComponent },
-    { path: 'interviewtemplate', component: InterviewTemplateComponent },
+    { path: 'interviewtemplate', component: InterviewTemplateComponent, canActivate: [AuthGuard] },
     { path: 'interview', component: InterviewComponent },
     { path: 'review', component: ReviewComponent },
     { path: 'question', component: QuestionComponent },
 
     // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: 'interviewtemplate' }
 ];
 
 export const routing = RouterModule.forRoot(appRoutes);
