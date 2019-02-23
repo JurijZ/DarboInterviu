@@ -114,7 +114,7 @@ namespace WebApi.Controllers
             logger.Info("Authentication result: " + authentication);
 
             if (authentication == 1)
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return BadRequest(new { message = "Email or password is incorrect" });
 
             if (authentication == 2)
                 return BadRequest(new { message = "Interview has expired" });

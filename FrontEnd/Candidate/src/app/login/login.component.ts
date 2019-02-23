@@ -5,7 +5,10 @@ import { first } from 'rxjs/operators';
 
 import { AlertService, AuthenticationService } from '@app/_services';
 
-@Component({templateUrl: 'login.component.html'})
+@Component({
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css']
+})
 export class LoginComponent implements OnInit {
     loginForm: FormGroup;
     loading = false;
@@ -20,7 +23,7 @@ export class LoginComponent implements OnInit {
         private alertService: AlertService
     ) {
         // redirect to home if already logged in
-        if (this.authenticationService.currentUserValue) { 
+        if (this.authenticationService.currentUserValue) {
             this.router.navigate(['/']);
         }
     }
@@ -28,7 +31,8 @@ export class LoginComponent implements OnInit {
     ngOnInit() {
         this.loginForm = this.formBuilder.group({
             username: ['', Validators.required],
-            password: ['', Validators.required]
+            password: ['', Validators.required],
+            isTCAccepted: ['', Validators.requiredTrue]
         });
 
         // get return url from route parameters or default to '/'
@@ -37,6 +41,9 @@ export class LoginComponent implements OnInit {
 
     // convenience getter for easy access to form fields
     get f() { return this.loginForm.controls; }
+    get isTCAccepted() {
+        return this.loginForm.get('isTCAccepted');
+    }
 
     onSubmit() {
         this.submitted = true;
@@ -45,6 +52,8 @@ export class LoginComponent implements OnInit {
         if (this.loginForm.invalid) {
             return;
         }
+
+        //if (this.loginForm.get())
 
         this.loading = true;
         this.authenticationService.login(this.f.username.value, this.f.password.value)

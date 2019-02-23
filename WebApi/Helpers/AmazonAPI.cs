@@ -20,7 +20,7 @@ namespace WebApi.Helpers
 
             string senderAddress = "support@darbointerviu.lt";
             string receiverAddress = "jzilcov@gmail.com"; //TODO: application.CandidateEmail;
-            string configSet = "ConfigSet";
+            //string configSet = "ConfigSet";
             string subject = "Online Interview 2";
             string htmlBody = $@"<html>
 <head></head>
