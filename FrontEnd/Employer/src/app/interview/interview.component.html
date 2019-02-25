@@ -1,26 +1,26 @@
 <br>
-<h3>Interviews:</h3>
+<h3>Interviu:</h3>
 <br>
 <div class="container">
 
   <div class="row" *ngIf="interviews.length == 0">
-    <p>You did not send any interviews to the candidates yet.</p>
+    <p>Jus dar nesate išsiuntę interviu.</p>
   </div>
 
   <div class="row" *ngIf="interviews.length == 0">
-    <button routerLink="/interviewtemplate" class="btn btn-primary" type="button">Send an Interview</button>
+    <button routerLink="/interviewtemplate" class="btn btn-primary" type="button">Siųsti Interviu</button>
   </div>
 
   <div class="row" *ngIf="interviews.length">
     <table class="table table-striped ">
       <thead>
         <tr>
-          <th> Interview Title </th>
-          <th> Candidate Name </th>
-          <th> Candidate Email </th>
-          <th> Candidate Secret </th>
-          <th> Expires on </th>
-          <th> Status </th>
+          <th> Interviu Pavadinimas </th>
+          <th> Kandidato Vardas </th>
+          <th> Kandidato Email </th>
+          <th> Kandidato Slaptažodis </th>
+          <th> Galioja iki </th>
+          <th> Statusas </th>
           <th></th>
         </tr>
       </thead>
@@ -34,8 +34,9 @@
           <td> {{interview.expiration | date:'yyyy-MM-dd HH:mm'}}</td>
           <td> {{interview.status}}</td>
           <td>
-            <button [disabled]="isButtonDisabled(interview.status)" class="btn btn-warning btn-sm" (click)="reviewInterview(interview)"
-              style="margin-right:5px">Review</button>
+            <button [disabled]="isButtonDisabled(interview.status)" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Tooltip on top"
+              (click)="reviewInterview(interview)" style="margin-right:5px">Peržiūrėti</button>
+            <interviewshare [interview]="interview"></interviewshare>
           </td>
         </tr>
       </tbody>
@@ -43,6 +44,6 @@
   </div>
   <div>
     <button (click)="refreshInterviews(currentUser.id)" *ngIf="interviews.length" class="btn btn-primary btn-lg1"
-      type="button">Refresh</button>
+      type="button">Atnaujinti duomenis</button>
   </div>
 </div>

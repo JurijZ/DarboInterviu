@@ -1,23 +1,23 @@
-<h3 style="margin-top: 20px;">Hi {{currentUser.username}} ({{currentUser.email}})</h3>
+<h3 style="margin-top: 20px;">Sveiki {{currentUser.username}} ({{currentUser.email}})</h3>
 <hr class="hr-primary" />
 <div class="container">
-    <p>Your interviewer prepared an online interview for you: <strong>{{application.title}}</strong></p>
-    <p>It consists of <strong>{{application.numberOfQuestions}}</strong> questions and you will have
-        <strong>{{application.interviewDuration}}</strong> minutes to complete.</p>
+    <p>Jums yra paruoštas online interviu: <strong>{{application.title}}</strong></p>
+    <p>Jis susideda iš <strong>{{application.numberOfQuestions}}</strong> klausimų ir Jūs turėsite 
+        <strong>{{application.interviewDuration}}</strong> minučių jam atlikti.</p>
 
-    <p>Also be aware that this interview expires on <strong>{{application.expiration | date }},
-            {{ application.expiration | date:'shortTime' }}</strong> and won't be available after.</p>
+    <p>Intervių turite užbaigti iki <strong>{{application.expiration | date : 'yyyy-MM-dd'}},
+            {{ application.expiration | date : 'H:mm'}}</strong>. Vėliau jis taps nebeprieinamas.</p>
 
 </div>
 <hr class="hr-primary" />
 <div class="container">
-    <p>Before you start we recommend you to test your computer's recording quality.</p>
-    <button type="button" class="btn btn-primary" (click)="testRecording()">Test recording</button>
+    <p>Prieš pradedant mes rekomenduojame Jums ištestuoti Jūsų kompiuterio vaizdo ir garso įrašymo kokybę.</p>
+    <button type="button" class="btn btn-primary" (click)="testRecording()">Ištestuoti įrašymą</button>
 </div>
 
 <hr class="hr-primary" />
 <div class="container">    
-    <p>Note that the interview cannot be paused or canceled, therefore make sure you can finish it in one go.</p>
-    <p>To start the interview click on the bellow button.</p>
-    <button type="button" class="btn btn-success" (click)="startInterview()">Start the interview</button>
+    <p>Turėkite omenyje kad pradėjus intervių jis negalės būti sustabdytas ar atšauktas, todėl įsitikinkite, kad galite užbaigti jį vienu kartu.</p>
+    <p>Norint pradėti intervių paspauskite žemiau esantį mygtuką.</p>
+    <button type="button" class="btn btn-success" (click)="startInterview()">Pradėti interviu</button>
 </div>

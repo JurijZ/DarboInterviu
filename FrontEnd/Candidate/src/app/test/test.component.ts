@@ -1,6 +1,6 @@
 let RecordRTC = require('recordrtc/RecordRTC.min');
 
-import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, ElementRef, NgZone } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, ElementRef, NgZone, OnDestroy } from '@angular/core';
 import { HttpClient, HttpRequest, HttpEventType, HttpResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { environment } from '@environments/environment';
@@ -14,7 +14,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   templateUrl: './test.component.html',
   styleUrls: ['./test.component.css']
 })
-export class TestComponent implements AfterViewInit, OnInit {
+export class TestComponent implements AfterViewInit, OnInit, OnDestroy {
 
   private stream: MediaStream;
   private recordRTC: any;
@@ -53,6 +53,13 @@ export class TestComponent implements AfterViewInit, OnInit {
       this.currentUser = user;
       console.log(this.currentUser);
     });
+  }
+
+  ngOnDestroy() {
+    // stop recording if it's still running
+    if (this.recordButtonDisabled == true){
+      this.stopRecording();
+    }    
   }
 
   ngAfterViewInit() {
@@ -180,6 +187,25 @@ export class TestComponent implements AfterViewInit, OnInit {
     video.controls = true;
     video.autoplay = false;
   }
+
+  // Called when the page is unexpectedly destroyed
+  stopRecording() {
+    this.recordButtonDisabled = false;
+    this.sendButtonDisabled = true;
+    let recordRTC = this.recordRTC;
+    let currentActiveQuestion = this.activeQuestion;
+    //recordRTC.stopRecording(this.processVideo.bind(this));    
+
+    var that = this;
+    this.recordRTC.stopRecording(function () {
+      console.log("Recorded stopped unexpectedly");
+      //that.sendToServer("test", recordRTC.getBlob());      
+    });
+    let stream = this.stream;
+    this.stream.getAudioTracks().forEach(track => track.stop());
+    this.stream.getVideoTracks().forEach(track => track.stop());
+  }
+
   completeTest(){
     //- normal navigation does not work. Probably beacause of the this.ref.detectChanges(); usage
     //this.router.navigate(['/']); 

@@ -43,6 +43,11 @@ namespace WebApi.Services
 
         public Question Create(Question question)
         {
+            // update template timestamp
+            var template = _context.Templates.Find(question.TemplateId);            
+            template.Timestamp = DateTime.Now;
+
+            _context.Templates.Update(template);
             _context.Questions.Add(question);
             _context.SaveChanges();
 
@@ -52,6 +57,7 @@ namespace WebApi.Services
         public void Update(Question questionParam)
         {
             var question = _context.Questions.Find(questionParam.Id);
+            var template = _context.Templates.Find(questionParam.TemplateId);
 
             if (question == null)
                 throw new AppException("Question not found");
@@ -61,7 +67,11 @@ namespace WebApi.Services
             question.Duration = questionParam.Duration;
             question.Order = questionParam.Order;
             question.Timestamp = questionParam.Timestamp;
-            
+
+            // update template timestamp
+            template.Timestamp = DateTime.Now;
+
+            _context.Templates.Update(template);
             _context.Questions.Update(question);
             _context.SaveChanges();
         }
@@ -71,6 +81,13 @@ namespace WebApi.Services
             var question = _context.Questions.Find(id);
             if (question != null)
             {
+                // update template timestamp
+                var template = _context.Templates.Find(question.TemplateId);
+                template.Timestamp = DateTime.Now;
+
+                _context.Templates.Update(template);
+
+                // delete question
                 _context.Questions.Remove(question);
                 _context.SaveChanges();
             }

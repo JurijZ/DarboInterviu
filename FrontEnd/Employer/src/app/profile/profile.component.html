@@ -1,32 +1,24 @@
-<h1>Hi {{currentUser.firstName}}!</h1>
-<br>
-<h3>All registered users:</h3>
-<br>
 <div class="container">
-
-    <div class="row">
-      <table class="table table-striped ">
-        <thead>
-          <tr>
-            <th> Account Id </th>
-            <th> Email </th>
-            <th> First Name </th>
-            <th> Last Name </th>
-            <th></th>
-          </tr>
-        </thead>
-  
-        <tbody>
-          <tr *ngFor="let user of users">
-            <td> {{user.id}}</td>
-            <td> {{user.username}}</td>
-            <td> {{user.firstName}}</td>
-            <td> {{user.lastName}}</td>
-            <td>
-              <button class="btn btn-warning btn-sm" (click)="deleteUser(user.id)" style="margin-right:5px">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <h3>Sveiki {{currentUser.firstName}}</h3>
+  <br>
+  <form>
+    <div class="form-group row">
+      <label for="user-email" class="col-2 col-form-label">Vartotojo vardas:</label>
+      <div class="col-10">
+        <p class="form-control-static"> {{currentUser.username}}</p>
+      </div>
     </div>
-  </div>
+    <div class="form-group row">
+      <label for="first-name" class="col-2 col-form-label">Vardas:</label>
+      <div class="col-3">
+        <input class="form-control" type="text" value="{{currentUser.firstName}}" id="first-name">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="last-name" class="col-2 col-form-label">Pavardė:</label>
+      <div class="col-3">
+        <input class="form-control" type="text" value="{{currentUser.lastName}}" id="last-name">
+      </div>
+    </div>
+  </form>
+</div>

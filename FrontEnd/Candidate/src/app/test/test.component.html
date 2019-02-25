@@ -1,7 +1,7 @@
 
 <div class="row">
   <div class="col text-center">
-    <h3 style="margin-bottom:5px; margin-top:10px">Test your Web Camera and Microphone</h3>
+    <h3 style="margin-bottom:5px; margin-top:10px">Ištestuokite Jūsų Web Kamerą ir Mikrofoną</h3>
   </div>
 </div>
 
@@ -13,10 +13,10 @@
 
 <div class="row" *ngIf="recordingState == true">
   <div class="col text-center">
-    <button *ngIf="!recordButtonDisabled" [disabled]="recordButtonDisabled" type="button" class="btn btn-primary" (click)="startRecording()"> Test Recording
+    <button *ngIf="!recordButtonDisabled" [disabled]="recordButtonDisabled" type="button" class="btn btn-primary" (click)="startRecording()"> Pradėti įrašymo testą
     </button>
-    <button *ngIf="!sendButtonDisabled" [disabled]="sendButtonDisabled" type="button" class="btn btn-primary" (click)="stopRecordingAndSend()">Stop and
-      Playback</button>
+    <p *ngIf="!sendButtonDisabled">Vyksta įrašymas. Ištarkite keletą žodžių Jūsų normaliu balsu.</p>
+    <button *ngIf="!sendButtonDisabled" [disabled]="sendButtonDisabled" type="button" class="btn btn-primary" (click)="stopRecordingAndSend()">Sustabdyti ir Groti</button>
   </div>
 </div>
 
@@ -24,15 +24,16 @@
   <div class="col text-center">
     <video #myVideo controls autoplay class="video" source src="{{url}}" type="video/webm" poster={{urlBackgroundImage}}
       width="100%">
-      Browser not supported
+      Jūsų naršyklė nėra palaikoma. Turite naudoti Chrome (https://www.google.com/chrome/)
     </video>
 
   </div>
 </div>
 <div class="row" *ngIf="!recordingState">
   <div class="col text-center">
-    <button type="button" class="btn btn-warning" (click)="enableRecordingState()" style="margin-right:10px"> Retry Test </button>
-    <button type="button" class="btn btn-success" (click)="completeTest()"> Complete Test </button>
+    <p>Įsitikinkite kad Jūsų veidas gerai matomas ir balsas gerai girdymas.</p>
+    <button type="button" class="btn btn-warning" (click)="enableRecordingState()" style="margin-right:10px"> Ištestuoti dar kartą </button>
+    <button type="button" class="btn btn-success" (click)="completeTest()"> Užbaigti testą </button>
     <!-- <p *ngIf="videoName != null"><em>Playing: {{ videoName }}</em></p> -->
   </div>
 </div>

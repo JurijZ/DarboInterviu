@@ -6,28 +6,28 @@
   <div class="modal-body">
     <form novalidate>
       <div class="form-group">
-        <label for="title">Job Title:</label>
+        <label for="title">Interviu pavadinimas:</label>
         <div class="input-group">
-          <input id="title" [(ngModel)]="newApplication.title" class="form-control" placeholder="Enter interview title"
+          <input id="title" [(ngModel)]="newApplication.title" class="form-control" placeholder="Įveskite interviu pavadinimą"
             name="title" required>
         </div>
       </div>
       <div class="form-group">
-        <label for="name">Candidates Name:</label>
+        <label for="name">Kandidato Vardas ir Pavardė:</label>
         <div class="input-group">
-          <input id="name" [(ngModel)]="newApplication.candidateName" email class="form-control" placeholder="Enter name" name="name"
-            required>
+          <input id="name" [(ngModel)]="newApplication.candidateName" email class="form-control"
+            placeholder="Įveskite kandidato vardą ir pavardę" name="name" required>
         </div>
       </div>
       <div class="form-group">
-        <label for="email">Candidates Email:</label>
+        <label for="email">Kandidato Elektroninis pašto adresas:</label>
         <div class="input-group">
-          <input id="email" [(ngModel)]="newApplication.candidateEmail" email class="form-control" placeholder="Enter email address"
-            name="email" required>
+          <input id="email" [(ngModel)]="newApplication.candidateEmail" email class="form-control"
+            placeholder="Įveskite elektroninį paštą" name="email" required>
         </div>
       </div>
       <div class="form-group">
-        <label for="expiry">Candidate must complete the interview before:</label>
+        <label for="expiry">Kandidatas turi užbaigti interviu iki:</label>
         <div class="input-group">
           <input id="expiry" [(ngModel)]="date" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker
             #dp="ngbDatepicker" [minDate]="minDate">
@@ -42,24 +42,25 @@
     </div>
   </div>
   <div *ngIf="issent">
-      <div class="alert alert-success text-center" role="alert">
-        Email was successfully sent to the candidate.
-      </div>
+    <div class="alert alert-success text-center" role="alert">
+      Elektroninis laiškas buvo sėkmingai išsiųstas kandidatui. Interviu statusą galite matyti interviu sąraše.
     </div>
+  </div>
   <div class="modal-footer ">
 
 
 
-        <button *ngIf="!issent" type="button" class="btn btn-outline-primary" (click)="createApplicant()" placement="bottom"
-          ngbTooltip="An email will be sent to the candidate" style="margin-right:5px">Send</button>
-        <button *ngIf="!issent" type="button" class="btn btn-outline-primary" (click)="modal.dismiss('Cancel click')"
-          style="margin-right:5px">Cancel</button>
-        <button *ngIf="issent" type="button" class="btn btn-outline-primary" (click)="modal.close('Close click')" style="float:center;">Close</button>
+    <button *ngIf="!issent" type="button" class="btn btn-outline-primary" (click)="createApplicant()" placement="bottom"
+      ngbTooltip="Elektroninis laiškas bus nusiųstas kandidatui" style="margin-right:5px">Siųsti</button>
+    <button *ngIf="!issent" type="button" class="btn btn-outline-primary" (click)="modal.dismiss('Cancel click')"
+      style="margin-right:5px">Nutraukti</button>
+    <button *ngIf="issent" type="button" class="btn btn-outline-primary" (click)="modal.close('Close click')"
+      style="float:center;">Uždaryti</button>
 
   </div>
 
 </ng-template>
 
 <!--This is shown in the interview.component.html-->
-<button class="btn btn-sm btn-outline-primary" (click)="open(content)">Send to a Candidate</button>
+<button class="btn btn-sm btn-outline-primary" (click)="open(content)">Siųsti Kandidatui</button>
 <!-- <pre>{{closeResult}}</pre> -->

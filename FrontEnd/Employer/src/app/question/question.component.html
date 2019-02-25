@@ -2,19 +2,19 @@
 <div>
   <input [(ngModel)]="interviewTemplate.name" (focusout)="updateInterview()" 
   class="form-control form-control-lg"
-  placeholder="Enter interview title here...">  
+  placeholder="Įveskite interviu pavadinimą...">  
 </div>
 <br>
 <ul class="list-unstyled">
   <li *ngFor="let question of questions; let i = index">
     <div>
       <textarea [(ngModel)]="question.text" [disabled]="!question.isEditable" rows="2" style="min-width: 100%"
-        placeholder="Enter your question here...">
+        placeholder="Įveskite klausimą...">
     </textarea>
     </div>
     <div class="horizontal">
       <div class="left">
-        <span>Duration (min.): </span>
+        <span>Trukmė (min.): </span>
         <select [(ngModel)]="question.duration" [disabled]="!question.isEditable">
           <option *ngFor="let duration of durations" [ngValue]="duration">{{duration}}</option>
         </select>
@@ -37,6 +37,6 @@
   </li>
 </ul>
 <div>
-  <button (click)="addQuestion()" class="btn btn-success btn-lg1" type="button" style="margin-right:10px">Add New Question</button>
-  <button (click)="refreshQuestions()" class="btn btn-primary btn-lg1" type="button">Refresh</button>
+  <button (click)="addQuestion()" class="btn btn-success btn-lg1" type="button" style="margin-right:10px">Pridėti naują klausimą</button>
+  <button (click)="refreshQuestions()" class="btn btn-primary btn-lg1" type="button">Atnaujinti</button>
 </div>

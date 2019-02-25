@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApi.Migrations
 {
-    public partial class A : Migration
+    public partial class Map : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -29,7 +29,6 @@ namespace WebApi.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
                     TemplateId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
                     CandidateName = table.Column<string>(nullable: true),
@@ -42,6 +41,19 @@ namespace WebApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Applications", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationUserMaps",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    ApplicationId = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUserMaps", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -115,6 +127,9 @@ namespace WebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Applications");
+
+            migrationBuilder.DropTable(
+                name: "ApplicationUserMaps");
 
             migrationBuilder.DropTable(
                 name: "Questions");

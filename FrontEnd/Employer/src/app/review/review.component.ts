@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '@environments/environment';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,7 @@ import { Interview , Video } from '@app/_models';
   templateUrl: './review.component.html',
   styleUrls: ['./review.component.css']
 })
-export class ReviewComponent implements OnInit {
+export class ReviewComponent implements OnInit, OnDestroy {
   public videos: Video[];
   public videoName: string; 
   public activeQuestion: string = "";
@@ -44,7 +44,12 @@ export class ReviewComponent implements OnInit {
     })
   }
 
-  playVideo(fileName: string) {
+  ngOnDestroy(){
+    //stops playing video if navigatino away from the page is happening
+    this.myVideo.nativeElement.pause();
+  }
+
+  playVideo(fileName: string) {    
     console.log("Selected video: " + fileName);
 
     /* You are accessing a dom element directly here, so you need to call "nativeElement" first. */
@@ -59,6 +64,7 @@ export class ReviewComponent implements OnInit {
 
     this.activeQuestion = video.question;
 
+    this.myVideo.nativeElement.pause(); // stop preveous video if it was playing
     this.playVideo(video.videoFileName)
   }
 }

@@ -26,7 +26,7 @@ export class RecordRTCComponent implements AfterViewInit, OnInit, OnDestroy {
   public sendButtonDisabled: boolean = true;
   public recordedBlob: Blob;
   uploadingState: boolean = false; //false means upload completed
-  buttonText: string = "Next Question";
+  buttonText: string = "Sekantis Klausimas";
   subscribtion: Observable<HttpEvent<{}>>;
 
   interval;
@@ -116,7 +116,7 @@ export class RecordRTCComponent implements AfterViewInit, OnInit, OnDestroy {
   startRecording() {
     this.recordButtonDisabled = true;
     this.sendButtonDisabled = false;
-    this.message = "Recording";
+    this.message = "Vyksta įrašymas";
 
     let mediaConstraints = {
       video: true,
@@ -153,7 +153,7 @@ export class RecordRTCComponent implements AfterViewInit, OnInit, OnDestroy {
     // Show next question or finish
     var i = this.questions.findIndex(q => q.id === this.activeQuestion.id);
     if (i == this.questions.length - 1) {
-      this.buttonText = "Finish";
+      this.buttonText = "Užbaigti";
     }
   }
 
@@ -282,7 +282,7 @@ export class RecordRTCComponent implements AfterViewInit, OnInit, OnDestroy {
 
   calculateMinutes(seconds: number) {
     var m = Math.floor(seconds % 3600 / 60) + 1;
-    var mDisplay = m > 0 ? m + (m == 1 ? " minute remain" : " minutes remain") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " minutė liko" : " minutės liko") : "";
     return mDisplay
   }
 

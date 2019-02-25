@@ -114,10 +114,10 @@ namespace WebApi.Controllers
             logger.Info("Authentication result: " + authentication);
 
             if (authentication == 1)
-                return BadRequest(new { message = "Email or password is incorrect" });
+                return BadRequest(new { message = "Neteisingai įvestas elektroninio pašto adresas arba slaptažodis. Pataisykite ir bandykite prisijungti dar kartą." });
 
             if (authentication == 2)
-                return BadRequest(new { message = "Interview has expired" });
+                return BadRequest(new { message = "Šio interviu galiojimo laikas baigėsi." });
 
             // Prepare JWT token
             var tokenHandler = new JwtSecurityTokenHandler();

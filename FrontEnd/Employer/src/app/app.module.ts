@@ -19,6 +19,7 @@ import { RegisterComponent } from './register';
 import { InterviewTemplateComponent } from './interviewtemplate';
 import { InterviewModalComponent } from './interviewmodal';
 import { InterviewComponent } from './interview';
+import { InterviewShareComponent } from './interviewshare';
 import { ReviewComponent } from './review';
 import { QuestionComponent } from './question';
 
@@ -41,6 +42,7 @@ import { QuestionComponent } from './question';
         InterviewTemplateComponent,
         InterviewModalComponent,
         InterviewComponent,
+        InterviewShareComponent,
         ReviewComponent,
         QuestionComponent
     ],

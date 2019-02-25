@@ -15,7 +15,6 @@ import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 import { HomeComponent } from './home';
 import { LoginComponent } from './login';
 import { TermsComponent } from './terms';
-import { VideosComponent } from './videos';
 import { RecordRTCComponent } from './record-rtc';
 import { TestComponent } from './test';
 import { FinalComponent } from './final';
@@ -34,7 +33,6 @@ import { FinalComponent } from './final';
         HomeComponent,
         LoginComponent,
         TermsComponent,
-        VideosComponent,
         RecordRTCComponent,
         TestComponent,
         FinalComponent

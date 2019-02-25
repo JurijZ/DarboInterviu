@@ -1,5 +1,5 @@
 <br>
-<h3>Interview Templates:</h3>
+<h3>Interviu Šablonai:</h3>
 <br>
 <div class="container">
 
@@ -7,8 +7,8 @@
     <table class="table table-striped ">
       <thead>
         <tr>
-          <th> Interview Title </th>
-          <th> Updated on </th>
+          <th> Interviu pavadinimas </th>
+          <th> Atnaujinimo data </th>
           <th></th>
         </tr>
       </thead>
@@ -18,8 +18,8 @@
           <td> {{interviewTemplate.name}}</td>
           <td> {{interviewTemplate.timestamp | date:'yyyy-MM-dd HH:mm'}}</td>
           <td>
-            <button class="btn btn-warning btn-sm" (click)="editInterview(interviewTemplate)" style="margin-right:5px">Edit</button>
-            <button class="btn btn-danger btn-sm" (click)="deleteInterview(interviewTemplate.id)" style="margin-right:5px">Delete</button>
+            <button class="btn btn-warning btn-sm" (click)="editTemplate(interviewTemplate)" style="margin-right:5px">Redaguoti</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteTemplate(interviewTemplate.id)" style="margin-right:5px">Ištrinti</button>
             <interviewmodal [interview]="interviewTemplate"></interviewmodal>
           </td>
         </tr>
@@ -27,7 +27,7 @@
     </table>
   </div>
   <div>
-    <button (click)="addInterview()" class="btn btn-success btn-lg1" type="button" style="margin-right:10px">Add New Interview Template</button>
-    <button (click)="refreshInterviews()" *ngIf="interviewTemplates" class="btn btn-primary btn-lg1" type="button">Refresh</button>
+    <button (click)="addTemplate()" class="btn btn-success btn-lg1" type="button" style="margin-right:10px">Sukurti naują Interviu Šabloną</button>
+    <button (click)="refreshTemplates()" *ngIf="interviewTemplates" class="btn btn-primary btn-lg1" type="button">Atnaujinti</button>
   </div>
 </div>

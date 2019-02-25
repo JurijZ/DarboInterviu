@@ -13,5 +13,6 @@ namespace WebApi.Helpers
         public virtual DbSet<Template> Templates { get; set; }
         public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<Application> Applications { get; set; }
+        public virtual DbSet<ApplicationUserMap> ApplicationUserMaps { get; set; }
     }
 }

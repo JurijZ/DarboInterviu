@@ -9,8 +9,8 @@ using WebApi.Helpers;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190219154313_A")]
-    partial class A
+    [Migration("20190225091411_Map")]
+    partial class Map
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -61,11 +61,23 @@ namespace WebApi.Migrations
 
                     b.Property<string>("Title");
 
+                    b.HasKey("Id");
+
+                    b.ToTable("Applications");
+                });
+
+            modelBuilder.Entity("WebApi.Entities.ApplicationUserMap", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ApplicationId");
+
                     b.Property<string>("UserId");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Applications");
+                    b.ToTable("ApplicationUserMaps");
                 });
 
             modelBuilder.Entity("WebApi.Entities.Question", b =>

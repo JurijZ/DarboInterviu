@@ -40,15 +40,15 @@ export class InterviewTemplateComponent implements OnInit {
     });
   }
 
-  deleteInterview(id: string) {
-    if (confirm("Are you sure you want to delete this Interview?")) {
+  deleteTemplate(id: string) {
+    if (confirm("Ar esate tikras kad norite ištrinti šį šabloną?")) {
       this.interviewtemplateService.delete(id).pipe(first()).subscribe(() => {
         this.loadAllTemplates(this.currentUser.id)
       });
     }
   }
 
-  addInterview() {
+  addTemplate() {
     let newInterviewTemplate: InterviewTemplate = new InterviewTemplate();
     newInterviewTemplate.name = "";
     newInterviewTemplate.timestamp = "";
@@ -71,13 +71,13 @@ export class InterviewTemplateComponent implements OnInit {
     );
   }
 
-  refreshInterviews() {
+  refreshTemplates() {
     this.loadAllTemplates(this.currentUser.id);
   }
 
 
 
-  editInterview(interviewTemplate: InterviewTemplate) {
+  editTemplate(interviewTemplate: InterviewTemplate) {
     this.data.setInterviewTemplate(interviewTemplate);
     this.router.navigate(['/question']);
   }

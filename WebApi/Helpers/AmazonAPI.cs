@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 using Amazon.SimpleEmail;
 using Amazon.SimpleEmail.Model;
@@ -21,24 +21,24 @@ namespace WebApi.Helpers
             string senderAddress = "support@darbointerviu.lt";
             string receiverAddress = "jzilcov@gmail.com"; //TODO: application.CandidateEmail;
             //string configSet = "ConfigSet";
-            string subject = "Online Interview 2";
+            string subject = "Video Interviu - " + application.Title;
             string htmlBody = $@"<html>
 <head></head>
 <body>
-    <h3>""{application.Title}"" video interview is prepared for you.</h3>
-    <p>To start go to: <a href='https://www.darbointerviu.lt/candidate'>https://www.darbointerviu.lt/candidate</a></p>
+    <h3>Jums yra paruoštas ""{application.Title}"" video interviu.</h3>
+    <p>Norint pradėti interviu prisijunkite prie: <a href='https://www.darbointerviu.lt/candidate'>https://www.darbointerviu.lt/candidate</a></p>
 
     <table border=""0"">
         <tr>
-            <td>Your user name is:</td>
+            <td>Jūsų prisijungimo vardas (tai yra Jūsų elektroninio pašto adresas)</td>
             <td><strong>{application.CandidateEmail}</strong></td>
         </tr>
         <tr>
-            <td>Your secret is:</td>
+            <td>Jūsų slaptažodis:</td>
             <td><strong>{application.CandidateSecret}</strong></td>
         </tr>
         <tr>
-            <td>Complete interview before:</td>
+            <td>Interviu turite užbaigti iki:</td>
             <td><strong>{application.Expiration.ToString("yyyy/MM/dd HH:mm")}</strong></td>
         </tr>
     </table> 

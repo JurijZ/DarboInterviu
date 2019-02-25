@@ -69,6 +69,7 @@ namespace WebApi.Controllers
         {
             // map dto to entity
             var application = _mapper.Map<Application>(applicationDto);
+            
 
             var logger = NLog.LogManager.GetCurrentClassLogger();
             logger.Info("Creating application: " + application.Title + " for the " + application.CandidateEmail);
@@ -81,8 +82,27 @@ namespace WebApi.Controllers
                 application.Timestamp = DateTime.Now;
                 application.Status = "Not Started";
 
-                _applicationService.Create(application);
+                _applicationService.Create(application, applicationDto.UserId);
                 return Ok(application);
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("Share")]
+        public IActionResult Share([FromBody]ShareDto shareDto)
+        {
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("Sharing application: " + shareDto.ApplicationId + " with " + shareDto.Email);
+
+            try
+            {
+                var s = _applicationService.Share(shareDto.UserId, shareDto.ApplicationId, shareDto.Email);
+                return Ok(shareDto);
             }
             catch (AppException ex)
             {
