@@ -1,3 +1,3 @@
 # angular-7-employer
 
-Angular 7 SPa for the Employer
+Angular 7 SPA for the Employer
