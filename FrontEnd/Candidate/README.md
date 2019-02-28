@@ -1,3 +1,3 @@
-# angular-7-Candidate
+# angular-7-candidate
 
 Angular 7 SPA for the Employer
