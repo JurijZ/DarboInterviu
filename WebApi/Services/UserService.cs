@@ -14,6 +14,7 @@ namespace WebApi.Services
         User Create(User user, string password);
         void Update(User user, string password = null);
         void Delete(string id);
+        void ChangePassword(string userId, string password = null);
     }
 
     public class UserService : IUserService
@@ -122,7 +123,28 @@ namespace WebApi.Services
             }
         }
 
-        // private helper methods
+        public void ChangePassword(string userId, string password = null)
+        {
+            var user = _context.Users.Find(userId);
+
+            if (user == null)
+                throw new AppException("User not found");
+                        
+            // update password if it was entered
+            if (!string.IsNullOrWhiteSpace(password))
+            {
+                byte[] passwordHash, passwordSalt;
+                CreatePasswordHash(password, out passwordHash, out passwordSalt);
+
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+            }
+
+            _context.Users.Update(user);
+            _context.SaveChanges();
+        }
+
+        // ------------ private helper methods
 
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {

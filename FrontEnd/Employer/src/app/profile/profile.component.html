@@ -1,24 +1,57 @@
 <div class="container">
   <h3>Sveiki {{currentUser.firstName}}</h3>
   <br>
-  <form>
+  <form [formGroup]="changeUserPropertiesForm" (ngSubmit)="changeUserProperties()">
     <div class="form-group row">
       <label for="user-email" class="col-2 col-form-label">Vartotojo vardas:</label>
-      <div class="col-10">
-        <p class="form-control-static"> {{currentUser.username}}</p>
+      <div class="col-3">
+          <input type="text" readonly class="form-control-plaintext" id="user-email" value="{{currentUser.username}}">
       </div>
     </div>
     <div class="form-group row">
-      <label for="first-name" class="col-2 col-form-label">Vardas:</label>
+      <label for="firstname" class="col-2 col-form-label">Vardas:</label>
       <div class="col-3">
-        <input class="form-control" type="text" value="{{currentUser.firstName}}" id="first-name">
+          <input type="text" readonly class="form-control-plaintext" id="firstname" value="{{currentUser.firstName}}">
+        <!--<input class="form-control" type="text" value="{{currentUser.firstName}}" id="firstname">-->
       </div>
     </div>
     <div class="form-group row">
-      <label for="last-name" class="col-2 col-form-label">Pavardė:</label>
+      <label for="lastname" class="col-2 col-form-label">Pavardė:</label>
       <div class="col-3">
-        <input class="form-control" type="text" value="{{currentUser.lastName}}" id="last-name">
+          <input type="text" readonly class="form-control-plaintext" id="lastname" value="{{currentUser.lastName}}">
+        <!--<input class="form-control" type="text" value="{{currentUser.lastName}}" id="lastname">-->
       </div>
     </div>
+  </form>
+</div>
+
+<hr>
+
+<div>
+  <button *ngIf="!passwordFormVisible" (click)="toggleChangePasswordForm()" class="btn btn-primary" type="button"
+    style="margin-left:10px; margin-right:10px">Keisti
+    Slaptažodį</button>
+    <span *ngIf=" passwordIsChanged != ''">{{passwordIsChanged}}</span>
+</div>
+
+
+<div class="container" *ngIf="passwordFormVisible">
+  
+  <form [formGroup]="changePasswordForm" (ngSubmit)="changePassword()">
+    <div class="form-group row">
+      <label for="password" class="col-2 col-form-label">Naujas Slaptažodis:</label>
+      <div class="col-3">
+        <input type="password" formControlName="password" class="form-control"
+          [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+          <div *ngIf="f.password.errors.required">Slaptažodis yra privalomas</div>
+          <div *ngIf="f.password.errors.minlength">Slaptažodis turi būti sudarytas kaip minimum iš 6 simbolių</div>
+        </div>
+      </div>
+      <button class="btn btn-success">Išsaugoti</button>
+      <button (click)="toggleChangePasswordForm()" class="btn btn-primary" type="button"
+        style="margin-left:10px">Apsigalvojau</button>
+    </div>
+
   </form>
 </div>

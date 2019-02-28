@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
         });
     }
 
-    // convenience getter for easy access to form fields
+    // convenience getter for easy access to form fields (used in html for validation)
     get f() { return this.registerForm.controls; }
 
     onSubmit() {

@@ -128,6 +128,23 @@ namespace WebApi.Controllers
             }
         }
 
+        [AllowAnonymous]
+        [HttpPut("password/{id}")]
+        public IActionResult ChangePassword(string id, [FromBody]UserDto userDto)
+        {
+            try
+            {
+                // save 
+                _userService.ChangePassword(id, userDto.Password);
+                return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {

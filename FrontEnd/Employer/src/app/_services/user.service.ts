@@ -27,4 +27,8 @@ export class UserService {
     delete(id: string) {
         return this.http.delete(`${environment.apiUrl}/users/${id}`);
     }
+
+    changePassword(user: User) {
+        return this.http.put(`${environment.apiUrl}/users/password/${user.id}`, user);
+    }
 }
