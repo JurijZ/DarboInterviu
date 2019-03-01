@@ -77,4 +77,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
                     console.log(this.passwordIsChanged);
                 });
     }
+
+    changeUserProperties(){
+        console.log('OnSubmit for modifying user properties');
+    }
 }

@@ -7,6 +7,7 @@ import { RecordRTCComponent } from './record-rtc';
 import { TestComponent } from './test';
 import { FinalComponent } from './final';
 import { AuthGuard } from './_guards';
+import { UnsubscribeComponent } from './unsubscribe';
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
@@ -15,6 +16,7 @@ const appRoutes: Routes = [
     { path: 'record-rtc', component: RecordRTCComponent },
     { path: 'test', component: TestComponent },
     { path: 'final', component: FinalComponent },
+    { path: 'unsubscribe', component: UnsubscribeComponent },
 
     // otherwise redirect to home
     { path: '**', redirectTo: 'home' }

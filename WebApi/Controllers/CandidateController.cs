@@ -146,5 +146,23 @@ namespace WebApi.Controllers
                 Token = tokenString
             });
         }
+
+        [AllowAnonymous]
+        [HttpPut("unsubscribe/{email}")]
+        public IActionResult Unsubscribe(string email)
+        {
+            try
+            {
+                // TODO - implement unsubscribe logic (not really relevant for the Candidate)
+                var logger = NLog.LogManager.GetCurrentClassLogger();
+                logger.Info("Unsubscribing candidates email: " + email);
+                return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

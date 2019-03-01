@@ -42,7 +42,10 @@ namespace WebApi.Helpers
             <td><strong>{application.Expiration.ToString("yyyy/MM/dd HH:mm")}</strong></td>
         </tr>
     </table> 
-        
+    <br>
+    <br>
+    <p><a href='https://www.darbointerviu.lt/candidate/unsubscribe?email={application.CandidateEmail}'>Unsubscribe</a></p>
+
     
 </body>
 </html>";

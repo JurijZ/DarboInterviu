@@ -18,6 +18,7 @@ import { TermsComponent } from './terms';
 import { RecordRTCComponent } from './record-rtc';
 import { TestComponent } from './test';
 import { FinalComponent } from './final';
+import { UnsubscribeComponent } from './unsubscribe';
 
 @NgModule({
     imports: [
@@ -35,7 +36,8 @@ import { FinalComponent } from './final';
         TermsComponent,
         RecordRTCComponent,
         TestComponent,
-        FinalComponent
+        FinalComponent,
+        UnsubscribeComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

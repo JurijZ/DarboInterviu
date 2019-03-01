@@ -31,4 +31,8 @@ export class UserService {
     changePassword(user: User) {
         return this.http.put(`${environment.apiUrl}/users/password/${user.id}`, user);
     }
+
+    unsubscribeEmail(email: string){
+        return this.http.put(`${environment.apiUrl}/users/unsubscribe/${email}`, null);
+    }
 }

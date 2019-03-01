@@ -151,5 +151,23 @@ namespace WebApi.Controllers
             _userService.Delete(id);
             return Ok();
         }
+
+        [AllowAnonymous]
+        [HttpPut("unsubscribe/{email}")]
+        public IActionResult Unsubscribe(string email)
+        {
+            try
+            {
+                // TODO - implement unsubscribe logic
+                var logger = NLog.LogManager.GetCurrentClassLogger();
+                logger.Info("Unsubscribing employer email: " + email);
+                return Ok();
+            }
+            catch (AppException ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

@@ -1,0 +1,32 @@
+<div class="jumbotron">
+    <div class="container">
+        <div class="row" *ngIf="unsubscribeStatus == '' || unsubscribeStatus == 'Failed'">
+            <div class="col-sm-10 offset-sm-1" style="text-align: center;">
+                <h3>
+                    Jūs norite atsisakyti informacinių pranešimų ateinančių į <strong>{{email}}</strong>.
+                </h3>
+                <p>
+                    Patvirtinkite šį sprendimą paspausdami mygtuką.
+                </p>
+            </div>
+
+        </div>
+        <div class="row" *ngIf="unsubscribeStatus == '' || unsubscribeStatus == 'Failed'">
+            <div class="col-sm-10 offset-sm-1" style="text-align: center;">
+                <button (click)="unsubscribe()" class="btn btn-primary" type="button">Atsisakyti pranešimų</button>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="unsubscribeStatus == 'Failed'">
+            <div class="col-sm-10 offset-sm-1" style="text-align: center;">
+                <h5 style="color: red;">{{failureMessage}}</h5>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="unsubscribeStatus == 'Succeded'">
+            <div class="col-sm-10 offset-sm-1" style="text-align: center;">
+                <h3>{{successMessage}}</h3>
+            </div>
+        </div>
+    </div>
+</div>

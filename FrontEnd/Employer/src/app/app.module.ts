@@ -22,6 +22,7 @@ import { InterviewComponent } from './interview';
 import { InterviewShareComponent } from './interviewshare';
 import { ReviewComponent } from './review';
 import { QuestionComponent } from './question';
+import { UnsubscribeComponent } from './unsubscribe';
 
 @NgModule({
     imports: [
@@ -44,7 +45,8 @@ import { QuestionComponent } from './question';
         InterviewComponent,
         InterviewShareComponent,
         ReviewComponent,
-        QuestionComponent
+        QuestionComponent,
+        UnsubscribeComponent
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

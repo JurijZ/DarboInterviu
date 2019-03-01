@@ -8,6 +8,7 @@ import { InterviewTemplateComponent } from './interviewtemplate';
 import { InterviewComponent } from './interview';
 import { ReviewComponent } from './review';
 import { QuestionComponent } from './question';
+import { UnsubscribeComponent } from './unsubscribe';
 import { AuthGuard } from './_guards';
 
 const appRoutes: Routes = [
@@ -19,6 +20,7 @@ const appRoutes: Routes = [
     { path: 'interview', component: InterviewComponent },
     { path: 'review', component: ReviewComponent },
     { path: 'question', component: QuestionComponent },
+    { path: 'unsubscribe', component: UnsubscribeComponent },
 
     // otherwise redirect to home
     { path: '**', redirectTo: 'interviewtemplate' }
