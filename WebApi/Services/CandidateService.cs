@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WebApi.Entities;
 using WebApi.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Services
 {
@@ -19,16 +20,19 @@ namespace WebApi.Services
     public class CandidateService : ICandidateService
     {
         private DataContext _context;
+        private readonly ILogger _logger;
 
-        public CandidateService(DataContext context)
+        public CandidateService(
+            DataContext context,
+            ILogger<CandidateService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public int Authenticate(string email, string password)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Authenticating: " + email + "/" + password);
+            _logger.LogInformation("Authenticating: " + email + "/" + password);
 
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 return 1;
@@ -40,7 +44,7 @@ namespace WebApi.Services
                 return 1;
 
             // check if application is not expired
-            logger.Info("Interview expiration: " + application.Expiration);
+            _logger.LogInformation("Interview expiration: " + application.Expiration);
             if (application.Expiration < DateTime.Now)
                 return 2;
 
@@ -55,8 +59,7 @@ namespace WebApi.Services
 
             var application = _context.Applications.SingleOrDefault(x => x.Id == applicationId);
 
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Extracted application template: " + application.Title);
+            _logger.LogInformation("Extracted application template: " + application.Title);
 
             return application;
         }
@@ -65,8 +68,7 @@ namespace WebApi.Services
         {
             var application = _context.Applications.SingleOrDefault(x => x.CandidateEmail == email && x.CandidateSecret == password);
 
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Extracted application template: " + application.Title);
+            _logger.LogInformation("Extracted application template: " + application.Title);
 
             return application;
         }
@@ -78,9 +80,8 @@ namespace WebApi.Services
             var numberOfQuestions = questions.Count();
             var totalInterviewDuration = questions.Sum(q => q.Duration);
 
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Number of questions in the template: " + numberOfQuestions);
-            logger.Info("Interview total duration: " + totalInterviewDuration);
+            _logger.LogInformation("Number of questions in the template: " + numberOfQuestions);
+            _logger.LogInformation("Interview total duration: " + totalInterviewDuration);
 
             return (numberOfQuestions, totalInterviewDuration);
         }

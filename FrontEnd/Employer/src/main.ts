@@ -14,6 +14,11 @@ const providers = [
 
 if (environment.production) {
   enableProdMode();
+
+  //to remove all console.log() calls
+  if(window){
+    window.console.log=function(){};
+  }
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule)

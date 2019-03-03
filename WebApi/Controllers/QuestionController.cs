@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using WebApi.Services;
 using WebApi.Dtos;
 using WebApi.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Controllers
 {
@@ -23,15 +24,18 @@ namespace WebApi.Controllers
         private IQuestionService _questionService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
 
         public QuestionController(
             IQuestionService questionService,
             IMapper mapper,
-            IOptions<AppSettings> appSettings)
+            IOptions<AppSettings> appSettings,
+            ILogger<QuestionController> logger)
         {
             _questionService = questionService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
         
         [AllowAnonymous]
@@ -42,8 +46,7 @@ namespace WebApi.Controllers
             var questions =  _questionService.GetAllByTemplateId(id);
             var questionDtos = _mapper.Map<IList<QuestionDto>>(questions);
 
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Number of questions: " + questionDtos.Count);
+            _logger.LogInformation("Number of questions: " + questionDtos.Count);
 
             return Ok(questionDtos);
         }
@@ -55,8 +58,7 @@ namespace WebApi.Controllers
             var question = _questionService.GetById(id);
             var interviewDto = _mapper.Map<QuestionDto>(question);
 
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Requested question id: " + id);
+            _logger.LogInformation("Requested question id: " + id);
 
             return Ok(interviewDto);
         }
@@ -69,8 +71,7 @@ namespace WebApi.Controllers
             // map dto to entity
             var question = _mapper.Map<Question>(questionDto);
 
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Creating question: " + question.Text);
+            _logger.LogInformation("Creating question: " + question.Text);
 
             try
             {
@@ -97,21 +98,20 @@ namespace WebApi.Controllers
             question.Id = id;
             question.Timestamp = DateTime.Now;
 
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Updating question: " + question.Id);
+            _logger.LogInformation("Updating question: " + question.Id);
 
             try
             {
                 // save 
                 _questionService.Update(question);
-                logger.Info("Question update was successful");
+                _logger.LogInformation("Question update was successful");
                 //return Ok(question.Id);  //200
                 return NoContent(); //204
             }
             catch (AppException ex)
             {
                 // return error message if there was an exception
-                logger.Info("Error while updating the question");
+                _logger.LogInformation("Error while updating the question");
                 return BadRequest(new { message = ex.Message });
             }
         }

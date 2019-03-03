@@ -4,6 +4,7 @@ using System.Linq;
 using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Dtos;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Services
 {
@@ -17,10 +18,14 @@ namespace WebApi.Services
     public class SupportService : ISupportService
     {
         private DataContext _context;
+        private readonly ILogger _logger;
 
-        public SupportService(DataContext context)
+        public SupportService(
+            DataContext context,
+            ILogger<SupportService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public IEnumerable<Entities.Template> GetAllTemplates()
@@ -51,8 +56,6 @@ namespace WebApi.Services
                };
 
             return videoDtos;
-        }
-
-        
+        }        
     }
 }

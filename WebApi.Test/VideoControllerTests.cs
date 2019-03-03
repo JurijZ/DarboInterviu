@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using System.IO;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Test
 {
@@ -28,12 +29,13 @@ namespace WebApi.Test
             var mock2 = new Mock<IVideoService>();
             var mock3 = new Mock<IMapper>();
             var mock4 = new Mock<IOptions<AppSettings>>();
+            var mock5 = new Mock<ILogger<VideoController>>();
 
             // Mock the method of the service
             var f = GetFileStream();
             mock2.Setup(p => p.GetVideoById("1")).Returns(f);
             
-            VideoController videoController = new VideoController(mock1.Object, mock2.Object, mock3.Object, mock4.Object);
+            VideoController videoController = new VideoController(mock1.Object, mock2.Object, mock3.Object, mock4.Object, mock5.Object);
 
             // Act
             var response = videoController.GetVideoById("1");

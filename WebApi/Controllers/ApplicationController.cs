@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using WebApi.Services;
 using WebApi.Dtos;
 using WebApi.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Controllers
 {
@@ -23,15 +24,18 @@ namespace WebApi.Controllers
         private IApplicationService _applicationService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
 
         public ApplicationController(
             IApplicationService applicationService,
             IMapper mapper,
-            IOptions<AppSettings> appSettings)
+            IOptions<AppSettings> appSettings,
+            ILogger<ApplicationController> logger)
         {
             _applicationService = applicationService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
         
         // Retrieve all the applications related to a particular Employer
@@ -43,8 +47,7 @@ namespace WebApi.Controllers
             var applications = _applicationService.GetAllByUserId(id);
             var applicationDtos = _mapper.Map<IList<ActiveInteriewDto>>(applications);
 
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Number of active templates: " + applicationDtos.Count);
+            _logger.LogInformation("Number of active templates: " + applicationDtos.Count);
 
             return Ok(applicationDtos);
         }
@@ -53,8 +56,7 @@ namespace WebApi.Controllers
         [HttpGet("application/{id}")]
         public IActionResult GetByApplicationId(string id)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Requested application id: " + id);
+            _logger.LogInformation("Requested application id: " + id);
 
             var application = _applicationService.GetByApplicationId(id);
             var applicationDto = _mapper.Map<ApplicationDto>(application);            
@@ -69,10 +71,8 @@ namespace WebApi.Controllers
         {
             // map dto to entity
             var application = _mapper.Map<Application>(applicationDto);
-            
 
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Creating application: " + application.Title + " for the " + application.CandidateEmail);
+            _logger.LogInformation("Creating application: " + application.Title + " for the " + application.CandidateEmail);
 
             try
             {
@@ -96,8 +96,7 @@ namespace WebApi.Controllers
         [HttpPost("Share")]
         public IActionResult Share([FromBody]ShareDto shareDto)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Sharing application: " + shareDto.ApplicationId + " with " + shareDto.Email);
+            _logger.LogInformation("Sharing application: " + shareDto.ApplicationId + " with " + shareDto.Email);
 
             try
             {

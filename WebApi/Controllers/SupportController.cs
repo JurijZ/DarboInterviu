@@ -14,6 +14,7 @@ using WebApi.Dtos;
 using WebApi.Entities;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Controllers
 {
@@ -25,28 +26,28 @@ namespace WebApi.Controllers
         private ISupportService _supportService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
 
         public SupportController(
             ISupportService supportService,
             IMapper mapper,
-            IOptions<AppSettings> appSettings)
+            IOptions<AppSettings> appSettings,
+            ILogger<SupportController> logger)
         {
             _supportService = supportService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
         
         [AllowAnonymous]
         [HttpGet("template")]
         public IActionResult GetAllTemplates()
         {
-            NLog.LogManager.GetCurrentClassLogger().Info("Support - GetAllTemplates");
-
             var interviews = _supportService.GetAllTemplates();
             var interviewDtos = _mapper.Map<IList<TemplateDto>>(interviews);
 
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Number of templates: " + interviewDtos.Count);
+            _logger.LogInformation("Number of templates: " + interviewDtos.Count);
 
             return Ok(interviewDtos);
         }
@@ -55,13 +56,10 @@ namespace WebApi.Controllers
         [HttpGet("application")]
         public IActionResult GetAllApplications()
         {
-            NLog.LogManager.GetCurrentClassLogger().Info("Support - GetAllApplications");
-
             var applications = _supportService.GetAllApplications();
             var applicationDtos = _mapper.Map<IList<ActiveInteriewDto>>(applications);
 
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Number of interviews: " + applicationDtos.Count);
+            _logger.LogInformation("Number of interviews: " + applicationDtos.Count);
 
             return Ok(applicationDtos);
         }
@@ -70,15 +68,13 @@ namespace WebApi.Controllers
         [HttpGet("video")]
         public ActionResult<IEnumerable<VideoDto>> GetVideosMetadata()
         {
-            NLog.LogManager.GetCurrentClassLogger().Info("Support - GetVideosMetadata");
-
             var listOfVideosMetadata = _supportService.GetVideosMetadata();
             if (listOfVideosMetadata.Any())
             {
                 return Ok(listOfVideosMetadata);
             }
 
-            NLog.LogManager.GetCurrentClassLogger().Info("No files were found, returning HTTP 400 BadRequest");
+            _logger.LogInformation("No files were found, returning HTTP 400 BadRequest");
             return BadRequest();
         }
 
@@ -86,8 +82,7 @@ namespace WebApi.Controllers
         [HttpPost("Email")]
         public IActionResult Create(string emailText)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Sending email with text: " + emailText);
+            _logger.LogInformation("Sending email with text: " + emailText);
 
             try
             {

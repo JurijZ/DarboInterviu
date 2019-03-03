@@ -4,6 +4,7 @@ using System.Linq;
 using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Dtos;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Services
 {
@@ -20,10 +21,15 @@ namespace WebApi.Services
     public class QuestionService : IQuestionService
     {
         private DataContext _context;
+        private readonly ILogger _logger;
 
-        public QuestionService(DataContext context)
+        public QuestionService(
+            DataContext context,
+            ILogger<QuestionService> logger
+            )
         {
             _context = context;
+            _logger = logger;
         }
         
         public IEnumerable<Question> GetAllByTemplateId(string templateId)

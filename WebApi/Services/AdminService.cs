@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WebApi.Entities;
 using WebApi.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Services
 {
@@ -19,10 +20,14 @@ namespace WebApi.Services
     public class AdminService : IAdminService
     {
         private DataContext _context;
+        private readonly ILogger _logger;
 
-        public AdminService(DataContext context)
+        public AdminService(
+            DataContext context, 
+            ILogger<AdminService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public Admin Authenticate(string userName, string password)
@@ -51,8 +56,7 @@ namespace WebApi.Services
 
         public Admin GetById(string id)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Support Authentiction");
+            _logger.LogInformation("Support Authentication");
 
             return _context.Admins.Find(id);
         }

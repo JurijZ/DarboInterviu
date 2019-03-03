@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Data.Sqlite;
 using WebApi.Services;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Test
 {
@@ -44,7 +45,9 @@ namespace WebApi.Test
                 // Use a clean instance of the context to run the test
                 using (var context = new DataContext(options))
                 {
-                    var service = new UserService(context);
+                    var mock = new Mock<ILogger<UserService>>();
+
+                    var service = new UserService(context, mock.Object);
                     var result = service.GetById("2");
                     Assert.Equal("C", result.FirstName);
                 }

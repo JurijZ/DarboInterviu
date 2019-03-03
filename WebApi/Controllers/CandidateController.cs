@@ -13,6 +13,7 @@ using WebApi.Services;
 using WebApi.Dtos;
 using System.Linq;
 using WebApi.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Controllers
 {
@@ -24,15 +25,18 @@ namespace WebApi.Controllers
         private ICandidateService _candidateService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
 
         public CandidateController(
             ICandidateService candidateService,
             IMapper mapper,
-            IOptions<AppSettings> appSettings)
+            IOptions<AppSettings> appSettings,
+            ILogger<CandidateController> logger)
         {
             _candidateService = candidateService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
 
         [AllowAnonymous]
@@ -65,8 +69,7 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetApplicationById(string id)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Requested application id: " + id);
+            _logger.LogInformation("Requested application id: " + id);
 
             var application = _candidateService.GetApplicationById(id);
             var applicationDto = _mapper.Map<ApplicationDto>(application);
@@ -94,8 +97,7 @@ namespace WebApi.Controllers
         [HttpPost("status")]
         public IActionResult UpdateInterviewStatus([FromBody] ApplicationStatusDto applicationStatusDto)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Interview " + applicationStatusDto.ApplicationId + " status is set to - " + applicationStatusDto.Status);
+            _logger.LogInformation("Interview " + applicationStatusDto.ApplicationId + " status is set to - " + applicationStatusDto.Status);
 
             var authentication = _candidateService.SetApplicationStatus(applicationStatusDto.ApplicationId, applicationStatusDto.Status);
 
@@ -107,11 +109,10 @@ namespace WebApi.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]CandidateDto candidateDto)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Authentication");
+            _logger.LogInformation("Authentication");
 
             var authentication = _candidateService.Authenticate(candidateDto.Email, candidateDto.Password);
-            logger.Info("Authentication result: " + authentication);
+            _logger.LogInformation("Authentication result: " + authentication);
 
             if (authentication == 1)
                 return BadRequest(new { message = "Neteisingai įvestas elektroninio pašto adresas arba slaptažodis. Pataisykite ir bandykite prisijungti dar kartą." });
@@ -154,8 +155,7 @@ namespace WebApi.Controllers
             try
             {
                 // TODO - implement unsubscribe logic (not really relevant for the Candidate)
-                var logger = NLog.LogManager.GetCurrentClassLogger();
-                logger.Info("Unsubscribing candidates email: " + email);
+                _logger.LogInformation("Unsubscribing candidates email: " + email);
                 return Ok();
             }
             catch (AppException ex)

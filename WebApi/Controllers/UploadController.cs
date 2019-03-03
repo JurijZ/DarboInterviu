@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
 using System.IdentityModel.Tokens.Jwt;
-using WebApi.Helpers;
-using Microsoft.Extensions.Options;
-using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
@@ -16,6 +12,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using System.Net.Http.Headers;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Controllers
 {
@@ -25,31 +22,33 @@ namespace WebApi.Controllers
     {
         private IHostingEnvironment _hostingEnvironment;
         private IVideoService _videoService;
+        private readonly ILogger _logger;
 
-        public UploadController(IHostingEnvironment hostingEnvironment, IVideoService videoService)
+        public UploadController(
+            IHostingEnvironment hostingEnvironment, 
+            IVideoService videoService,
+            ILogger<UploadController> logger)
         {
             _hostingEnvironment = hostingEnvironment;            
             _videoService = videoService;
+            _logger = logger;
         }
 
         [HttpPost, DisableRequestSizeLimit]
         public ActionResult UploadFile()
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-
             try
             {
                 // Extract keys from the submitted form
-                var formKeys = Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString());
-                               
+                var formKeys = Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString());                               
 
                 var file = Request.Form.Files[0];
-                logger.Info("Received file name: " + file.FileName);
+                _logger.LogInformation("Received file name: " + file.FileName);
 
                 string folderName = "Upload";
                 string contentRootPath = _hostingEnvironment.ContentRootPath;
                 string newPath = Path.Combine(contentRootPath, folderName);
-                logger.Info("Upload to: " + newPath);
+                _logger.LogInformation("Upload to: " + newPath);
 
                 var videoMetadata = new Video();
                 videoMetadata.ApplicationId = formKeys["applicationId"];

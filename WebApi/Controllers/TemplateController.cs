@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using WebApi.Services;
 using WebApi.Dtos;
 using WebApi.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Controllers
 {
@@ -23,15 +24,18 @@ namespace WebApi.Controllers
         private ITemplateService _templateService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
 
         public TemplateController(
             ITemplateService templateService,
             IMapper mapper,
-            IOptions<AppSettings> appSettings)
+            IOptions<AppSettings> appSettings,
+            ILogger<TemplateController> logger)
         {
             _templateService = templateService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
         
         [AllowAnonymous]
@@ -41,8 +45,7 @@ namespace WebApi.Controllers
             var template =  _templateService.GetAllByUserId(userId);
             var interviewDtos = _mapper.Map<IList<TemplateDto>>(template);
 
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Number of interviews: " + interviewDtos.Count);
+            _logger.LogInformation("Number of interviews: " + interviewDtos.Count);
 
             return Ok(interviewDtos);
         }
@@ -54,8 +57,7 @@ namespace WebApi.Controllers
         //    var template = _templateService.GetById(id);
         //    var templateDto = _mapper.Map<TemplateDto>(template);
 
-        //    var logger = NLog.LogManager.GetCurrentClassLogger();
-        //    logger.Info("Requested interview id: " + id);
+        //    _logger.LogInformation("Requested interview id: " + id);
 
         //    return Ok(templateDto);
         //}
@@ -65,8 +67,7 @@ namespace WebApi.Controllers
         [HttpPost("Create")]
         public IActionResult Create([FromBody]TemplateDto templateDto)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("New template id: " + templateDto.Id);
+            _logger.LogInformation("New template id: " + templateDto.Id);
 
             try
             {
@@ -94,21 +95,20 @@ namespace WebApi.Controllers
             // map dto to entity and set id
             var template = _mapper.Map<Template>(templateDto);
 
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Updating interview: " + template.Id);
+            _logger.LogInformation("Updating interview: " + template.Id);
 
             try
             {
                 // save 
                 _templateService.Update(template);
-                logger.Info("Interview update was successful");
+                _logger.LogInformation("Interview update was successful");
                 //return Ok(question.Id);  //200
                 return NoContent(); //204
             }
             catch (AppException ex)
             {
                 // return error message if there was an exception
-                logger.Info("Error while updating the interview");
+                _logger.LogInformation("Error while updating the interview");
                 return BadRequest(new { message = ex.Message });
             }
         }

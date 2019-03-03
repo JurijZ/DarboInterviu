@@ -6,6 +6,7 @@ using System.Linq;
 using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Dtos;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Services
 {
@@ -18,29 +19,31 @@ namespace WebApi.Services
     {
         private DataContext _context;
         private IHostingEnvironment _hostingEnvironment;
+        private readonly ILogger _logger;
 
-        public TestService(DataContext context, IHostingEnvironment hostingEnvironment)
+        public TestService(
+            DataContext context, 
+            IHostingEnvironment hostingEnvironment,
+            ILogger<TestService> logger)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
+            _logger = logger;
         }
-
         
         public FileStream GetVideoById(string id)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-
             string[] parts = new string[] { _hostingEnvironment.ContentRootPath, "Test", id };
             string path = Path.Combine(parts);
 
-            logger.Info("Looking for a file: " + path);
+            _logger.LogInformation("Looking for a file: " + path);
 
             if (File.Exists(path))
             {
                 return new FileStream(path, FileMode.Open);
             }
 
-            logger.Info("File was not found");
+            _logger.LogInformation("File was not found");
             return null;
         }
     }

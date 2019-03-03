@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using WebApi.Services;
 using WebApi.Dtos;
 using WebApi.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Controllers
 {
@@ -23,23 +24,25 @@ namespace WebApi.Controllers
         private IUserService _userService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
 
         public UsersController(
             IUserService userService,
             IMapper mapper,
-            IOptions<AppSettings> appSettings)
+            IOptions<AppSettings> appSettings,
+            ILogger<UsersController> logger)
         {
             _userService = userService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]UserDto userDto)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Authentication");
+            _logger.LogInformation("Authentication");
 
             var user = _userService.Authenticate(userDto.Username, userDto.Password);
 
@@ -159,8 +162,7 @@ namespace WebApi.Controllers
             try
             {
                 // TODO - implement unsubscribe logic
-                var logger = NLog.LogManager.GetCurrentClassLogger();
-                logger.Info("Unsubscribing employer email: " + email);
+                _logger.LogInformation("Unsubscribing employer email: " + email);
                 return Ok();
             }
             catch (AppException ex)

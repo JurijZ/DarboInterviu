@@ -4,6 +4,7 @@ using System.Linq;
 using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Dtos;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Services
 {
@@ -20,11 +21,15 @@ namespace WebApi.Services
     public class ApplicationService : IApplicationService
     {
         private DataContext _context;
+        private readonly ILogger _logger;
         private static readonly Random getrandom = new Random();
 
-        public ApplicationService(DataContext context)
+        public ApplicationService(
+            DataContext context,
+            ILogger<ApplicationService> logger)
         {
             _context = context;
+            _logger = logger;
         }
         
         public IEnumerable<Application> GetAllByUserId(string userId)
@@ -75,8 +80,7 @@ namespace WebApi.Services
 
                 string password = RandomString(8);
 
-                var logger = NLog.LogManager.GetCurrentClassLogger();
-                logger.Info("New user: " + email + " with password " + password + " was created");
+                _logger.LogInformation("New user: " + email + " with password " + password + " was created");
 
                 byte[] passwordHash, passwordSalt;
                 CreatePasswordHash(password, out passwordHash, out passwordSalt);

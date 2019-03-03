@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using WebApi.Services;
 using WebApi.Dtos;
 using WebApi.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Controllers
 {
@@ -23,23 +24,25 @@ namespace WebApi.Controllers
         private IAdminService _adminService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
 
         public AdminsController(
             IAdminService adminService,
             IMapper mapper,
-            IOptions<AppSettings> appSettings)
+            IOptions<AppSettings> appSettings,
+            ILogger<AdminsController> logger)
         {
             _adminService = adminService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]AdminDto adminDto)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Authentication");
+            _logger.LogInformation("Authentication for user: " + adminDto.UserName);
 
             var admin = _adminService.Authenticate(adminDto.UserName, adminDto.Password);
 

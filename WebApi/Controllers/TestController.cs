@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using System.Net.Http.Headers;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Controllers
 {
@@ -25,19 +26,22 @@ namespace WebApi.Controllers
     {
         private IHostingEnvironment _hostingEnvironment;
         private ITestService _testService;
+        private readonly ILogger _logger;
 
-        public TestController(IHostingEnvironment hostingEnvironment, ITestService testService)
+        public TestController(
+            IHostingEnvironment hostingEnvironment, 
+            ITestService testService,
+            ILogger<TestController> logger)
         {
             _hostingEnvironment = hostingEnvironment;
             _testService = testService;
+            _logger = logger;
         }
 
         [Produces("application/json")]
         [HttpPost, DisableRequestSizeLimit]
         public ActionResult UploadFile()
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-
             try
             {
                 // Extract keys from the submitted form
@@ -45,12 +49,12 @@ namespace WebApi.Controllers
                 //var fileId = formKeys["fileId"];         
 
                 var file = Request.Form.Files[0];
-                logger.Info("Received file name: " + file.FileName);
+                _logger.LogInformation("Received file name: " + file.FileName);
 
                 string folderName = "Test";
                 string contentRootPath = _hostingEnvironment.ContentRootPath;
                 string newPath = Path.Combine(contentRootPath, folderName);
-                logger.Info("Upload to: " + newPath);
+                _logger.LogInformation("Upload to: " + newPath);
                 
 
                 if (!Directory.Exists(newPath))
@@ -77,8 +81,7 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetVideoById(string id)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Video file requested: " + id);
+            _logger.LogInformation("Video file requested: " + id);
 
             var fs = _testService.GetVideoById(id);
             if (fs != null)
@@ -86,7 +89,7 @@ namespace WebApi.Controllers
                 return new FileStreamResult(fs, new MediaTypeHeaderValue("video/webm").MediaType);
             }
 
-            logger.Info("No file found, returning HTTP 400 BadRequest");
+            _logger.LogInformation("No file found, returning HTTP 400 BadRequest");
             return BadRequest();
         }
     }

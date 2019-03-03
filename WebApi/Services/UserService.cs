@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WebApi.Entities;
 using WebApi.Helpers;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Services
 {
@@ -20,10 +21,14 @@ namespace WebApi.Services
     public class UserService : IUserService
     {
         private DataContext _context;
+        private readonly ILogger _logger;
 
-        public UserService(DataContext context)
+        public UserService(
+            DataContext context,
+            ILogger<UserService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public User Authenticate(string username, string password)
@@ -52,9 +57,7 @@ namespace WebApi.Services
 
         public User GetById(string id)
         {
-
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("User Authentiction");
+            _logger.LogInformation("User Authentiction");
 
             return _context.Users.Find(id);
         }

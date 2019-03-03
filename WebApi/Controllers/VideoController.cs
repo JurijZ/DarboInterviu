@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using System.Net.Http.Headers;
+using Microsoft.Extensions.Logging;
 
 namespace WebApi.Controllers
 {
@@ -27,24 +28,26 @@ namespace WebApi.Controllers
         private IVideoService _videoService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
 
         public VideoController(
             IHostingEnvironment hostingEnvironment, 
             IVideoService videoService,
             IMapper mapper,
-            IOptions<AppSettings> appSettings)
+            IOptions<AppSettings> appSettings,
+            ILogger<VideoController> logger)
         {
             _hostingEnvironment = hostingEnvironment;
             _videoService = videoService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
 
         [HttpGet("[action]")]
         public IActionResult GetVideo()
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("GetVideo");
+            _logger.LogInformation("GetVideo");
 
             string folderName = @"Upload\1.webm";
             string contentRootPath = _hostingEnvironment.ContentRootPath;
@@ -62,7 +65,7 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public ActionResult<IEnumerable<VideoDto>> GetVideosMetadataByInterviewId(string id)
         {
-            NLog.LogManager.GetCurrentClassLogger().Info("GetVideosMetadataByInterviewId");
+            _logger.LogInformation("GetVideosMetadataByInterviewId");
 
             var listOfVideosMetadata = _videoService.GetVideosMetadataByInterviewId(id);
             if (listOfVideosMetadata.Any())
@@ -70,15 +73,14 @@ namespace WebApi.Controllers
                 return Ok(listOfVideosMetadata);
             }
 
-            NLog.LogManager.GetCurrentClassLogger().Info("No files were found, returning HTTP 400 BadRequest");
+            _logger.LogWarning("No files were found, returning HTTP 400 BadRequest");
             return BadRequest();
         }
 
         [HttpGet("record/{id}")]
         public IActionResult GetVideoById(string id)
         {
-            var logger = NLog.LogManager.GetCurrentClassLogger();
-            logger.Info("Video file requested: " + id);
+            _logger.LogInformation("Video file requested: " + id);
 
             var fs = _videoService.GetVideoById(id);
             if (fs != null)
@@ -86,7 +88,7 @@ namespace WebApi.Controllers
                 return new FileStreamResult(fs, new MediaTypeHeaderValue("video/webm").MediaType);
             }
 
-            logger.Info("No file found, returning HTTP 400 BadRequest");
+            _logger.LogWarning("No file found, returning HTTP 400 BadRequest");
             return BadRequest();
         }
     }
