@@ -77,11 +77,11 @@ namespace WebApi
                         var adminService = context.HttpContext.RequestServices.GetRequiredService<IAdminService>();
                         var applicationService = context.HttpContext.RequestServices.GetRequiredService<IApplicationService>();
                         //var userId = int.Parse(context.Principal.Identity.Name); 
-
-                        var logger = NLog.LogManager.GetCurrentClassLogger();
+                        
                         var t = context.Principal.Claims.ToArray();
-                        logger.Info("Role claim - " + t[1].Type + " " + t[1].Value);
 
+                        //var logger = NLog.LogManager.GetCurrentClassLogger();
+                        //logger.Info("Role claim - " + t[1].Type + " " + t[1].Value);
 
                         if (context.Principal.Claims.First(c => c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").Value == "Support") //Support Authentication
                         {
@@ -148,7 +148,7 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            //env.ConfigureNLog("NLog.Config");
+            env.ConfigureNLog("NLog.Config");
 
             //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             //loggerFactory.AddDebug();

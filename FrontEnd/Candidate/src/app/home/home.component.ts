@@ -13,17 +13,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     users: User[] = [];
     application: Application = new Application();
 
-    constructor(private authenticationService: AuthenticationService, 
+    constructor(private authenticationService: AuthenticationService,
         private homeService: HomeService,
         private router: Router) {
+        this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+            this.currentUser = user;
+
+            this.loadApplication(this.currentUser.applicationId);
+        });
     }
 
     ngOnInit() {
-        this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
-            this.currentUser = user;
-            //console.log(this.currentUser);
-            this.loadApplication(this.currentUser.applicationId);
-        });
     }
 
     ngOnDestroy() {
@@ -40,10 +40,10 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     startInterview() {
         //console.log(this.application);
-        this.router.navigate(['/record-rtc']);        
+        this.router.navigate(['/record-rtc']);
     }
 
-    testRecording(){
+    testRecording() {
         this.router.navigate(['/test']);
     }
 }

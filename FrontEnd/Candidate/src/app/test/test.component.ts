@@ -59,7 +59,10 @@ export class TestComponent implements AfterViewInit, OnInit, OnDestroy {
     // stop recording if it's still running
     if (this.recordButtonDisabled == true){
       this.stopRecording();
-    }    
+    }
+
+    // unsubscribe to ensure no memory leaks
+    this.currentUserSubscription.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -211,7 +214,5 @@ export class TestComponent implements AfterViewInit, OnInit, OnDestroy {
     //this.router.navigate(['/']); 
     
     this.ngZone.run(() => this.router.navigate(['/'])).then();
-  }
-
-  
+  }  
 }

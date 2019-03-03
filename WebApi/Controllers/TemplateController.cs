@@ -45,7 +45,7 @@ namespace WebApi.Controllers
             var template =  _templateService.GetAllByUserId(userId);
             var interviewDtos = _mapper.Map<IList<TemplateDto>>(template);
 
-            _logger.LogInformation("Number of interviews: " + interviewDtos.Count);
+            _logger.LogInformation("Number of templates: " + interviewDtos.Count);
 
             return Ok(interviewDtos);
         }

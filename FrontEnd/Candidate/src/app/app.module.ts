@@ -14,6 +14,7 @@ import { AlertComponent } from './_components';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 import { HomeComponent } from './home';
 import { LoginComponent } from './login';
+import { LogoutComponent } from './logout';
 import { TermsComponent } from './terms';
 import { RecordRTCComponent } from './record-rtc';
 import { TestComponent } from './test';
@@ -33,6 +34,7 @@ import { UnsubscribeComponent } from './unsubscribe';
         AlertComponent,
         HomeComponent,
         LoginComponent,
+        LogoutComponent,
         TermsComponent,
         RecordRTCComponent,
         TestComponent,

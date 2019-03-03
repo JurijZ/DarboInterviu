@@ -10,6 +10,9 @@ namespace WebApi
     {
         public static void Main(string[] args)
         {
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("Main started");
+
             BuildWebHost(args).Run();
         }
 
