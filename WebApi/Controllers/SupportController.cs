@@ -15,6 +15,7 @@ using WebApi.Entities;
 using System.IO;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace WebApi.Controllers
 {
@@ -27,17 +28,20 @@ namespace WebApi.Controllers
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
         private readonly ILogger _logger;
+        private IConfiguration _configuration { get; }
 
         public SupportController(
             ISupportService supportService,
             IMapper mapper,
             IOptions<AppSettings> appSettings,
-            ILogger<SupportController> logger)
+            ILogger<SupportController> logger,
+            IConfiguration configuration)
         {
             _supportService = supportService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
             _logger = logger;
+            _configuration = configuration;
         }
         
         [AllowAnonymous]
@@ -77,24 +81,19 @@ namespace WebApi.Controllers
             _logger.LogInformation("No files were found, returning HTTP 400 BadRequest");
             return BadRequest();
         }
-
+        
         [AllowAnonymous]
-        [HttpPost("Email")]
-        public IActionResult Create(string emailText)
+        [HttpGet("emailtest/{title}")]
+        public IActionResult TestEmail(string title)
         {
-            _logger.LogInformation("Sending email with text: " + emailText);
+            _logger.LogInformation("Test message: " + title);
 
-            try
-            {
-                var status = AmazonAPI.SendEmailMessage(emailText);
-                return Ok(status);
-            }
-            catch (AppException ex)
-            {
-                // return error message if there was an exception
-                return BadRequest(new { message = ex.Message });
-            }
+            var mailgunApiKey = _configuration.GetSection("MAILGUNAPI").Value;
+            _logger.LogInformation("MAILGUNAPI: " + mailgunApiKey);
+
+            var response = MailgunAPI.SendTestMessage(title);
+
+            return Ok("MailGun API response: " + response);
         }
-
     }
 }

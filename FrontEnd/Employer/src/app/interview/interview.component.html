@@ -1,5 +1,5 @@
 <br>
-<h3>Interviu:</h3>
+<h3>Kandidatų interviu:</h3>
 <br>
 <div class="container">
 
@@ -16,11 +16,12 @@
       <thead>
         <tr>
           <th> Interviu Pavadinimas </th>
-          <th> Kandidato Vardas </th>
-          <th> Kandidato Email </th>
-          <th> Kandidato Slaptažodis </th>
+          <th> Vardas </th>
+          <th> Email </th>
+          <th> Slaptažodis </th>
           <th> Galioja iki </th>
-          <th> Statusas </th>
+          <th> Būsena </th>
+          <th> Būsenos laiko žyma </th>
           <th></th>
         </tr>
       </thead>
@@ -32,7 +33,8 @@
           <td> {{interview.candidateEmail}}</td>
           <td> {{interview.candidateSecret}}</td>
           <td> {{interview.expiration | date:'yyyy-MM-dd HH:mm'}}</td>
-          <td> {{interview.status}}</td>
+          <td> {{translateStatus(interview.status)}}</td>
+          <td> {{interview.statusTimestamp | date:'yyyy-MM-dd HH:mm'}}</td>
           <td>
             <button [disabled]="isButtonDisabled(interview.status)" class="btn btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Tooltip on top"
               (click)="reviewInterview(interview)" style="margin-right:5px">Peržiūrėti</button>

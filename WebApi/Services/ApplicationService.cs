@@ -5,6 +5,7 @@ using WebApi.Entities;
 using WebApi.Helpers;
 using WebApi.Dtos;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace WebApi.Services
 {
@@ -20,14 +21,17 @@ namespace WebApi.Services
 
     public class ApplicationService : IApplicationService
     {
+        private IConfiguration _configuration { get; }
         private DataContext _context;
         private readonly ILogger _logger;
         private static readonly Random getrandom = new Random();
 
         public ApplicationService(
+            IConfiguration configuration,
             DataContext context,
             ILogger<ApplicationService> logger)
         {
+            _configuration = configuration;
             _context = context;
             _logger = logger;
         }
@@ -59,7 +63,10 @@ namespace WebApi.Services
             _context.SaveChanges();
 
             // Send an email to the Candidate
-            var x = AmazonAPI.SendApplicationEmailMessage(application);
+            //var x = AmazonAPI.SendApplicationEmailMessage(application);
+            var response = MailgunAPI.SendApplicationEmailMessage(application);
+
+            _logger.LogInformation(response);
 
             return application;
         }
@@ -94,9 +101,10 @@ namespace WebApi.Services
 
                 _context.SaveChanges();
             }
-            
+
             // Send an email to the User informing about the Share
-            //var x = AmazonAPI.SendApplicationShareEmailMessage(application);
+            var application = _context.Applications.Where(a => a.Id == applicationId).FirstOrDefault();
+            var response = MailgunAPI.SendApplicationShareEmailMessage(application, email);
 
             return "OK";
         }

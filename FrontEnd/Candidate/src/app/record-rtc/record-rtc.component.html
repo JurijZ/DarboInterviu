@@ -15,6 +15,13 @@
   </div>
 </div>
 
+<div *ngIf="showTimer">
+  <ngb-progressbar type="info" [value]="timeLeft * 4">{{timeLeft}} s</ngb-progressbar>
+</div>
+<div *ngIf="!showTimer">
+  <ngb-progressbar type="info" [value]="timeLeftMinutesInPercents">{{timeLeftMinutes}}</ngb-progressbar>
+</div>
+
 <div class="row">
   <div class="col text-center">
     <!--<button [disabled]="recordButtonDisabled" md-raised-button color="primary" (click)="startRecording()"> Record </button>-->
@@ -22,13 +29,6 @@
     <!--<button md-raised-button color="primary" (click)="download()"> Download</button>-->
     <button [disabled]="sendButtonDisabled" type="button" class="btn btn-info" (click)="stopRecordingAndSend()">{{buttonText}}</button>
   </div>
-</div>
-
-<div *ngIf="showTimer">
-  <ngb-progressbar type="info" [value]="timeLeft * 4">{{timeLeft}} s</ngb-progressbar>
-</div>
-<div *ngIf="!showTimer">
-  <ngb-progressbar type="info" [value]="timeLeftMinutesInPercents">{{timeLeftMinutes}}</ngb-progressbar>
 </div>
 
 <span style="font-weight:bold;color:green;" *ngIf="progress > 0 && progress < 100">

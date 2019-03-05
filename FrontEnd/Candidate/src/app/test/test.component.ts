@@ -28,6 +28,10 @@ export class TestComponent implements AfterViewInit, OnInit, OnDestroy {
   public videoName: string;
   imageData: any;
 
+  interval;
+  timeLeft: number = 20; // seconds
+  showTimer: boolean = false;
+
   activeQuestion: Question = new Question();
   questions: Question[];
   currentUser: User;
@@ -128,6 +132,10 @@ export class TestComponent implements AfterViewInit, OnInit, OnDestroy {
     this.recordButtonDisabled = true;
     this.sendButtonDisabled = false;
     this.message = "Recording";
+        
+    // Timer
+    this.timeLeft = 20; // Will stop the recording
+    this.startTimer();
 
     let mediaConstraints = {
       video: true,
@@ -137,12 +145,10 @@ export class TestComponent implements AfterViewInit, OnInit, OnDestroy {
       .getUserMedia(mediaConstraints)
       .then(this.successCallback.bind(this), this.errorCallback.bind(this));
 
-      this.ref.detectChanges(); // This is needed to update the view otherwise the element does not yet exist   
-        
+    this.ref.detectChanges(); // This is needed to update the view otherwise the element does not yet exist
   }
 
   successCallback(stream: MediaStream) {
-
     var options = {
       type: 'video'
       //mimeType: 'video/webm', // or video/webm\;codecs=h264 or video/webm\;codecs=vp9
@@ -169,16 +175,17 @@ export class TestComponent implements AfterViewInit, OnInit, OnDestroy {
     this.sendButtonDisabled = true;
     let recordRTC = this.recordRTC;
     let currentActiveQuestion = this.activeQuestion;
-    //recordRTC.stopRecording(this.processVideo.bind(this));    
+    //recordRTC.stopRecording(this.processVideo.bind(this)); 
+    
+    // Stop timer
+    this.pauseTimer();
 
     var that = this;
     this.recordRTC.stopRecording(function () {
       //this.processVideo.bind(this)
       //that.recordedBlob = recordRTC.getBlob();
       //console.log("Id to be sent: " + that.activeQuestion.id);
-      that.sendToServer("test", recordRTC.getBlob());
-
-      
+      that.sendToServer("test", recordRTC.getBlob());      
     });
     let stream = this.stream;
     this.stream.getAudioTracks().forEach(track => track.stop());
@@ -214,5 +221,25 @@ export class TestComponent implements AfterViewInit, OnInit, OnDestroy {
     //this.router.navigate(['/']); 
     
     this.ngZone.run(() => this.router.navigate(['/'])).then();
-  }  
+  }
+  
+  startTimer() {
+    this.interval = setInterval(() => {
+      // If you decide to change value 20 then do not forget to update html multiplication as well
+      if (this.timeLeft > 0) {
+        this.showTimer = true;
+        this.timeLeft--;
+        //console.log(this.timeLeft);
+        this.ref.detectChanges(); // This is needed to update the view otherwise the element does not yet exist
+      } else {
+        // When time is up then stop recording and load next question
+        this.showTimer = false;
+        this.stopRecordingAndSend();
+      }
+    }, 1000)
+  }
+
+  pauseTimer() {
+    clearInterval(this.interval);
+  }
 }

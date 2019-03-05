@@ -37,3 +37,9 @@
     <!-- <p *ngIf="videoName != null"><em>Playing: {{ videoName }}</em></p> -->
   </div>
 </div>
+
+<div class="row" *ngIf="recordingState == true">
+  <div class="col text-center">
+    <h1 *ngIf="!sendButtonDisabled">{{timeLeft}} s</h1>
+  </div>
+</div>

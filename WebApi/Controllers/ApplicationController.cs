@@ -13,6 +13,7 @@ using WebApi.Services;
 using WebApi.Dtos;
 using WebApi.Entities;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 
 namespace WebApi.Controllers
 {
@@ -25,17 +26,20 @@ namespace WebApi.Controllers
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
         private readonly ILogger _logger;
+        private IConfiguration _configuration { get; }
 
         public ApplicationController(
             IApplicationService applicationService,
             IMapper mapper,
             IOptions<AppSettings> appSettings,
-            ILogger<ApplicationController> logger)
+            ILogger<ApplicationController> logger,
+            IConfiguration configuration)
         {
             _applicationService = applicationService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
             _logger = logger;
+            _configuration = configuration;
         }
         
         // Retrieve all the applications related to a particular Employer
@@ -47,7 +51,7 @@ namespace WebApi.Controllers
             var applications = _applicationService.GetAllByUserId(id);
             var applicationDtos = _mapper.Map<IList<ActiveInteriewDto>>(applications);
 
-            _logger.LogInformation("Number of active templates: " + applicationDtos.Count);
+            _logger.LogInformation("Employer requested his applications, the number is: " + applicationDtos.Count);
 
             return Ok(applicationDtos);
         }
@@ -80,7 +84,8 @@ namespace WebApi.Controllers
                 application.Id = Guid.NewGuid().ToString();
                 application.CandidateSecret = _applicationService.GetRandomNumber(1000, 9999).ToString();
                 application.Timestamp = DateTime.Now;
-                application.Status = "Not Started";
+                application.Status = InterviuStatus.NotStarted.ToString();
+                application.StatusTimestamp = DateTime.Now;
 
                 _applicationService.Create(application, applicationDto.UserId);
                 return Ok(application);
@@ -116,6 +121,6 @@ namespace WebApi.Controllers
         {
             _applicationService.Delete(id);
             return Ok();
-        }
+        }        
     }
 }

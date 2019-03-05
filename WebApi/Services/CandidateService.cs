@@ -95,6 +95,7 @@ namespace WebApi.Services
             }
 
             application.Status = status ?? application.Status;
+            application.StatusTimestamp = DateTime.Now;
 
             _context.Applications.Update(application);
             _context.SaveChanges();

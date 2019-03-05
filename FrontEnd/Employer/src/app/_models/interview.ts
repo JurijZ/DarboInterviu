@@ -5,6 +5,7 @@ export class Interview {
     candidateName: string;
     candidateEmail: string;
     candidateSecret: string;
-    status: string;
     expiration: string;
+    status: string;
+    statusTimestamp: string;
 }

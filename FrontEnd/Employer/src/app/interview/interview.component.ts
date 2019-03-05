@@ -49,9 +49,24 @@ export class InterviewComponent implements OnInit, OnDestroy {
   }
 
   isButtonDisabled(status: string){
-    if (status == 'Not Started'){
+    if (status == 'NotStarted'){
       return true;
     }
     return false;
+  }
+  
+  translateStatus(status: string){
+    if(status === 'NotStarted'){
+      return 'Nėra Pradėtas';
+    }
+    else if(status === 'Completed'){
+      return 'Užbaigtas';
+    }
+    else if(status === 'Expired'){
+      return 'Nebuvo Atliktas';
+    }
+    else {
+      return 'Nežinoma';
+    }
   }
 }
