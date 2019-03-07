@@ -6,6 +6,7 @@ using WebApi.Helpers;
 using WebApi.Dtos;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
+using System.Collections;
 
 namespace WebApi.Services
 {
@@ -62,8 +63,14 @@ namespace WebApi.Services
 
             _context.SaveChanges();
 
+            // Show All Environment variables visible to the process
+            //var ev = Environment.GetEnvironmentVariables();
+            //foreach (DictionaryEntry de in Environment.GetEnvironmentVariables())
+            //{
+            //    _logger.LogInformation("  {0} = {1}", de.Key, de.Value);
+            //}
+
             // Send an email to the Candidate
-            //var x = AmazonAPI.SendApplicationEmailMessage(application);
             var response = MailgunAPI.SendApplicationEmailMessage(application);
 
             _logger.LogInformation(response);

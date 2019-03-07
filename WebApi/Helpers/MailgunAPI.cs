@@ -9,7 +9,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using RestSharp;
 using RestSharp.Authenticators;
-using Microsoft.Extensions.Configuration;
 
 namespace WebApi.Helpers
 {
@@ -20,7 +19,7 @@ namespace WebApi.Helpers
         // Static constructor to populate static roperty
         static MailgunAPI()
         {
-            _mailgunApiKey = Environment.GetEnvironmentVariable("MAILGUNAPI");
+            _mailgunApiKey = Environment.GetEnvironmentVariable("MAILGUNSECRET");
         }
 
         public MailgunAPI()

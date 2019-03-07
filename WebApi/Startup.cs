@@ -17,6 +17,7 @@ using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using NLog.Extensions.Logging;
 using NLog.Web;
+using System;
 
 namespace WebApi
 {
@@ -47,14 +48,9 @@ namespace WebApi
 
             services.AddAutoMapper();
 
-            // configure strongly typed settings objects
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-
-            // configure jwt authentication
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-
+            // Populate strongly typed config objects with the Environment variables and add to DI
+            services.Configure<AppSettings>(Configuration);
+            
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Employer", policy => policy.RequireClaim("Role", "Employer"));
@@ -127,7 +123,7 @@ namespace WebApi
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetValue<string>("JWTSECRET"))),
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
