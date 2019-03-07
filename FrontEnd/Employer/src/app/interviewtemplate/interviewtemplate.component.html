@@ -1,8 +1,13 @@
 <br>
 <h3>Interviu Šablonai:</h3>
 <br>
-<div class="container">
 
+<div class="container" *ngIf="loading">
+    <div class="row">
+        <div class="loader"></div>
+    </div>
+</div>
+<div class="container">
   <div class="row" *ngIf="interviewTemplates">
     <table class="table table-striped ">
       <thead>
@@ -18,8 +23,10 @@
           <td> {{interviewTemplate.name}}</td>
           <td> {{interviewTemplate.timestamp | date:'yyyy-MM-dd HH:mm'}}</td>
           <td>
-            <button class="btn btn-warning btn-sm" (click)="editTemplate(interviewTemplate)" style="margin-right:5px">Redaguoti</button>
-            <button class="btn btn-danger btn-sm" (click)="deleteTemplate(interviewTemplate.id)" style="margin-right:5px">Ištrinti</button>
+            <button class="btn btn-warning btn-sm" (click)="editTemplate(interviewTemplate)"
+              style="margin-right:5px">Redaguoti</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteTemplate(interviewTemplate.id)"
+              style="margin-right:5px">Ištrinti</button>
             <interviewmodal [interview]="interviewTemplate"></interviewmodal>
           </td>
         </tr>
@@ -27,7 +34,9 @@
     </table>
   </div>
   <div>
-    <button (click)="addTemplate()" class="btn btn-success btn-lg1" type="button" style="margin-right:10px">Sukurti naują Interviu Šabloną</button>
-    <button (click)="refreshTemplates()" *ngIf="interviewTemplates" class="btn btn-primary btn-lg1" type="button">Atnaujinti</button>
+    <button (click)="addTemplate()" class="btn btn-success btn-lg1" type="button" style="margin-right:10px">Sukurti
+      naują Interviu Šabloną</button>
+    <button (click)="refreshTemplates()" *ngIf="interviewTemplates" class="btn btn-primary btn-lg1"
+      type="button">Atnaujinti</button>
   </div>
 </div>

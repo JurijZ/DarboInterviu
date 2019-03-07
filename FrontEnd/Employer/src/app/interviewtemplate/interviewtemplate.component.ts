@@ -12,6 +12,7 @@ import { User } from '@app/_models';
   styleUrls: ['./interviewtemplate.component.css']
 })
 export class InterviewTemplateComponent implements OnInit {
+  loading: boolean = false;
   interviewTemplates: InterviewTemplate[] = [];
   currentUser: User;
   currentUserSubscription: Subscription;
@@ -21,13 +22,13 @@ export class InterviewTemplateComponent implements OnInit {
     private router: Router,
     private data: DataService,
     private authenticationService: AuthenticationService) {
-      this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
-        this.currentUser = user;
-        this.loadAllTemplates(this.currentUser.id);
-      });
+    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+      this.currentUser = user;
+      this.loadAllTemplates(this.currentUser.id);
+    });
   }
 
-  ngOnInit() {    
+  ngOnInit() {
   }
 
   ngOnDestroy() {
@@ -35,8 +36,11 @@ export class InterviewTemplateComponent implements OnInit {
   }
 
   private loadAllTemplates(userId: string) {
+    this.loading = true; //show the spinner
+
     this.interviewtemplateService.getAllByUserId(userId).pipe(first()).subscribe(interviewTemplates => {
       this.interviewTemplates = interviewTemplates;
+      this.loading = false; //hide the spinner
     });
   }
 

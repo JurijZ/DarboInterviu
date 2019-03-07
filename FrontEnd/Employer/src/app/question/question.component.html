@@ -14,7 +14,7 @@
     </div>
     <div class="horizontal">
       <div class="left">
-        <span>Trukmė (min.): </span>
+        <span>Trukmė (minutėmis): </span>
         <select [(ngModel)]="question.duration" [disabled]="!question.isEditable">
           <option *ngFor="let duration of durations" [ngValue]="duration">{{duration}}</option>
         </select>
