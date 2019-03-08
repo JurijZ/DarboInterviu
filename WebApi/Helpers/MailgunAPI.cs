@@ -120,6 +120,41 @@ namespace WebApi.Helpers
             return response.Content;
         }
 
+        public static string SendInterviewCompletedEmailMessage(Application application, string[] userEmails)
+        {
+            string emailAdresses = String.Join(";", userEmails);
+
+            RestClient client = new RestClient("https://api.eu.mailgun.net/v3");
+            client.Authenticator =
+                new HttpBasicAuthenticator("api", _mailgunApiKey);
+
+            RestRequest request = new RestRequest();
+            request.AddParameter("domain", "darbointerviu.lt", ParameterType.UrlSegment);
+            request.Resource = "{domain}/messages";
+            request.AddParameter("from", "Darbo Interviu <support@darbointerviu.lt>");
+            request.AddParameter("to", emailAdresses);
+            request.AddParameter("subject", application.CandidateName + " užbaigė interviu");
+
+
+            string htmlBody = $@"<html>
+<head></head>
+<body>
+    <h3>Kandidatas {application.CandidateName} ({application.CandidateEmail}) užbaigė interviu įrašymą.</h3>
+    <p>Įrašą galite peržiūrėti prisijungę prie <a href='https://www.darbointerviu.lt/employer'>https://www.darbointerviu.lt/employer</a> svetainės</p>
+</body>
+</html>";
+
+            request.AddParameter("html", htmlBody);
+            request.Method = Method.POST;
+
+            IRestResponse response = client.Execute(request);
+
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info(response.Content);
+
+            return response.Content;
+        }
+
         public static string SendTestMessage(string title)
         {
 

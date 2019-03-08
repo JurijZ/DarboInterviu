@@ -97,11 +97,12 @@ namespace WebApi.Controllers
         [HttpPost("status")]
         public IActionResult UpdateInterviewStatus([FromBody] ApplicationStatusDto applicationStatusDto)
         {
-            _logger.LogInformation("Interview " + applicationStatusDto.ApplicationId + " status is set to - " + applicationStatusDto.Status);
+            _logger.LogInformation("Interview " + applicationStatusDto.ApplicationId + " received a new status - " + applicationStatusDto.Status);
 
-            var authentication = _candidateService.SetApplicationStatus(applicationStatusDto.ApplicationId, applicationStatusDto.Status);
+            var newStatus = _candidateService.SetApplicationStatus(applicationStatusDto.ApplicationId, applicationStatusDto.Status);
 
-            // Return
+            _logger.LogInformation("Status was successfully saved as - " + newStatus);
+
             return Ok();
         }
 
@@ -119,6 +120,9 @@ namespace WebApi.Controllers
 
             if (authentication == 2)
                 return BadRequest(new { message = "Šio interviu galiojimo laikas baigėsi." });
+
+            if (authentication == 3)
+                return BadRequest(new { message = "Šis interviu jau buvo atliktas." });
 
             // Prepare JWT token
             var tokenHandler = new JwtSecurityTokenHandler();

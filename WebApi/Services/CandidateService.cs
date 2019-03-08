@@ -41,12 +41,23 @@ namespace WebApi.Services
 
             // check if application exists 
             if (application == null)
+            {
                 return 1;
+            }                
 
-            // check if application is not expired
-            _logger.LogInformation("Interview expiration: " + application.Expiration);
+            // check if application is not expired            
             if (application.Expiration < DateTime.Now)
+            {
+                _logger.LogInformation("Candidate " + application.CandidateEmail + " requested expired interview: " + application.Expiration);
                 return 2;
+            }                
+
+            // check if application/interview has already been completed            
+            if (application.Status == "Completed")
+            {
+                _logger.LogInformation("Candidate " + application.CandidateEmail + "requested completed interview: " + application.CandidateEmail);
+                return 3;
+            }                
 
             // authentication successful
             return 0;
@@ -99,6 +110,22 @@ namespace WebApi.Services
 
             _context.Applications.Update(application);
             _context.SaveChanges();
+
+            //Send notification email to the Employer
+            if (status == "Completed")
+            {
+                _logger.LogInformation(application.CandidateName + " completed interview.");
+
+                // Get user emails by applicationID
+                var applicationUserMaps = _context.ApplicationUserMaps.Where(a => a.ApplicationId == application.Id);
+
+                var userEmails = (from u in _context.Users
+                             join a in applicationUserMaps
+                             on u.Id equals a.UserId
+                             select u.Username).ToArray();
+
+                MailgunAPI.SendInterviewCompletedEmailMessage(application, userEmails);
+            }            
 
             return application.Status;
         }

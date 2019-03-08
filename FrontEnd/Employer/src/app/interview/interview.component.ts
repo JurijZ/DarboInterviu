@@ -11,6 +11,7 @@ import { InterviewService, DataService, AuthenticationService } from '@app/_serv
   styleUrls: ['./interview.component.css']
 })
 export class InterviewComponent implements OnInit, OnDestroy {
+  loading: boolean = false;
   interviews: Interview[] = [];
   currentUser: User;
   currentUserSubscription: Subscription;
@@ -38,8 +39,11 @@ export class InterviewComponent implements OnInit, OnDestroy {
   }
 
   private loadAllInterviews(userId: string) {
+    this.loading = true; //show the spinner
+
     this.interviewService.getAllByUserId(userId).pipe(first()).subscribe(interviews => {
       this.interviews = interviews;
+      this.loading = false; //hide the spinner
     });
   }
 

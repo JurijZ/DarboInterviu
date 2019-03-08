@@ -1,6 +1,13 @@
 <br>
 <h3>Kandidatų interviu:</h3>
 <br>
+
+<div class="container" *ngIf="loading">
+    <div class="row">
+        <div class="loader"></div>
+    </div>
+</div>
+
 <div class="container">
 
   <div class="row" *ngIf="interviews.length == 0">
