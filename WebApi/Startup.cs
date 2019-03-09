@@ -129,7 +129,10 @@ namespace WebApi
                 };
             });
 
-            // configure DI for application services
+            // Register scheduled task service with DI
+            services.AddHostedService<ScheduledHostedService>();
+
+            // Register application services with DI
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IVideoService, VideoService>();

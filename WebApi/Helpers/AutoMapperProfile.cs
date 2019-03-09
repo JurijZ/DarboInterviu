@@ -17,8 +17,11 @@ namespace WebApi.Helpers
             CreateMap<Template, TemplateDto>();
             CreateMap<TemplateDto, Template>();
 
-            CreateMap<Question, QuestionDto>();
-            CreateMap<QuestionDto, Question>();
+            CreateMap<TemplateQuestion, QuestionDto>();
+            CreateMap<QuestionDto, TemplateQuestion>();
+
+            CreateMap<ApplicationQuestion, ApplicationQuestionDto>();
+            CreateMap<ApplicationQuestionDto, ApplicationQuestion>();
 
             CreateMap<Application, ApplicationDto>();
             CreateMap<ApplicationDto, Application>();

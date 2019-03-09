@@ -11,8 +11,9 @@ namespace WebApi.Helpers
         public virtual DbSet<Admin> Admins { get; set; }
         public virtual DbSet<Video> Videos { get; set; }
         public virtual DbSet<Template> Templates { get; set; }
-        public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<TemplateQuestion> TemplateQuestions { get; set; }
         public virtual DbSet<Application> Applications { get; set; }
+        public virtual DbSet<ApplicationQuestion> ApplicationQuestions { get; set; }
         public virtual DbSet<ApplicationUserMap> ApplicationUserMaps { get; set; }
     }
 }

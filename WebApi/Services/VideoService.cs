@@ -47,7 +47,7 @@ namespace WebApi.Services
 
             var videoDtos =
                from videos in _context.Videos
-               join questions in _context.Questions on videos.QuestionId equals questions.Id
+               join questions in _context.ApplicationQuestions on videos.QuestionId equals questions.Id
                where videos.ApplicationId == applicationId
                select new VideoDto
                {

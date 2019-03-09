@@ -69,7 +69,7 @@ namespace WebApi.Controllers
         public IActionResult Create([FromBody]QuestionDto questionDto)
         {
             // map dto to entity
-            var question = _mapper.Map<Question>(questionDto);
+            var question = _mapper.Map<TemplateQuestion>(questionDto);
 
             _logger.LogInformation("Creating question: " + question.Text);
 
@@ -94,7 +94,7 @@ namespace WebApi.Controllers
         public IActionResult Update(string id, [FromBody]QuestionDto questionDto)
         {
             // map dto to entity and set id
-            var question = _mapper.Map<Question>(questionDto);
+            var question = _mapper.Map<TemplateQuestion>(questionDto);
             question.Id = id;
             question.Timestamp = DateTime.Now;
 

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApi.Entities
 {
-    public class Question
+    public class TemplateQuestion
     {
         [Key]
         //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]

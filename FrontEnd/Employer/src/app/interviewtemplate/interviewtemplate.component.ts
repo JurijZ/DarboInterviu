@@ -79,8 +79,6 @@ export class InterviewTemplateComponent implements OnInit {
     this.loadAllTemplates(this.currentUser.id);
   }
 
-
-
   editTemplate(interviewTemplate: InterviewTemplate) {
     this.data.setInterviewTemplate(interviewTemplate);
     this.router.navigate(['/question']);

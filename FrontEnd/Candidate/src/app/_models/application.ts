@@ -1,7 +1,6 @@
-﻿export class Application {
-    interviewId: string;
-    email: string;
+﻿export class Application {    
     applicationId: string;
+    email: string;
     expiration: string;
     name: string;
     title: string;

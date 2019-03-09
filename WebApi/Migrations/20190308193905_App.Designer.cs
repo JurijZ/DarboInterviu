@@ -9,8 +9,8 @@ using WebApi.Helpers;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190303202838_Status")]
-    partial class Status
+    [Migration("20190308193905_App")]
+    partial class App
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,8 +57,6 @@ namespace WebApi.Migrations
 
                     b.Property<DateTime>("StatusTimestamp");
 
-                    b.Property<string>("TemplateId");
-
                     b.Property<DateTime>("Timestamp");
 
                     b.Property<string>("Title");
@@ -66,6 +64,26 @@ namespace WebApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Applications");
+                });
+
+            modelBuilder.Entity("WebApi.Entities.ApplicationQuestion", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ApplicationId");
+
+                    b.Property<int>("Duration");
+
+                    b.Property<int>("Order");
+
+                    b.Property<string>("Text");
+
+                    b.Property<DateTime>("Timestamp");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApplicationQuestions");
                 });
 
             modelBuilder.Entity("WebApi.Entities.ApplicationUserMap", b =>
@@ -82,7 +100,23 @@ namespace WebApi.Migrations
                     b.ToTable("ApplicationUserMaps");
                 });
 
-            modelBuilder.Entity("WebApi.Entities.Question", b =>
+            modelBuilder.Entity("WebApi.Entities.Template", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("Timestamp");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Templates");
+                });
+
+            modelBuilder.Entity("WebApi.Entities.TemplateQuestion", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -99,23 +133,7 @@ namespace WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Questions");
-                });
-
-            modelBuilder.Entity("WebApi.Entities.Template", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
-
-                    b.Property<DateTime>("Timestamp");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Templates");
+                    b.ToTable("TemplateQuestions");
                 });
 
             modelBuilder.Entity("WebApi.Entities.User", b =>

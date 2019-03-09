@@ -13,7 +13,7 @@ namespace WebApi.Services
         Application GetApplicationById(string applicationId);
         Application GetApplicationId(string email, string password);
         (int, int) GetInterviewOverview(string templateId);
-        IEnumerable<Question> GetTemplateQuestionsByApplicationId(string id);
+        IEnumerable<ApplicationQuestion> GetInterviewQuestionsByApplicationId(string id);
         string SetApplicationStatus(string id, string status);
     }
 
@@ -84,9 +84,9 @@ namespace WebApi.Services
             return application;
         }
 
-        public (int, int) GetInterviewOverview(string templateId)
+        public (int, int) GetInterviewOverview(string applicationId)
         {
-            var questions = _context.Questions.Where(x => x.TemplateId == templateId);
+            var questions = _context.ApplicationQuestions.Where(a => a.ApplicationId == applicationId);
 
             var numberOfQuestions = questions.Count();
             var totalInterviewDuration = questions.Sum(q => q.Duration);
@@ -130,13 +130,14 @@ namespace WebApi.Services
             return application.Status;
         }
 
-        public IEnumerable<Question> GetTemplateQuestionsByApplicationId(string id)
+        public IEnumerable<ApplicationQuestion> GetInterviewQuestionsByApplicationId(string id)
         {
             var application = _context.Applications.FirstOrDefault(a => a.Id == id);
+            _logger.LogInformation("Requesting questions for the Application Id: " + application.Id);
 
             if (application != null)
             {
-                var questions = _context.Questions.Where(x => x.TemplateId == application.TemplateId);
+                var questions = _context.ApplicationQuestions.Where(a => a.ApplicationId == application.Id);
 
                 return questions;
             }

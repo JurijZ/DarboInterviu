@@ -14,7 +14,7 @@ namespace WebApi.Services
     {
         IEnumerable<Application> GetAllByUserId(string userId);
         Application GetByApplicationId(string id);
-        Application Create(Application application, string userId);
+        Application Create(Application application, string templateId, string userId);
         string Share(string userId, string applicationId, string email);
         void Delete(string id);
         int GetRandomNumber(int min, int max);
@@ -56,19 +56,31 @@ namespace WebApi.Services
             return _context.Applications.Find(id);
         }
 
-        public Application Create(Application application, string userId)
+        public Application Create(Application application, string templateId, string userId)
         {
+            // Save new Application
             _context.Applications.Add(application);
+
+            // Link Application to the User
             _context.ApplicationUserMaps.Add(new ApplicationUserMap { ApplicationId = application.Id, UserId = userId });
 
-            _context.SaveChanges();
+            // Copy questions from the TemplateQuestions to the ApplicationQuestions table
+            var templateQuestions = _context.TemplateQuestions.Where(q => q.TemplateId == templateId);
+            foreach (var templateQuestion in templateQuestions)
+            {
+                _context.ApplicationQuestions.Add(
+                    new ApplicationQuestion
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        ApplicationId = application.Id,
+                        Text = templateQuestion.Text,
+                        Duration = templateQuestion.Duration,
+                        Order = templateQuestion.Order,
+                        Timestamp = DateTime.Now
+                    });
+            }
 
-            // Show All Environment variables visible to the process
-            //var ev = Environment.GetEnvironmentVariables();
-            //foreach (DictionaryEntry de in Environment.GetEnvironmentVariables())
-            //{
-            //    _logger.LogInformation("  {0} = {1}", de.Key, de.Value);
-            //}
+            _context.SaveChanges();
 
             // Send an email to the Candidate
             var response = MailgunAPI.SendApplicationEmailMessage(application);

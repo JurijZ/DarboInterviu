@@ -51,10 +51,11 @@ namespace WebApi.Controllers
             }
 
             // Retrieve all the questions:
-            var questions = _candidateService.GetTemplateQuestionsByApplicationId(id);
+            var questions = _candidateService.GetInterviewQuestionsByApplicationId(id);
 
-            if (questions != null && questions.Any()) {
-                var questionDtos = _mapper.Map<IList<QuestionDto>>(questions);
+            if (questions != null && questions.Any()) {                
+                var questionDtos = _mapper.Map<IList<ApplicationQuestionDto>>(questions);
+                _logger.LogInformation("Number of questions: " + questionDtos.Count());
 
                 return Ok(questionDtos);
             }
@@ -76,20 +77,19 @@ namespace WebApi.Controllers
 
             // Prepare ApplicationId and Interview overview information
             
-            var template = _candidateService.GetInterviewOverview(application.TemplateId);
+            var interview = _candidateService.GetInterviewOverview(application.Id);
             
             //return Ok(applicationDto);
 
             return Ok(new
             {
-                TemplateId = application.TemplateId,
-                Email = application.CandidateEmail,
                 ApplicationId = application.Id,
+                Email = application.CandidateEmail,                
                 Expiration = application.Expiration,
                 Name = application.CandidateName,
                 Title = application.Title,
-                NumberOfQuestions = template.Item1,
-                InterviewDuration = template.Item2
+                NumberOfQuestions = interview.Item1,
+                InterviewDuration = interview.Item2
             });
         }
 

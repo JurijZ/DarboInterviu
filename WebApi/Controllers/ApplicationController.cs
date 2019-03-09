@@ -80,14 +80,15 @@ namespace WebApi.Controllers
 
             try
             {
-                // save 
+                // Creates new application 
                 application.Id = Guid.NewGuid().ToString();
                 application.CandidateSecret = _applicationService.GetRandomNumber(1000, 9999).ToString();
                 application.Timestamp = DateTime.Now;
                 application.Status = InterviuStatus.NotStarted.ToString();
                 application.StatusTimestamp = DateTime.Now;
 
-                _applicationService.Create(application, applicationDto.UserId);
+                _applicationService.Create(application, applicationDto.TemplateId, applicationDto.UserId);
+
                 return Ok(application);
             }
             catch (AppException ex)

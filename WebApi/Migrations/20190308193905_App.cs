@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApi.Migrations
 {
-    public partial class Map : Migration
+    public partial class App : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,17 +25,33 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ApplicationQuestions",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    ApplicationId = table.Column<string>(nullable: true),
+                    Text = table.Column<string>(nullable: true),
+                    Duration = table.Column<int>(nullable: false),
+                    Order = table.Column<int>(nullable: false),
+                    Timestamp = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationQuestions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Applications",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    TemplateId = table.Column<string>(nullable: true),
                     Title = table.Column<string>(nullable: true),
                     CandidateName = table.Column<string>(nullable: true),
                     CandidateEmail = table.Column<string>(nullable: true),
                     CandidateSecret = table.Column<string>(nullable: true),
-                    Status = table.Column<string>(nullable: true),
                     Expiration = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<string>(nullable: true),
+                    StatusTimestamp = table.Column<DateTime>(nullable: false),
                     Timestamp = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
@@ -57,7 +73,7 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Questions",
+                name: "TemplateQuestions",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
@@ -69,7 +85,7 @@ namespace WebApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Questions", x => x.Id);
+                    table.PrimaryKey("PK_TemplateQuestions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -126,13 +142,16 @@ namespace WebApi.Migrations
                 name: "Admins");
 
             migrationBuilder.DropTable(
+                name: "ApplicationQuestions");
+
+            migrationBuilder.DropTable(
                 name: "Applications");
 
             migrationBuilder.DropTable(
                 name: "ApplicationUserMaps");
 
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "TemplateQuestions");
 
             migrationBuilder.DropTable(
                 name: "Templates");

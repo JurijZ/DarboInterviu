@@ -10,11 +10,11 @@ namespace WebApi.Services
 {
     public interface IQuestionService
     {
-        IEnumerable<Question> GetAllByTemplateId(string templateId);
-        IEnumerable<Question> GetAll();
-        Question GetById(string id);
-        Question Create(Question interview);
-        void Update(Question questionParam);
+        IEnumerable<TemplateQuestion> GetAllByTemplateId(string templateId);
+        IEnumerable<TemplateQuestion> GetAll();
+        TemplateQuestion GetById(string id);
+        TemplateQuestion Create(TemplateQuestion interview);
+        void Update(TemplateQuestion questionParam);
         void Delete(string id);
     }
 
@@ -32,37 +32,37 @@ namespace WebApi.Services
             _logger = logger;
         }
         
-        public IEnumerable<Question> GetAllByTemplateId(string templateId)
+        public IEnumerable<TemplateQuestion> GetAllByTemplateId(string templateId)
         {
-            return _context.Questions.Where(q => q.TemplateId == templateId);
+            return _context.TemplateQuestions.Where(q => q.TemplateId == templateId);
         }
 
-        public IEnumerable<Question> GetAll()
+        public IEnumerable<TemplateQuestion> GetAll()
         {
-            return _context.Questions;
+            return _context.TemplateQuestions;
         }
 
-        public Question GetById(string id)
+        public TemplateQuestion GetById(string id)
         {
-            return _context.Questions.Find(id);
+            return _context.TemplateQuestions.Find(id);
         }
 
-        public Question Create(Question question)
+        public TemplateQuestion Create(TemplateQuestion question)
         {
             // update template timestamp
             var template = _context.Templates.Find(question.TemplateId);            
             template.Timestamp = DateTime.Now;
 
             _context.Templates.Update(template);
-            _context.Questions.Add(question);
+            _context.TemplateQuestions.Add(question);
             _context.SaveChanges();
 
             return question;
         }
 
-        public void Update(Question questionParam)
+        public void Update(TemplateQuestion questionParam)
         {
-            var question = _context.Questions.Find(questionParam.Id);
+            var question = _context.TemplateQuestions.Find(questionParam.Id);
             var template = _context.Templates.Find(questionParam.TemplateId);
 
             if (question == null)
@@ -78,13 +78,13 @@ namespace WebApi.Services
             template.Timestamp = DateTime.Now;
 
             _context.Templates.Update(template);
-            _context.Questions.Update(question);
+            _context.TemplateQuestions.Update(question);
             _context.SaveChanges();
         }
 
         public void Delete(string id)
         {
-            var question = _context.Questions.Find(id);
+            var question = _context.TemplateQuestions.Find(id);
             if (question != null)
             {
                 // update template timestamp
@@ -94,7 +94,7 @@ namespace WebApi.Services
                 _context.Templates.Update(template);
 
                 // delete question
-                _context.Questions.Remove(question);
+                _context.TemplateQuestions.Remove(question);
                 _context.SaveChanges();
             }
         }

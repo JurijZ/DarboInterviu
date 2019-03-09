@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private loadApplication(applicationid: string) {
         this.homeService.getApplicationById(applicationid).pipe(first()).subscribe(application => {
             this.application = application;
-            //console.log(this.application);
+            console.log(this.application);
         });
     }
 
