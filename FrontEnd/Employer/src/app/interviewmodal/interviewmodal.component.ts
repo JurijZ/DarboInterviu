@@ -49,7 +49,7 @@ export class InterviewModalComponent {
 
     // Set min selectable date
     let currentDate2 = new Date();
-    currentDate2.setDate(currentDate2.getDate() + 2);
+    currentDate2.setDate(currentDate2.getDate());
     this.minDate = {
       year: currentDate2.getFullYear(),
       month: currentDate2.getMonth() + 1,
@@ -66,7 +66,7 @@ export class InterviewModalComponent {
       month: currentDate.getMonth() + 1,
       day: currentDate.getDate()
     };
-    this.time = { hour: 23, minute: 0, second: 0 };
+    this.time = { hour: 22, minute: 0, second: 0 };
 
     //
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {

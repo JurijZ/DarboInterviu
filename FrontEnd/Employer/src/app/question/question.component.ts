@@ -14,7 +14,7 @@ import { loadQueryList } from '@angular/core/src/render3';
 export class QuestionComponent implements OnInit {
   questions: Question[] = [];
   interviewTemplate: InterviewTemplate;
-  durations: number[] = [5, 10, 15, 20];
+  durations: number[] = [2, 5, 10, 15, 20];
   currentUser: User;
   currentUserSubscription: Subscription;
 
@@ -43,7 +43,9 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  //selectDuration(duration: number){  }
+  updateQuestion(question: Question) {
+    var c = this.questionService.update(question);
+  }
 
   addQuestion() {
     let newQuestion: Question = new Question();
@@ -70,11 +72,7 @@ export class QuestionComponent implements OnInit {
 
   refreshQuestions() {
     this.loadAllQuestions(this.interviewTemplate.id);
-  }
-
-  updateQuestion(question: Question) {
-    var c = this.questionService.update(question);
-  }
+  } 
 
   updateInterview(){
     this.interviewTemplate.userid = this.currentUser.id;
