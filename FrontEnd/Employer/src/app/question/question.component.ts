@@ -3,8 +3,7 @@ import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 import { InterviewTemplate, Question, User } from '@app/_models';
-import { DataService, QuestionService, AuthenticationService } from '@app/_services';
-import { loadQueryList } from '@angular/core/src/render3';
+import { DataService, QuestionService, AlertService, AuthenticationService } from '@app/_services';
 
 @Component({
   selector: 'app-question',
@@ -17,15 +16,17 @@ export class QuestionComponent implements OnInit {
   durations: number[] = [2, 5, 10, 15, 20];
   currentUser: User;
   currentUserSubscription: Subscription;
+  loading: boolean = false;
 
   constructor(
     private authenticationService: AuthenticationService,
-    private questionService: QuestionService, 
-    private data: DataService
-    ) {
-      this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
-        this.currentUser = user;
-      });
+    private questionService: QuestionService,
+    private data: DataService,
+    private alertService: AlertService
+  ) {
+    this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
+      this.currentUser = user;
+    });
   }
 
   ngOnInit() {
@@ -36,15 +37,28 @@ export class QuestionComponent implements OnInit {
   }
 
   deleteQuestion(id: string) {
-    if (confirm("Are you sure you want to delete this question?")) {
-      this.questionService.delete(id).pipe(first()).subscribe(() => {
-        this.loadAllQuestions(this.interviewTemplate.id)
-      });
+    if (confirm("Ar tikrai norite ištrinti šį klausimą?")) {
+      this.questionService.delete(id).pipe(first()).subscribe(
+        success => {
+          this.loadAllQuestions(this.interviewTemplate.id)
+          this.alertService.clear();
+        },
+        error => {
+          this.alertService.error(error);
+        });
     }
   }
 
   updateQuestion(question: Question) {
-    var c = this.questionService.update(question);
+    this.questionService.update(question).subscribe(
+      data => {
+        console.log("Question update was successful ", data);
+        this.alertService.clear();
+      },
+      error => {
+        this.alertService.error(error);
+      }
+    );
   }
 
   addQuestion() {
@@ -72,9 +86,9 @@ export class QuestionComponent implements OnInit {
 
   refreshQuestions() {
     this.loadAllQuestions(this.interviewTemplate.id);
-  } 
+  }
 
-  updateInterview(){
+  updateInterview() {
     this.interviewTemplate.userid = this.currentUser.id;
     this.questionService.updateInterview(this.interviewTemplate).subscribe(
       data => {
@@ -82,15 +96,24 @@ export class QuestionComponent implements OnInit {
       },
       error => {
         console.log("Error in Interview update: ", error);
+        this.alertService.error(error);
       });
   }
 
   private loadAllQuestions(templateId: string) {
-    this.questionService.getByTemplateId(templateId).pipe(first()).subscribe(questions => {
-      this.questions = questions;
+    this.loading = true; //show the spinner
 
-      this.orderQuestions();
-    });
+    this.questionService.getByTemplateId(templateId).pipe(first()).subscribe(
+      questions => {
+        this.questions = questions;
+        this.orderQuestions();
+        this.alertService.clear();
+        this.loading = false; //hide the spinner
+      },
+      error => {
+        this.alertService.error(error);
+        this.loading = false; //hide the spinner
+      });
   }
 
   up(index: number) {

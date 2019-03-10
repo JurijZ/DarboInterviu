@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { InterviewTemplate } from '@app/_models';
-import { InterviewTemplateService, DataService, AuthenticationService } from '@app/_services';
+import { InterviewTemplateService, DataService, AlertService, AuthenticationService } from '@app/_services';
 import { User } from '@app/_models';
 
 @Component({
@@ -21,7 +21,9 @@ export class InterviewTemplateComponent implements OnInit {
     private interviewtemplateService: InterviewTemplateService,
     private router: Router,
     private data: DataService,
-    private authenticationService: AuthenticationService) {
+    private authenticationService: AuthenticationService,
+    private alertService: AlertService
+  ) {
     this.currentUserSubscription = this.authenticationService.currentUser.subscribe(user => {
       this.currentUser = user;
       this.loadAllTemplates(this.currentUser.id);
@@ -38,17 +40,26 @@ export class InterviewTemplateComponent implements OnInit {
   private loadAllTemplates(userId: string) {
     this.loading = true; //show the spinner
 
-    this.interviewtemplateService.getAllByUserId(userId).pipe(first()).subscribe(interviewTemplates => {
-      this.interviewTemplates = interviewTemplates;
-      this.loading = false; //hide the spinner
-    });
+    this.interviewtemplateService.getAllByUserId(userId).pipe(first()).subscribe(
+      interviewTemplates => {
+        this.interviewTemplates = interviewTemplates;
+        this.loading = false; //hide the spinner
+      },
+      error => {
+        this.loading = false; //hide the spinner
+        this.alertService.error(error);
+      });
   }
 
   deleteTemplate(id: string) {
     if (confirm("Ar esate tikras kad norite ištrinti šį šabloną?")) {
-      this.interviewtemplateService.delete(id).pipe(first()).subscribe(() => {
-        this.loadAllTemplates(this.currentUser.id)
-      });
+      this.interviewtemplateService.delete(id).pipe(first()).subscribe(
+        success => {
+          this.loadAllTemplates(this.currentUser.id)
+        },
+        error => {
+          this.alertService.error(error);
+        });
     }
   }
 
@@ -71,11 +82,13 @@ export class InterviewTemplateComponent implements OnInit {
       },
       error => {
         console.log("Error: ", error);
+        this.alertService.error(error);
       }
     );
   }
 
   refreshTemplates() {
+    this.alertService.clear();
     this.loadAllTemplates(this.currentUser.id);
   }
 

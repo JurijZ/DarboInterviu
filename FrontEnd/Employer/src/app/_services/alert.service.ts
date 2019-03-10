@@ -29,7 +29,17 @@ export class AlertService {
 
     error(message: string, keepAfterNavigationChange = false) {
         this.keepAfterNavigationChange = keepAfterNavigationChange;
-        this.subject.next({ type: 'error', text: message });
+        if (message === 'Unknown Error'){
+            message = 'Neišeina susijungti su serveriu. Įsitikinkite kad esate prisijungę prie Interneto.';
+        }
+        if (message === 'Bad Gateway'){
+            message = 'Šiuo metu aptarnaujame serverį. Atsiprašome už nepatogumus, greitai baigsime.';
+        }
+        this.subject.next({ type: 'error', text: message });        
+    }
+
+    clear(){
+        this.subject.next();
     }
 
     getMessage(): Observable<any> {
