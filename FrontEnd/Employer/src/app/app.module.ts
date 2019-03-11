@@ -10,8 +10,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent }  from './app.component';
 import { routing }        from './app.routing';
 
-import { AlertComponent } from './_components';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
+
+import { AlertComponent } from './alert';
 import { ProfileComponent } from './profile';
 import { LoginComponent } from './login';
 import { LogoutComponent } from './logout';
@@ -23,6 +24,8 @@ import { InterviewShareComponent } from './interviewshare';
 import { ReviewComponent } from './review';
 import { QuestionComponent } from './question';
 import { UnsubscribeComponent } from './unsubscribe';
+
+import { TextAreaRowsDirective } from './_directives';
 
 @NgModule({
     imports: [
@@ -46,7 +49,8 @@ import { UnsubscribeComponent } from './unsubscribe';
         InterviewShareComponent,
         ReviewComponent,
         QuestionComponent,
-        UnsubscribeComponent
+        UnsubscribeComponent,
+        TextAreaRowsDirective
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

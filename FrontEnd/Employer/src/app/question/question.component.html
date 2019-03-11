@@ -12,8 +12,10 @@
 <ul class="list-unstyled">
   <li *ngFor="let question of questions; let i = index">
     <div>
-      <textarea [(ngModel)]="question.text" rows="2" style="min-width: 100%" placeholder="Įveskite klausimą..."
-        (focusout)="updateQuestion(question)">
+      <textarea [textarearows]="question.text" [(ngModel)]="question.text" style="min-width: 100%" placeholder="Įveskite klausimą..."
+        (focusout)="updateQuestion(question)"
+        (keyup)="autoGrowTextZone($event)"
+        (click)="autoGrowTextZone($event)">
       </textarea>
     </div>
     <div class="horizontal">

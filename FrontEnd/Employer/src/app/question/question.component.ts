@@ -61,6 +61,12 @@ export class QuestionComponent implements OnInit {
     );
   }
 
+  autoGrowTextZone(e) {
+    //console.log("Changing height" + e.target.scrollHeight);
+    e.target.style.height = "0px";
+    e.target.style.height = (e.target.scrollHeight + 25)+"px";
+  }
+
   addQuestion() {
     let newQuestion: Question = new Question();
     //newQuestion.id = 1;
