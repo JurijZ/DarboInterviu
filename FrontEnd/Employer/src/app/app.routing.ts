@@ -1,14 +1,14 @@
 import { Routes, RouterModule } from '@angular/router';
 
-import { ProfileComponent } from './profile';
-import { LoginComponent } from './login';
-import { LogoutComponent } from './logout';
-import { RegisterComponent } from './register';
-import { InterviewTemplateComponent } from './interviewtemplate';
-import { InterviewComponent } from './interview';
-import { ReviewComponent } from './review';
-import { QuestionComponent } from './question';
-import { UnsubscribeComponent } from './unsubscribe';
+import { ProfileComponent } from './_components/profile';
+import { LoginComponent } from './_components/login';
+import { LogoutComponent } from './_components/logout';
+import { RegisterComponent } from './_components/register';
+import { InterviewTemplateComponent } from './_components/interviewtemplate';
+import { InterviewComponent } from './_components/interview';
+import { ReviewComponent } from './_components/review';
+import { QuestionComponent } from './_components/question';
+import { UnsubscribeComponent } from './_components/unsubscribe';
 import { AuthGuard } from './_guards';
 
 const appRoutes: Routes = [
